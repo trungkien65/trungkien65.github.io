@@ -6,12 +6,9 @@ await import("./src/env.js")
 
 /** @type {import("next").NextConfig} */
 const config = {
-  // ...(process.env.NODE_ENV === "production" && {
-  //   output: "export",
-  // }),
   reactStrictMode: true,
   swcMinify: true,
-  output: "standalone",
+  output: "export",
   images: {
     remotePatterns: [
       {
