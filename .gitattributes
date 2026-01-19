@@ -1,0 +1,2 @@
+# Ensure lockfile is treated as text
+pnpm-lock.yaml text eol=lf

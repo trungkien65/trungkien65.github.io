@@ -1,0 +1,28 @@
+---
+/**
+ * Main page - display Todo List component
+ */
+import Layout from "@/layouts/Layout.astro"
+import TodoList from "@/components/TodoList.astro"
+---
+
+<Layout title="Todo List - Quản lý công việc">
+  <main class="container mx-auto px-4 py-8">
+    <div class="max-w-4xl mx-auto">
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <h1 class="text-5xl font-bold text-gray-800 dark:text-white mb-4">
+          Todo List
+        </h1>
+        <p class="text-xl text-gray-600 dark:text-gray-300">
+          Quản lý công việc của bạn một cách đơn giản
+        </p>
+      </div>
+
+      <!-- Todo List Component -->
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6">
+        <TodoList />
+      </div>
+    </div>
+  </main>
+</Layout>

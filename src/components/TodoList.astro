@@ -1,0 +1,236 @@
+---
+// TodoList component with CRUD functionality
+---
+
+<div class="todo-list">
+  <!-- Stats section -->
+  <div id="statsSection" class="mb-6 flex gap-4 text-sm">
+    <div class="flex-1 bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-lg p-3">
+      <div class="text-blue-600 dark:text-blue-400 font-semibold">Tổng cộng</div>
+      <div id="totalCount" class="text-2xl font-bold text-blue-700 dark:text-blue-300">0</div>
+    </div>
+    <div class="flex-1 bg-gradient-to-r from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-lg p-3">
+      <div class="text-green-600 dark:text-green-400 font-semibold">Hoàn thành</div>
+      <div id="completedCount" class="text-2xl font-bold text-green-700 dark:text-green-300">0</div>
+    </div>
+    <div class="flex-1 bg-gradient-to-r from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 rounded-lg p-3">
+      <div class="text-orange-600 dark:text-orange-400 font-semibold">Còn lại</div>
+      <div id="remainingCount" class="text-2xl font-bold text-orange-700 dark:text-orange-300">0</div>
+    </div>
+  </div>
+
+  <!-- Add new todo form -->
+  <form id="todoForm" class="mb-6">
+    <div class="relative flex items-center gap-3 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700/50 dark:to-gray-600/50 rounded-xl p-2 shadow-inner">
+      <input
+        type="text"
+        id="todoInput"
+        placeholder="Thêm công việc mới..."
+        class="flex-1 bg-transparent px-2 py-3 text-gray-800 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none text-lg"
+        required
+      />
+      <button
+        type="submit"
+        class="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-lg font-semibold transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95"
+      >
+        Thêm
+      </button>
+    </div>
+  </form>
+
+  <!-- Todo items list -->
+  <div id="todoList" class="space-y-3">
+    <!-- Todos will be rendered here -->
+  </div>
+
+  <!-- Empty state -->
+  <div id="emptyState" class="text-center py-12">
+    <p class="text-lg text-gray-500 dark:text-gray-400 font-medium">Chưa có công việc nào</p>
+    <p class="text-sm text-gray-400 dark:text-gray-500 mt-1">Hãy thêm công việc đầu tiên của bạn!</p>
+  </div>
+</div>
+
+<script>
+  // Todo list state management
+  interface Todo {
+    id: string
+    text: string
+    completed: boolean
+    createdAt: number
+  }
+
+  // Load todos from localStorage
+  function loadTodos(): Todo[] {
+    const stored = localStorage.getItem('todos')
+    return stored ? JSON.parse(stored) : []
+  }
+
+  // Save todos to localStorage
+  function saveTodos(todos: Todo[]): void {
+    localStorage.setItem('todos', JSON.stringify(todos))
+  }
+
+  // Update stats
+  function updateStats(todos: Todo[]): void {
+    const total = todos.length
+    const completed = todos.filter((t) => t.completed).length
+    const remaining = total - completed
+
+    const totalEl = document.getElementById('totalCount')
+    const completedEl = document.getElementById('completedCount')
+    const remainingEl = document.getElementById('remainingCount')
+
+    if (totalEl) totalEl.textContent = total.toString()
+    if (completedEl) completedEl.textContent = completed.toString()
+    if (remainingEl) remainingEl.textContent = remaining.toString()
+  }
+
+  // Render todos to DOM
+  function renderTodos(todos: Todo[]): void {
+    const todoList = document.getElementById('todoList')
+    const emptyState = document.getElementById('emptyState')
+
+    if (!todoList || !emptyState) return
+
+    updateStats(todos)
+
+    if (todos.length === 0) {
+      todoList.innerHTML = ''
+      emptyState.style.display = 'block'
+      return
+    }
+
+    emptyState.style.display = 'none'
+    todoList.innerHTML = todos
+      .sort((a, b) => b.createdAt - a.createdAt)
+      .map(
+        (todo, index) => `
+      <div class="todo-item group flex items-center gap-4 p-4 bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-lg border border-gray-200 dark:border-gray-700 transition-all duration-200 hover:scale-[1.01] ${
+        todo.completed ? 'opacity-75 bg-gray-50 dark:bg-gray-800/50' : ''
+      }" style="animation: slideIn 0.3s ease-out ${index * 0.05}s both">
+        <label class="relative flex items-center cursor-pointer">
+          <input
+            type="checkbox"
+            ${todo.completed ? 'checked' : ''}
+            data-id="${todo.id}"
+            class="todo-checkbox peer sr-only"
+          />
+          <div class="relative w-6 h-6 rounded-lg border-2 border-gray-300 dark:border-gray-600 transition-all duration-200 peer-checked:bg-gradient-to-br peer-checked:from-blue-500 peer-checked:to-blue-600 peer-checked:border-blue-600 peer-hover:border-blue-400 dark:peer-hover:border-blue-500">
+            ${todo.completed ? `
+            <span class="absolute inset-0 flex items-center justify-center text-white text-xs font-bold">✓</span>
+            ` : ''}
+          </div>
+        </label>
+        <span class="flex-1 text-gray-800 dark:text-gray-100 text-lg ${
+          todo.completed ? 'line-through text-gray-400 dark:text-gray-500' : ''
+        } transition-all duration-200">${todo.text}</span>
+        <button
+          data-id="${todo.id}"
+          class="delete-btn opacity-0 group-hover:opacity-100 px-3 py-2 text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all duration-200 transform hover:scale-110 active:scale-95"
+          title="Xóa"
+        >
+          ×
+        </button>
+      </div>
+    `
+      )
+      .join('')
+
+    // Attach event listeners
+    document.querySelectorAll('.todo-checkbox').forEach((checkbox) => {
+      checkbox.addEventListener('change', (e) => {
+        const id = (e.target as HTMLInputElement).dataset.id
+        if (id) toggleTodo(id)
+      })
+    })
+
+    document.querySelectorAll('.delete-btn').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        const id = (e.target as HTMLButtonElement).closest('.delete-btn')?.getAttribute('data-id')
+        if (id) deleteTodo(id)
+      })
+    })
+  }
+
+  // Add new todo
+  function addTodo(text: string): void {
+    const todos = loadTodos()
+    const newTodo: Todo = {
+      id: Date.now().toString(),
+      text: text.trim(),
+      completed: false,
+      createdAt: Date.now()
+    }
+    todos.push(newTodo)
+    saveTodos(todos)
+    renderTodos(todos)
+  }
+
+  // Toggle todo completion
+  function toggleTodo(id: string): void {
+    const todos = loadTodos()
+    const todo = todos.find((t) => t.id === id)
+    if (todo) {
+      todo.completed = !todo.completed
+      saveTodos(todos)
+      renderTodos(todos)
+    }
+  }
+
+  // Delete todo
+  function deleteTodo(id: string): void {
+    const todos = loadTodos().filter((t) => t.id !== id)
+    saveTodos(todos)
+    renderTodos(todos)
+  }
+
+  // Initialize
+  const form = document.getElementById('todoForm') as HTMLFormElement
+  const input = document.getElementById('todoInput') as HTMLInputElement
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault()
+    const text = input?.value
+    if (text) {
+      addTodo(text)
+      input.value = ''
+    }
+  })
+
+  // Load and render todos on page load
+  renderTodos(loadTodos())
+</script>
+
+<style>
+  .todo-list {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .todo-item {
+    animation-fill-mode: both;
+  }
+
+  /* Custom checkbox styling */
+  .todo-checkbox:checked + div {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    border-color: #2563eb;
+  }
+
+  .todo-checkbox:focus + div {
+    ring: 2px;
+    ring-color: #3b82f6;
+    ring-offset: 2px;
+  }
+</style>
