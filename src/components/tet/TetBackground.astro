@@ -1,0 +1,30 @@
+---
+/**
+ * Nền gradient Tết (đỏ, vàng) + pulse nhẹ.
+ */
+---
+
+<div class="tet-bg" aria-hidden="true"></div>
+
+<style>
+  .tet-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% 0%, rgba(255, 200, 50, 0.2), transparent 50%),
+      radial-gradient(ellipse 60% 80% at 80% 80%, rgba(255, 100, 80, 0.15), transparent 40%),
+      linear-gradient(160deg, #8b0000 0%, #b22222 25%, #dc143c 50%, #b8860b 78%, #8b4513 100%);
+    animation: tetBgPulse 8s ease-in-out infinite;
+  }
+  @keyframes tetBgPulse {
+    0%,
+    100% {
+      opacity: 1;
+      filter: brightness(1);
+    }
+    50% {
+      opacity: 0.96;
+      filter: brightness(1.06);
+    }
+  }
+</style>

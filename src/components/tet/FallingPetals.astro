@@ -1,0 +1,47 @@
+---
+/**
+ * Hoa mai / cánh hoa rơi từ trên xuống (CSS).
+ * Đổi emoji trong petal để đổi loại hoa (🌸 🌺 💮).
+ */
+const count = 14
+const petalChar = "🌸"
+---
+
+<div class="falling-petals" aria-hidden="true">
+  {[...Array(count)].map((_, i) => (
+    <div
+      class="falling-petals__item"
+      style={`--left: ${8 + Math.random() * 84}%; --d: ${3.5 + Math.random() * 3}s; --dly: ${Math.random() * 5}s`}
+    >
+      {petalChar}
+    </div>
+  ))}
+</div>
+
+<style>
+  .falling-petals {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .falling-petals__item {
+    position: absolute;
+    left: var(--left);
+    top: -40px;
+    font-size: 1.4rem;
+    animation: petalFall linear infinite;
+    animation-duration: var(--d);
+    animation-delay: var(--dly);
+    opacity: 0.85;
+  }
+  @keyframes petalFall {
+    0% {
+      top: -40px;
+      transform: translateX(0) rotate(0deg);
+    }
+    100% {
+      top: 100vh;
+      transform: translateX(60px) rotate(360deg);
+    }
+  }
+</style>

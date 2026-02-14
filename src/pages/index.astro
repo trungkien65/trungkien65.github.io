@@ -1,28 +1,147 @@
 ---
 /**
- * Main page - display Todo List component
+ * Trang chính - Chúc Tết 2026 (năm Ngọ).
+ * HƯỚNG DẪN list câu chúc: src/data/greetings.ts
  */
 import Layout from "@/layouts/Layout.astro"
-import TodoList from "@/components/TodoList.astro"
+import { greetings } from "@/data/greetings"
+import TetBackground from "@/components/tet/TetBackground.astro"
+import Confetti from "@/components/tet/Confetti.astro"
+import Fireworks from "@/components/tet/Fireworks.astro"
+import FallingPetals from "@/components/tet/FallingPetals.astro"
+import Sparkles from "@/components/tet/Sparkles.astro"
+import Mascot from "@/components/tet/Mascot.astro"
+import WhiteHorse from "@/components/tet/WhiteHorse.astro"
+import HorseHerd from "@/components/tet/HorseHerd.astro"
+import Grass from "@/components/tet/Grass.astro"
+import RandomGreeting from "@/components/tet/RandomGreeting.astro"
+import CursorTrail from "@/components/tet/CursorTrail.astro"
 ---
 
-<Layout title="Todo List - Quản lý công việc">
-  <main class="container mx-auto px-4 py-8">
-    <div class="max-w-4xl mx-auto">
-      <!-- Header -->
-      <div class="text-center mb-8">
-        <h1 class="text-5xl font-bold text-gray-800 dark:text-white mb-4">
-          Todo List
-        </h1>
-        <p class="text-xl text-gray-600 dark:text-gray-300">
-          Quản lý công việc của bạn một cách đơn giản
-        </p>
-      </div>
-
-      <!-- Todo List Component -->
-      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6">
-        <TodoList />
-      </div>
+<Layout title="Chúc Mừng Năm Mới 2026">
+  <main class="tet-page">
+    <TetBackground />
+    <Confetti />
+    <Fireworks />
+    <FallingPetals />
+    <Sparkles />
+    <HorseHerd />
+    <Grass />
+    <div class="tet-content">
+      <h1 class="tet-content__title">
+        <span class="tet-content__line tet-content__line--1">Chúc Mừng</span>
+        <span class="tet-content__line tet-content__line--2">Năm Mới</span>
+        <span class="tet-content__year">2026</span>
+      </h1>
+      <RandomGreeting greetings={greetings} />
     </div>
+    <CursorTrail />
   </main>
 </Layout>
+
+<style>
+  .tet-page {
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .tet-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .tet-content__title {
+    margin: 0 0 0.5rem;
+    font-size: clamp(2rem, 8vw, 4.5rem);
+    font-weight: 800;
+    line-height: 1.2;
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+  }
+
+  .tet-content__line {
+    display: block;
+    background: linear-gradient(90deg, #fffacd, #ffd700, #ffec8b, #fffacd);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: titleShine 3s linear infinite, titlePop 0.8s ease-out backwards;
+  }
+
+  .tet-content__line--2 {
+    animation-delay: 0.15s;
+  }
+
+  .tet-content__year {
+    display: block;
+    font-size: 1.35em;
+    margin-top: 0.15em;
+    color: #ffd700;
+    text-shadow: 0 0 28px rgba(255, 215, 0, 0.7);
+    animation: yearPulse 2s ease-in-out infinite, titlePop 0.8s ease-out 0.3s backwards;
+  }
+
+  .tet-content__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.75rem;
+    padding: 0.6rem 1.25rem;
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 9999px;
+    transition: all 0.3s ease;
+    animation: fadeIn 0.8s ease-out 0.6s backwards;
+    position: relative;
+    z-index: 3;
+  }
+
+  .tet-content__link:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: #ffd700;
+    color: #ffd700;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 215, 0, 0.25);
+  }
+
+  .tet-content__link:hover .tet-content__link-icon {
+    animation: linkHorseRun 0.5s ease-in-out;
+  }
+
+  .tet-content__link-icon {
+    font-size: 1.25em;
+    display: inline-block;
+  }
+
+  @keyframes linkHorseRun {
+    0% { transform: translateX(0); }
+    50% { transform: translateX(4px); }
+    100% { transform: translateX(0); }
+  }
+
+  @keyframes titleShine {
+    to { background-position: 200% center; }
+  }
+
+  @keyframes titlePop {
+    from { opacity: 0; transform: scale(0.6); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  @keyframes yearPulse {
+    0%, 100% { transform: scale(1); filter: brightness(1); }
+    50% { transform: scale(1.04); filter: brightness(1.15); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>

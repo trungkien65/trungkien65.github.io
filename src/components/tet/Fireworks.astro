@@ -1,0 +1,43 @@
+---
+/**
+ * Hiệu ứng pháo hoa: các vòng sáng lan tỏa (CSS animation).
+ * Số lượng có thể chỉnh bằng count.
+ */
+const count = 6
+---
+
+<div class="fireworks" aria-hidden="true">
+  {[...Array(count)].map((_, i) => (
+    <div class="fireworks__item" style={`--i: ${i}`} />
+  ))}
+</div>
+
+<style>
+  .fireworks {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .fireworks__item {
+    position: absolute;
+    left: calc(15% + (var(--i) * 16%));
+    top: calc(10% + (var(--i) * 14%));
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #ffd700;
+    box-shadow: 0 0 20px 8px rgba(255, 215, 0, 0.5);
+    animation: fireworkBurst 3s ease-out infinite;
+    animation-delay: calc(var(--i) * 0.5s);
+  }
+  @keyframes fireworkBurst {
+    0% {
+      transform: scale(0);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(70);
+      opacity: 0;
+    }
+  }
+</style>

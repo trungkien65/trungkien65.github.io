@@ -1,0 +1,66 @@
+---
+/**
+ * Hiệu ứng cursor: khi di chuyển chuột, kéo theo hoa mai, trái tim, tiền xu...
+ * Chạy bằng script client (mousemove).
+ */
+// Emoji hiển thị theo chuột - có thể sửa list tại đây
+const trailEmojis = ["🌸", "❤️", "🪙", "✨", "🌺", "💮"];
+---
+
+<div id="cursor-trail-root" class="cursor-trail" aria-hidden="true"></div>
+
+<script define:vars={{ trailEmojis }}>
+  (function () {
+    const root = document.getElementById("cursor-trail-root");
+    if (!root) return;
+
+    const emojis = Array.isArray(trailEmojis) && trailEmojis.length ? trailEmojis : ["🌸"];
+    const maxTrail = 20; // Số phần tử tối đa trên màn hình
+    const throttleMs = 50;
+
+    let lastTime = 0;
+    function onMove(e) {
+      const now = Date.now();
+      if (now - lastTime < throttleMs) return;
+      lastTime = now;
+
+      const span = document.createElement("span");
+      span.className = "cursor-trail__item";
+      span.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      span.style.left = e.clientX + "px";
+      span.style.top = e.clientY + "px";
+      root.appendChild(span);
+
+      // Giới hạn số phần tử, xóa cũ
+      while (root.children.length > maxTrail) root.removeChild(root.firstChild);
+
+      setTimeout(() => {
+        span.classList.add("cursor-trail__item--out");
+        setTimeout(() => span.remove(), 400);
+      }, 800);
+    }
+
+    document.addEventListener("mousemove", onMove, { passive: true });
+  })();
+</script>
+
+<style>
+  .cursor-trail {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+  }
+  .cursor-trail__item {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    font-size: 1.25rem;
+    opacity: 0.9;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    user-select: none;
+  }
+  .cursor-trail__item--out {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+</style>

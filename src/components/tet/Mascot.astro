@@ -1,0 +1,51 @@
+---
+/**
+ * Linh vật năm mới: 2026 là năm Ngọ (con Ngựa).
+ * Icon ngựa chạy qua màn hình (animation chạy phi).
+ */
+---
+
+<div class="mascot" aria-hidden="true">
+  <span class="mascot__horse" title="Năm Ngọ - Ngựa">🐴</span>
+</div>
+
+<style>
+  .mascot {
+    position: absolute;
+    bottom: 18%;
+    left: -80px;
+    z-index: 1;
+    pointer-events: none;
+    /* Chạy từ trái sang phải, lặp vô hạn */
+    animation: horseTrack 12s linear infinite;
+  }
+
+  .mascot__horse {
+    font-size: clamp(2.5rem, 10vw, 5rem);
+    display: inline-block;
+    /* Bounce như đang phi */
+    animation: horseGallop 0.3s ease-in-out infinite;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.35));
+  }
+
+  /* Đường chạy ngang màn hình */
+  @keyframes horseTrack {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(calc(100vw + 100px));
+    }
+  }
+
+  /* Nhảy cóc khi phi */
+  @keyframes horseGallop {
+    0%,
+    100% {
+      transform: translateY(0) scaleX(1);
+    }
+    50% {
+      transform: translateY(-8px) scaleX(1.02);
+    }
+  }
+</style>

@@ -1,0 +1,72 @@
+---
+/**
+ * Hiển thị câu chúc Tết thay đổi liên tục (mỗi vài giây chọn câu mới từ list).
+ * Chỉnh intervalMs trong script để đổi tốc độ đổi câu.
+ */
+interface Props {
+  greetings: string[]
+}
+const { greetings } = Astro.props
+---
+
+<div id="random-greeting-wrap" class="random-greeting">
+  <p id="random-greeting-text" class="random-greeting__text">
+    {greetings[0]}
+  </p>
+</div>
+
+<script define:vars={{ greetings }}>
+  (function () {
+    const el = document.getElementById("random-greeting-text");
+    if (!el || !Array.isArray(greetings) || greetings.length === 0) return;
+
+    const intervalMs = 2800; // Đổi số này để câu chúc đổi nhanh/chậm hơn
+
+    function pickNext() {
+      const list = greetings;
+      const current = el.textContent?.trim() || "";
+      let next = list[Math.floor(Math.random() * list.length)];
+      if (list.length > 1 && next === current) {
+        next = list[(list.indexOf(next) + 1) % list.length];
+      }
+      el.classList.add("random-greeting__text--out");
+      setTimeout(function () {
+        el.textContent = next;
+        el.classList.remove("random-greeting__text--out");
+      }, 220);
+    }
+
+    el.textContent = greetings[Math.floor(Math.random() * greetings.length)];
+    setInterval(pickNext, intervalMs);
+  })();
+</script>
+
+<style>
+  .random-greeting {
+    text-align: center;
+    margin-top: 1rem;
+  }
+  .random-greeting__text {
+    margin: 0;
+    font-size: clamp(1.25rem, 4vw, 1.75rem);
+    color: rgba(255, 255, 255, 0.95);
+    letter-spacing: 0.05em;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    animation: greetingFade 0.6s ease-out;
+  }
+  .random-greeting__text--out {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  @keyframes greetingFade {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

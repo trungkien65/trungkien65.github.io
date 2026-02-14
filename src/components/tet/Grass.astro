@@ -1,0 +1,58 @@
+---
+/**
+ * Cỏ trang trí (năm Ngọ - đồng cỏ), animation lay động.
+ * Đặt phía dưới, khu vực nút "Về trang chủ".
+ */
+---
+
+<div class="grass" aria-hidden="true">
+  <div class="grass__strip">
+    <!-- Emoji cỏ lúa / cỏ -->
+    {["🌾", "🌿", "🌾", "🌿", "🌾", "🌿", "🌾", "🌿", "🌾", "🌿", "🌾", "🌿", "🌾"].map(
+      (char, i) => (
+        <span class="grass__blade" style={`--i: ${i}`}>
+          {char}
+        </span>
+      )
+    )}
+  </div>
+</div>
+
+<style>
+  .grass {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    pointer-events: none;
+    display: flex;
+    justify-content: center;
+    padding-bottom: 0.5rem;
+  }
+
+  .grass__strip {
+    display: flex;
+    gap: 0.25rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 90vw;
+  }
+
+  .grass__blade {
+    font-size: 1.25rem;
+    opacity: 0.9;
+    animation: grassSway 2s ease-in-out infinite;
+    animation-delay: calc(var(--i) * 0.1s);
+  }
+
+  @keyframes grassSway {
+    0%,
+    100% {
+      transform: rotate(-5deg) translateY(0);
+    }
+    50% {
+      transform: rotate(5deg) translateY(-3px);
+    }
+  }
+</style>
