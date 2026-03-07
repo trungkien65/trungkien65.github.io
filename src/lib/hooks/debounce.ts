@@ -1,6 +1,6 @@
 /**
- * Debounce: gọi fn sau khi không còn gọi trong ms.
- * Trả về hàm đã debounce và hàm cancel để hủy lần gọi pending.
+ * Debounce: call fn after no calls for ms.
+ * Returns debounced function and cancel function to abort pending call.
  */
 export function debounce<T extends (...args: unknown[]) => unknown>(
   fn: T,

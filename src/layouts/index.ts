@@ -1,5 +1,5 @@
 /**
- * Layouts: export qua index, không import trực tiếp từ từng file.
+ * Layouts: export via index, do not import directly from individual files.
  */
 
 export { default as DashboardLayout } from "./DashboardLayout.astro"

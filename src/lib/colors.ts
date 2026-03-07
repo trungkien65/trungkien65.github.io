@@ -1,9 +1,9 @@
 /**
- * Bảng màu mặc định của Tailwind CSS.
- * Tham khảo: https://tailwindcss.com/docs/colors
+ * Default Tailwind CSS color palette.
+ * Reference: https://tailwindcss.com/docs/colors
  *
- * Mỗi màu có 11 bậc: 50 (sáng nhất) → 950 (tối nhất).
- * Dùng cho tham chiếu trong code (chart, export, v.v.) hoặc khi cần giá trị hex/OKLCH.
+ * Each color has 11 levels: 50 (lightest) → 950 (darkest).
+ * Use for reference in code (chart, export, etc.) or when hex/OKLCH value is needed.
  */
 
 export type ColorScale =
@@ -21,7 +21,7 @@ export type ColorScale =
 
 export type ColorScaleRecord = Record<ColorScale, string>
 
-/** Tất cả tên họ màu trong palette mặc định Tailwind */
+/** All color family names in default Tailwind palette */
 export type TailwindColorName =
   | "slate"
   | "gray"
@@ -73,8 +73,8 @@ const scale = (
 })
 
 /**
- * Bảng màu Tailwind CSS (hex).
- * Dùng: tailwindColors.slate[500], tailwindColors.blue[600], ...
+ * Tailwind CSS color palette (hex).
+ * Use: tailwindColors.slate[500], tailwindColors.blue[600], ...
  */
 export const tailwindColors = {
   // Neutrals
@@ -368,11 +368,11 @@ export const tailwindColors = {
   ),
 } as const satisfies Record<TailwindColorName, ColorScaleRecord>
 
-/** Màu đen & trắng */
+/** Black & white */
 export const black = "#000000"
 export const white = "#ffffff"
 
-/** Danh sách tên họ màu (để iterate) */
+/** List of color family names (for iteration) */
 export const colorNames: TailwindColorName[] = [
   "slate",
   "gray",
@@ -398,7 +398,7 @@ export const colorNames: TailwindColorName[] = [
   "rose",
 ]
 
-/** Các bậc scale (50 → 950) */
+/** Scale steps (50 → 950) */
 export const colorScaleSteps: ColorScale[] = [
   "50",
   "100",

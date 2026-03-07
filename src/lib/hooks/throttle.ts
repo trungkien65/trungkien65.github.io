@@ -1,6 +1,6 @@
 /**
- * Throttle: gọi fn tối đa 1 lần trong mỗi khoảng ms.
- * Leading: gọi ngay lần đầu; trailing: gọi thêm 1 lần sau khi hết khoảng (nếu có gọi trong lúc chờ).
+ * Throttle: call fn at most once per ms interval.
+ * Leading: call immediately first time; trailing: call once more after interval ends (if called while waiting).
  */
 export function throttle<T extends (...args: unknown[]) => unknown>(
   fn: T,

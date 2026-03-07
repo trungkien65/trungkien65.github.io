@@ -1,6 +1,6 @@
 /**
- * Helper localStorage: get/set và subscribe khi key thay đổi (storage event hoặc set local).
- * Dùng khi cần đọc/ghi và phản ứng với thay đổi (vd: theme).
+ * Helper localStorage: get/set and subscribe when key changes (storage event or local set).
+ * Use when need to read/write and react to changes (e.g. theme).
  */
 export function getLocalStorage<T>(key: string, fallback: T): T {
   if (typeof window === "undefined") return fallback
@@ -23,7 +23,7 @@ export function setLocalStorage<T>(key: string, value: T): void {
   }
 }
 
-/** Subscribe khi giá trị key thay đổi (storage event từ tab khác hoặc setLocalStorage). */
+/** Subscribe when key value changes (storage event from other tab or setLocalStorage). */
 export function subscribeLocalStorage(key: string, callback: (value: string | null) => void): () => void {
   if (typeof window === "undefined") return () => {}
 

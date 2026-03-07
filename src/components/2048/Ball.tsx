@@ -23,7 +23,7 @@ export function Ball({ ball }: BallProps) {
   const gradient = VALUE_TO_GRADIENT[ball.value] ?? VALUE_TO_GRADIENT[2]
   const state = ball.state ?? "idle"
 
-  /* (ball.x, ball.y) = tâm ball; đặt top-left để cạnh dưới ball chạm đáy board */
+  /* (ball.x, ball.y) = ball center; position top-left so ball bottom touches board floor */
   const outerStyle: CSSProperties = {
     transform: `translate(${ball.x - ball.radius}px, ${ball.y - ball.radius}px)`,
   }

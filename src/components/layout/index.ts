@@ -1,5 +1,5 @@
 /**
- * Layout components: export qua index, không import trực tiếp từ từng file.
+ * Layout components: export via index, do not import directly from individual files.
  */
 
 export { default as Header } from "./Header.astro"

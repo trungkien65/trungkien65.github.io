@@ -1,5 +1,5 @@
 /**
- * BallBoard: chuột trong board thì ball theo ngang; click để thả.
+ * BallBoard: mouse in board moves ball horizontally; click to drop.
  */
 import { useCallback, useEffect, useRef, useState } from "react"
 import { useBallGame } from "@/hooks/useBallGame"
@@ -110,7 +110,7 @@ export function BallBoard() {
         onTouchMove={handleBoardTouchMove}
         onTouchEnd={handleBoardTouchEnd}
         role="application"
-        aria-label="Di chuyển chuột để chọn vị trí, click để thả ball"
+        aria-label="Move mouse to choose position, click to drop ball"
       >
         <div
           className="ball-game-preview-line"

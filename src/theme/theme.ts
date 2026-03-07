@@ -1,6 +1,6 @@
 /**
- * Semantic theme: map palette (lib/colors) sang màu theo ngữ cảnh light/dark.
- * Tất cả giá trị tham chiếu từ tailwindColors, không duplicate hex.
+ * Semantic theme: map palette (lib/colors) to colors by light/dark context.
+ * All values reference tailwindColors, no duplicate hex.
  */
 import { tailwindColors, white } from "@/lib/colors"
 
@@ -23,7 +23,7 @@ export type ThemeColors = {
 const c = tailwindColors
 
 export const themes: Record<ThemeMode, ThemeColors> = {
-  // Light: khoảng trắng → xanh dương (sky/blue), primary tông sáng
+  // Light: white to blue (sky/blue), primary bright tone
   light: {
     background: c.sky["50"],
     foreground: c.slate["900"],
@@ -37,7 +37,7 @@ export const themes: Record<ThemeMode, ThemeColors> = {
     card: white,
     cardForeground: c.slate["900"],
   },
-  // Dark: tông xám (zinc/gray)
+  // Dark: gray tone (zinc/gray)
   dark: {
     background: c.zinc["950"],
     foreground: c.zinc["50"],
@@ -53,7 +53,7 @@ export const themes: Record<ThemeMode, ThemeColors> = {
   },
 }
 
-/** Tên CSS variable tương ứng (để applyTheme set trên documentElement) */
+/** Corresponding CSS variable names (for applyTheme to set on documentElement) */
 export const themeVarKeys = [
   "background",
   "foreground",

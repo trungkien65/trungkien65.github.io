@@ -1,5 +1,5 @@
 /**
- * Lib: export tất cả qua index (utils, colors, hooks).
+ * Lib: export all via index (utils, colors, hooks).
  */
 
 export { cn } from "./utils"

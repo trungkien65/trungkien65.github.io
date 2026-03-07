@@ -1,5 +1,5 @@
 /**
- * UI components: export qua index, không import trực tiếp từ từng file.
+ * UI components: export via index, do not import directly from individual files.
  */
 
 export { default as Alert } from "./Alert.astro"

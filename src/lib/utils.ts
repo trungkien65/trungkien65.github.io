@@ -1,5 +1,5 @@
 /**
- * Merge Tailwind classes với tailwind-merge (tránh conflict khi override).
+ * Merge Tailwind classes with tailwind-merge (avoid conflict when overriding).
  */
 import { twMerge } from "tailwind-merge"
 

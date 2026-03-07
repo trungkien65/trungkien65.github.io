@@ -4,7 +4,7 @@
 <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
  width="400.000000pt" height="600.000000pt" viewBox="0 0 400.000000 600.000000"
  preserveAspectRatio="xMidYMid meet">
-<!-- Lật ngang để ngựa quay đầu sang phải (gốc quay quanh tâm viewBox) -->
+<!-- Flip horizontally so horse faces right (origin rotates around viewBox center) -->
 <g transform="translate(200,300) scale(-1,1) translate(-200,-300)">
 <g transform="translate(0.000000,600.000000) scale(0.100000,-0.100000)"
 fill="#000000" stroke="none">

@@ -1,6 +1,6 @@
 /**
- * Hooks / utilities cho client (vanilla JS).
- * Dùng trong script của Astro hoặc component islands.
+ * Hooks / utilities for client (vanilla JS).
+ * Use in Astro script or component islands.
  */
 
 export { debounce } from "./debounce"

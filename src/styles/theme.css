@@ -1,7 +1,7 @@
 /**
- * CSS variables cho semantic theme.
- * Light: trắng → xanh dương. Dark: xám.
- * Giá trị đồng bộ với theme.ts; dùng cho initial paint (tránh FOUC).
+ * CSS variables for semantic theme.
+ * Light: white to blue. Dark: gray.
+ * Values synced with theme.ts; used for initial paint (avoid FOUC).
  */
 :root,
 [data-theme="light"] {

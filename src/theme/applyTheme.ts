@@ -1,13 +1,13 @@
 /**
- * Áp dụng theme: set CSS variables trên documentElement và lưu vào localStorage.
- * initTheme() dùng khi load: ưu tiên localStorage, fallback prefers-color-scheme.
+ * Apply theme: set CSS variables on documentElement and save to localStorage.
+ * initTheme() used on load: prefer localStorage, fallback prefers-color-scheme.
  */
 import { themes, type ThemeMode } from "./theme"
 
 const STORAGE_KEY = "theme"
 
 /**
- * Đọc theme đã lưu hoặc system preference.
+ * Read saved theme or system preference.
  */
 export function getSavedTheme(): ThemeMode {
   if (typeof window === "undefined") return "light"
@@ -18,7 +18,7 @@ export function getSavedTheme(): ThemeMode {
 }
 
 /**
- * Set CSS variables từ themes[mode] và lưu mode vào localStorage.
+ * Set CSS variables from themes[mode] and save mode to localStorage.
  */
 export function applyTheme(mode: ThemeMode): void {
   if (typeof document === "undefined") return
@@ -40,8 +40,8 @@ export function applyTheme(mode: ThemeMode): void {
 }
 
 /**
- * Khởi tạo theme khi load: đọc saved/system rồi apply.
- * Gọi sớm (vd trong head) để tránh flash.
+ * Initialize theme on load: read saved/system then apply.
+ * Call early (e.g. in head) to avoid flash.
  */
 export function initTheme(): ThemeMode {
   const mode = getSavedTheme()

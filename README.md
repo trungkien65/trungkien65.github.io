@@ -1,17 +1,17 @@
-# Todo List - Quản lý công việc với Astro
+# Todo List - Task management with Astro
 
-Một ứng dụng Todo List đơn giản và đẹp mắt, được xây dựng bằng Astro.
+A simple and elegant Todo List application built with Astro.
 
-## Tính năng
+## Features
 
-- ✅ Thêm, xóa và đánh dấu hoàn thành công việc
-- 💾 Lưu trữ dữ liệu trong localStorage
-- 📊 Thống kê: Tổng cộng, Hoàn thành, Còn lại
+- ✅ Add, delete and mark tasks as complete
+- 💾 Store data in localStorage
+- 📊 Statistics: Total, Completed, Remaining
 - 🌙 Dark mode support
 - 📱 Responsive design
-- ⚡ Static site - dễ dàng host
+- ⚡ Static site - easy to host
 
-## Cài đặt
+## Installation
 
 ```bash
 pnpm install
@@ -23,7 +23,7 @@ pnpm install
 pnpm dev
 ```
 
-Site sẽ chạy tại `http://localhost:4321`
+Site will run at `http://localhost:4321`
 
 ## Build
 
@@ -31,7 +31,7 @@ Site sẽ chạy tại `http://localhost:4321`
 pnpm build
 ```
 
-Output sẽ ở trong thư mục `dist/` - sẵn sàng để deploy lên bất kỳ static hosting nào (Vercel, Netlify, GitHub Pages, etc.)
+Output will be in the `dist/` folder - ready to deploy to any static hosting (Vercel, Netlify, GitHub Pages, etc.)
 
 ## Deploy
 
@@ -47,32 +47,32 @@ netlify deploy --prod
 
 ### GitHub Pages
 
-Project đã được cấu hình với GitHub Actions để tự động deploy lên GitHub Pages.
+Project is configured with GitHub Actions to automatically deploy to GitHub Pages.
 
-**Cách deploy:**
+**How to deploy:**
 
-1. Push code lên GitHub repository
-2. Vào Settings > Pages trong repository
-3. Chọn Source: "GitHub Actions"
-4. Mỗi khi push lên branch `main`, GitHub Actions sẽ tự động build và deploy
+1. Push code to GitHub repository
+2. Go to Settings > Pages in the repository
+3. Select Source: "GitHub Actions"
+4. Each push to `main` branch will automatically build and deploy
 
-Hoặc nếu bạn muốn deploy thủ công:
+Or if you want to deploy manually:
 
 ```bash
 pnpm build
-# Sau đó push thư mục dist/ lên branch gh-pages
+# Then push the dist/ folder to gh-pages branch
 ```
 
-## Cấu trúc
+## Structure
 
 ```
 ├── src/
 │   ├── components/
-│   │   └── TodoList.astro      # Component Todo List
+│   │   └── TodoList.astro      # Todo List component
 │   ├── layouts/
-│   │   └── Layout.astro         # Layout chính
+│   │   └── Layout.astro         # Main layout
 │   └── pages/
-│       └── index.astro          # Trang chủ
+│       └── index.astro          # Home page
 ├── .github/
 │   └── workflows/
 │       └── deploy.yml           # GitHub Actions workflow

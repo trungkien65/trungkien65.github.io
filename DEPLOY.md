@@ -1,51 +1,51 @@
-# Hướng dẫn Deploy lên GitHub Pages
+# Deploy to GitHub Pages Guide
 
-## Bước 1: Chuẩn bị Repository
+## Step 1: Prepare Repository
 
-1. Tạo repository mới trên GitHub (hoặc sử dụng repository hiện có)
-2. Clone repository về máy (nếu chưa có)
+1. Create a new repository on GitHub (or use existing repository)
+2. Clone repository to your machine (if not already)
 
-## Bước 2: Push code lên GitHub
+## Step 2: Push code to GitHub
 
 ```bash
-# Khởi tạo git (nếu chưa có)
+# Initialize git (if not already)
 git init
 
-# Thêm remote repository
+# Add remote repository
 git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
 
-# Thêm tất cả files
+# Add all files
 git add .
 
 # Commit
 git commit -m "Initial commit: Todo List app"
 
-# Push lên GitHub
+# Push to GitHub
 git push -u origin main
 ```
 
-## Bước 3: Cấu hình GitHub Pages
+## Step 3: Configure GitHub Pages
 
-1. Vào repository trên GitHub
-2. Vào **Settings** > **Pages**
-3. Trong phần **Source**, chọn **GitHub Actions**
-4. Lưu lại
+1. Go to repository on GitHub
+2. Go to **Settings** > **Pages**
+3. In **Source** section, select **GitHub Actions**
+4. Save
 
-## Bước 4: Deploy tự động
+## Step 4: Automatic Deploy
 
-Sau khi cấu hình xong, mỗi khi bạn push code lên branch `main`, GitHub Actions sẽ tự động:
+After configuration, each time you push code to `main` branch, GitHub Actions will automatically:
 - Build project
-- Deploy lên GitHub Pages
+- Deploy to GitHub Pages
 
-Bạn có thể xem tiến trình deploy trong tab **Actions** của repository.
+You can view deploy progress in the **Actions** tab of the repository.
 
-## Kiểm tra kết quả
+## Verify Result
 
-Sau khi deploy thành công, site sẽ có tại:
+After successful deploy, site will be available at:
 `https://YOUR_USERNAME.github.io/YOUR_REPO_NAME/`
 
-## Lưu ý
+## Notes
 
-- Đảm bảo repository là public (hoặc bạn có GitHub Pro/Team nếu muốn private)
-- Workflow file đã được tạo tại `.github/workflows/deploy.yml`
-- Build output sẽ ở trong thư mục `dist/`
+- Ensure repository is public (or you have GitHub Pro/Team for private)
+- Workflow file is at `.github/workflows/deploy.yml`
+- Build output will be in the `dist/` folder

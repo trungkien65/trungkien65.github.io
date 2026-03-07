@@ -1,6 +1,6 @@
 ---
 /**
- * Theme page: showcase tất cả base UI components.
+ * Theme page: showcase all base UI components.
  */
 import { DashboardLayout } from "@/layouts";
 import {
@@ -26,7 +26,7 @@ import {
   <div class="space-y-12">
     <section>
       <Heading as="h2" size="lg" class="mb-1">Button</Heading>
-      <Text variant="muted" class="mb-4">Các biến thể và kích thước.</Text>
+      <Text variant="muted" class="mb-4">Variants and sizes.</Text>
       <div class="mt-4 flex flex-wrap gap-3">
         <Button variant="primary">Primary</Button>
         <Button variant="secondary">Secondary</Button>
@@ -59,7 +59,7 @@ import {
 
     <section>
       <Heading as="h2" size="lg" class="mb-1">Link</Heading>
-      <Text variant="muted" class="mb-4">Các kiểu link.</Text>
+      <Text variant="muted" class="mb-4">Link variants.</Text>
       <div class="mt-4 flex flex-wrap gap-4">
         <Link href="/">Primary link</Link>
         <Link href="/theme" variant="secondary">Secondary link</Link>
@@ -76,16 +76,16 @@ import {
           <Heading as="h2" size="lg">Heading LG</Heading>
           <Heading as="h3" size="md">Heading MD</Heading>
         </div>
-        <Text variant="lead">Lead paragraph: đoạn dẫn lớn hơn.</Text>
+        <Text variant="lead">Lead paragraph: larger intro text.</Text>
         <Text>Body default. Lorem ipsum dolor sit amet.</Text>
-        <Text variant="muted">Text muted cho nội dung phụ.</Text>
+        <Text variant="muted">Muted text for secondary content.</Text>
         <Text variant="small">Small text.</Text>
         <Text as="p">
-          Inline <Code>code</Code> và <Code>variable_name</Code>.
+          Inline <Code>code</Code> and <Code>variable_name</Code>.
         </Text>
         <Code block>const example = "block code"</Code>
         <Blockquote>
-          Blockquote: trích dẫn với viền primary.
+          Blockquote: quote with primary border.
         </Blockquote>
         <List as="ul">
           <li>Item 1</li>
@@ -93,30 +93,30 @@ import {
           <li>Item 3</li>
         </List>
         <List as="ol">
-          <li>Bước một</li>
-          <li>Bước hai</li>
+          <li>Step one</li>
+          <li>Step two</li>
         </List>
       </div>
     </section>
 
     <section>
       <Heading as="h2" size="lg" class="mb-1">Modal</Heading>
-      <Text variant="muted" class="mb-4">Mở modal bằng nút bên dưới.</Text>
+      <Text variant="muted" class="mb-4">Open modal with the button below.</Text>
       <div class="mt-4">
         <Button variant="primary" data-modal-open="demo-modal">
-          Mở modal
+          Open modal
         </Button>
       </div>
-      <Modal id="demo-modal" title="Modal mẫu">
+      <Modal id="demo-modal" title="Sample Modal">
         <Text variant="muted">
-          Nội dung modal. Đóng bằng nút X hoặc click ra ngoài.
+          Modal content. Close with X button or click outside.
         </Text>
       </Modal>
     </section>
 
     <section>
       <Heading as="h2" size="lg" class="mb-1">Table</Heading>
-      <Text variant="muted" class="mb-4">Bảng với header, hover, responsive.</Text>
+      <Text variant="muted" class="mb-4">Table with header, hover, responsive.</Text>
       <div class="mt-4">
         <Table>
           <thead>
@@ -152,14 +152,14 @@ import {
       <Text variant="muted" class="mb-4">Default, bordered, elevated.</Text>
       <div class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <Card variant="default">
-          <Text variant="small">Card nội dung đơn giản.</Text>
+          <Text variant="small">Simple card content.</Text>
         </Card>
         <Card variant="bordered">
-          <Text variant="small">Card có viền.</Text>
+          <Text variant="small">Card with border.</Text>
         </Card>
         <Card variant="elevated">
-          <span slot="header" class="font-medium">Card có header</span>
-          <Text variant="small">Nội dung và footer.</Text>
+          <span slot="header" class="font-medium">Card with header</span>
+          <Text variant="small">Content and footer.</Text>
           <span slot="footer" class="text-sm text-muted-foreground">Footer</span>
         </Card>
       </div>
@@ -167,7 +167,7 @@ import {
 
     <section>
       <Heading as="h2" size="lg" class="mb-1">Badge</Heading>
-      <Text variant="muted" class="mb-4">Các biến thể badge.</Text>
+      <Text variant="muted" class="mb-4">Badge variants.</Text>
       <div class="mt-4 flex flex-wrap gap-2">
         <Badge variant="primary">Primary</Badge>
         <Badge variant="secondary">Secondary</Badge>
@@ -182,20 +182,20 @@ import {
       <Heading as="h2" size="lg" class="mb-1">Alert</Heading>
       <Text variant="muted" class="mb-4">Info, success, warning, danger.</Text>
       <div class="mt-4 max-w-xl space-y-3">
-        <Alert variant="info" title="Info">Thông báo thông tin.</Alert>
-        <Alert variant="success" title="Success">Thao tác thành công.</Alert>
-        <Alert variant="warning" title="Warning">Cảnh báo cần lưu ý.</Alert>
-        <Alert variant="danger" title="Danger">Lỗi hoặc rủi ro.</Alert>
+        <Alert variant="info" title="Info">Information message.</Alert>
+        <Alert variant="success" title="Success">Operation successful.</Alert>
+        <Alert variant="warning" title="Warning">Warning to note.</Alert>
+        <Alert variant="danger" title="Danger">Error or risk.</Alert>
       </div>
     </section>
 
     <section>
       <Heading as="h2" size="lg" class="mb-1">Dropdown</Heading>
-      <Text variant="muted" class="mb-4">Click nút để mở menu.</Text>
+      <Text variant="muted" class="mb-4">Click button to open menu.</Text>
       <div class="mt-4">
         <Dropdown>
           <Button slot="trigger" variant="outline">
-            Mở dropdown
+            Open dropdown
           </Button>
           <div slot="menu">
             <Link href="#" class="block px-4 py-2 text-sm hover:bg-muted">Action 1</Link>
@@ -208,7 +208,7 @@ import {
 
     <section>
       <Heading as="h2" size="lg" class="mb-1">Tabs</Heading>
-      <Text variant="muted" class="mb-4">Chuyển tab để xem nội dung.</Text>
+      <Text variant="muted" class="mb-4">Switch tabs to view content.</Text>
       <div class="mt-4 max-w-xl">
         <Tabs>
           <button
@@ -242,7 +242,7 @@ import {
             aria-labelledby="tab-1"
             aria-hidden="true"
           >
-            <Text variant="small">Nội dung tab 1.</Text>
+            <Text variant="small">Tab 1 content.</Text>
           </div>
           <div
             slot="panels"
@@ -251,7 +251,7 @@ import {
             aria-labelledby="tab-2"
             aria-hidden="true"
           >
-            <Text variant="small">Nội dung tab 2.</Text>
+            <Text variant="small">Tab 2 content.</Text>
           </div>
           <div
             slot="panels"
@@ -260,7 +260,7 @@ import {
             aria-labelledby="tab-3"
             aria-hidden="true"
           >
-            <Text variant="small">Nội dung tab 3.</Text>
+            <Text variant="small">Tab 3 content.</Text>
           </div>
         </Tabs>
       </div>

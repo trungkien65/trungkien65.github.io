@@ -5,7 +5,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Semantic theme: dùng CSS variables (applyTheme set khi đổi light/dark)
+        // Semantic theme: use CSS variables (applyTheme sets when switching light/dark)
         background: 'var(--color-background)',
         foreground: 'var(--color-foreground)',
         primary: {

@@ -1,6 +1,6 @@
 ---
 /**
- * Game hub: card list, mở 2048 ball.
+ * Game hub: card list, opens 2048 ball game.
  */
 import { DashboardLayout } from "@/layouts";
 import { Card, Heading, Link, Text } from "@/components/ui";
@@ -9,14 +9,14 @@ import { Card, Heading, Link, Text } from "@/components/ui";
 <DashboardLayout title="Games">
   <div class="space-y-6">
     <Heading as="h1" size="xl" class="mb-4">Games</Heading>
-    <Text variant="muted" class="mb-6">Chọn game để chơi.</Text>
+    <Text variant="muted" class="mb-6">Select a game to play.</Text>
 
     <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       <Link href="/game/2048" class="block">
         <Card variant="elevated" class="h-full cursor-pointer transition hover:shadow-lg">
           <div class="space-y-2">
             <Heading as="h3" size="sm">Ball 2048</Heading>
-            <Text variant="small">Kéo thả các quả bóng cùng số để merge và tăng điểm.</Text>
+            <Text variant="small">Drag and drop balls with the same number to merge and increase score.</Text>
           </div>
         </Card>
       </Link>

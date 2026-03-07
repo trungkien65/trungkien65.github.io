@@ -1,5 +1,5 @@
 /**
- * Gọi callback khi click bên ngoài element (vd: đóng dropdown/modal).
+ * Call callback when clicking outside element (e.g. close dropdown/modal).
  */
 export function useOnClickOutside(
   element: HTMLElement | null,

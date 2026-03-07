@@ -8,7 +8,7 @@ export const BOARD_WIDTH = 420
 export const BOARD_HEIGHT = 520
 export const FLOOR_Y = BOARD_HEIGHT
 
-/** Clamp ball center (x, y) để cạnh ngoài ball chạm cạnh trong board. */
+/** Clamp ball center (x, y) so ball edge stays inside board. */
 export function clampBallInBoard(
   x: number,
   y: number,
@@ -68,12 +68,12 @@ export function randomSpawnX(): number {
   return maxR + Math.floor(Math.random() * (BOARD_WIDTH - 2 * maxR))
 }
 
-/** Preview zone: 0-10% board height (top 10%), ball chỉ di chuyển ngang. */
+/** Preview zone: 0-10% board height (top 10%), ball moves horizontally only. */
 export const PREVIEW_ZONE_Y_MIN = 0
 export const PREVIEW_ZONE_Y_MAX = Math.floor(BOARD_HEIGHT * 0.1)
-/** Đường đứt ở 10% chiều cao (đáy vùng preview). */
+/** Dashed line at 10% height (bottom of preview zone). */
 export const PREVIEW_LINE_Y = Math.floor(BOARD_HEIGHT * 0.1)
-/** Y cố định của preview (giữa vùng 0-10%), chỉ đổi x khi kéo. */
+/** Fixed Y for preview (center of 0-10% zone), only x changes when dragging. */
 export const PREVIEW_Y_CENTER = Math.floor((PREVIEW_ZONE_Y_MIN + PREVIEW_ZONE_Y_MAX) / 2)
 
 export function randomPreviewPosition(): { x: number; y: number } {

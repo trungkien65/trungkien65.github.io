@@ -1,8 +1,8 @@
-# Hướng dẫn nhanh
+# Quick guide
 
-## Chỉnh danh sách câu chúc Tết
+## Edit New Year greetings list
 
-- **File cần sửa:** `src/data/greetings.ts`
-- Mở file đó và chỉnh mảng `greetings`: thêm/xóa/sửa các chuỗi. Mỗi lần reload trang **/2026** sẽ hiển thị **1 câu ngẫu nhiên** từ list.
+- **File to edit:** `src/data/greetings.ts`
+- Open that file and edit the `greetings` array: add/remove/edit strings. Each reload of **/2026** page will display **1 random greeting** from the list.
 
-Nếu muốn đặt list ở file khác (ví dụ config), chỉ cần export mảng `greetings` từ file đó và import trong `src/pages/2026.astro` thay cho `@/data/greetings`.
+If you want to put the list in another file (e.g. config), just export the `greetings` array from that file and import it in `src/pages/2026.astro` instead of `@/data/greetings`.

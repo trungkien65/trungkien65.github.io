@@ -1,6 +1,6 @@
 ---
 /**
- * Dropdown: trigger slot + menu slot. Toggle bằng click (client script).
+ * Dropdown: trigger slot + menu slot. Toggle by click (client script).
  */
 interface Props {
   id?: string
@@ -30,7 +30,7 @@ const { id = "dropdown", class: className = "" } = Astro.props
       if (m) {
         m.classList.toggle("hidden")
       }
-      // Đóng các dropdown khác
+      // Close other dropdowns
       document.querySelectorAll("[data-dropdown-menu]").forEach((el) => {
         if (el !== m) (el as HTMLElement).classList.add("hidden")
       })
