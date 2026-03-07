@@ -1,0 +1,31 @@
+---
+/**
+ * Heading: h1–h6 với size thống nhất, dùng semantic tag.
+ */
+interface Props {
+  as?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
+  size?: "xl" | "lg" | "md" | "sm"
+  class?: string
+}
+
+const { as = "h2", size, class: className = "" } = Astro.props
+
+type HeadingTag = "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
+type SizeKey = "xl" | "lg" | "md" | "sm"
+const sizeFromAs: Record<HeadingTag, SizeKey> = {
+  h1: "xl", h2: "lg", h3: "md", h4: "md", h5: "sm", h6: "sm",
+}
+const s: SizeKey = size ?? sizeFromAs[as as HeadingTag]
+
+const sizes: Record<SizeKey, string> = {
+  xl: "text-3xl font-bold tracking-tight text-foreground",
+  lg: "text-2xl font-semibold tracking-tight text-foreground",
+  md: "text-lg font-semibold text-foreground",
+  sm: "text-base font-semibold text-foreground",
+}
+
+const Tag = as
+---
+<Tag class:list={[sizes[s], className]}>
+  <slot />
+</Tag>

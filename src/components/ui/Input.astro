@@ -1,0 +1,65 @@
+---
+/**
+ * Input: label, error, optional icon slot.
+ */
+import { Text } from "@/components/ui"
+
+interface Props {
+  type?: "text" | "email" | "password" | "number"
+  name?: string
+  id?: string
+  placeholder?: string
+  label?: string
+  error?: string
+  disabled?: boolean
+  class?: string
+  required?: boolean
+}
+
+const {
+  type = "text",
+  name,
+  id,
+  placeholder,
+  label,
+  error,
+  disabled = false,
+  class: className = "",
+  required = false,
+} = Astro.props
+
+const inputId = id ?? name ?? `input-${Math.random().toString(36).slice(2, 9)}`
+---
+<div class={className}>
+  {label && (
+    <label for={inputId} class="mb-1 block text-sm font-medium text-foreground">
+      {label}
+      {required && <span class="text-red-500">*</span>}
+    </label>
+  )}
+  <div class="relative">
+    <slot name="icon" />
+    <input
+      id={inputId}
+      type={type}
+      name={name}
+      placeholder={placeholder}
+      disabled={disabled}
+      required={required}
+      aria-invalid={error ? "true" : undefined}
+      aria-describedby={error ? `${inputId}-error` : undefined}
+      class:list={[
+        "w-full rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground placeholder-muted-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-0 disabled:opacity-50",
+        error
+          ? "border-red-500 focus:ring-red-500"
+          : "",
+        Astro.slots.has("icon") ? "pl-9" : "",
+      ]}
+    />
+  </div>
+  {error && (
+    <Text as="p" id={`${inputId}-error`} variant="small" class="mt-1 text-red-600" role="alert">
+      {error}
+    </Text>
+  )}
+</div>

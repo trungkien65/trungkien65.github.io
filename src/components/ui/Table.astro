@@ -1,0 +1,36 @@
+---
+/**
+ * Table: wrapper for thead/tbody. Styled with hover rows, responsive.
+ */
+interface Props {
+  class?: string
+}
+
+const { class: className = "" } = Astro.props
+---
+<div class="overflow-x-auto rounded-lg border border-border">
+  <table class:list={["min-w-full divide-y divide-border", className]}>
+    <slot />
+  </table>
+</div>
+
+<style>
+  :global(table) {
+    border-collapse: collapse;
+  }
+  :global(thead) {
+    @apply bg-muted;
+  }
+  :global(thead th) {
+    @apply px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground;
+  }
+  :global(tbody tr) {
+    @apply border-b border-border transition-colors last:border-0;
+  }
+  :global(tbody tr:hover) {
+    @apply bg-muted;
+  }
+  :global(tbody td) {
+    @apply px-4 py-3 text-sm text-foreground;
+  }
+</style>

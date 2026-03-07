@@ -1,0 +1,31 @@
+---
+/**
+ * Alert: info, success, warning, danger.
+ */
+import { Text } from "@/components/ui"
+
+interface Props {
+  variant?: "info" | "success" | "warning" | "danger"
+  title?: string
+  class?: string
+}
+
+const { variant = "info", title, class: className = "" } = Astro.props
+
+const base = "rounded-lg border p-4"
+const variants = {
+  info: "border-primary/40 bg-primary/10 text-foreground",
+  success:
+    "border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-200",
+  warning:
+    "border-amber-200 bg-amber-50 text-amber-800 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-200",
+  danger:
+    "border-red-200 bg-red-50 text-red-800 dark:border-red-800 dark:bg-red-950/40 dark:text-red-200",
+}
+---
+<div class:list={[base, variants[variant], className]} role="alert">
+  {title && <Text as="p" class="font-semibold">{title}</Text>}
+  <div class={title ? "mt-1" : ""}>
+    <slot />
+  </div>
+</div>

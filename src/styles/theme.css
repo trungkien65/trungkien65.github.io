@@ -1,0 +1,33 @@
+/**
+ * CSS variables cho semantic theme.
+ * Light: trắng → xanh dương. Dark: xám.
+ * Giá trị đồng bộ với theme.ts; dùng cho initial paint (tránh FOUC).
+ */
+:root,
+[data-theme="light"] {
+  --color-background: #f0f9ff;
+  --color-foreground: #0f172a;
+  --color-primary: #38bdf8;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #dbeafe;
+  --color-secondary-foreground: #1e3a8a;
+  --color-border: #bae6fd;
+  --color-muted: #e0f2fe;
+  --color-muted-foreground: #475569;
+  --color-card: #ffffff;
+  --color-card-foreground: #0f172a;
+}
+
+[data-theme="dark"] {
+  --color-background: #09090b;
+  --color-foreground: #fafafa;
+  --color-primary: #a1a1aa;
+  --color-primary-foreground: #09090b;
+  --color-secondary: #27272a;
+  --color-secondary-foreground: #e4e4e7;
+  --color-border: #27272a;
+  --color-muted: #27272a;
+  --color-muted-foreground: #a1a1aa;
+  --color-card: #18181b;
+  --color-card-foreground: #fafafa;
+}

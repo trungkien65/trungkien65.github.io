@@ -1,0 +1,18 @@
+---
+/**
+ * List: ul hoặc ol, style gọn.
+ */
+interface Props {
+  as?: "ul" | "ol"
+  class?: string
+}
+
+const { as = "ul", class: className = "" } = Astro.props
+
+const base = "list-outside space-y-1 text-foreground"
+const listStyle = { ul: "list-disc", ol: "list-decimal" }
+const Tag = as
+---
+<Tag class:list={[base, listStyle[as as "ul" | "ol"], className]}>
+  <slot />
+</Tag>

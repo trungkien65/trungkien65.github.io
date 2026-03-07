@@ -1,0 +1,57 @@
+---
+/**
+ * Tabs: tab list slot + panels. Dùng role="tablist" và aria. Client script để chuyển tab.
+ */
+interface Props {
+  class?: string
+}
+
+const { class: className = "" } = Astro.props
+---
+<div class:list={["tabs-root", className]} data-tabs>
+  <div
+    role="tablist"
+    class="flex gap-1 rounded-lg bg-muted p-1"
+    aria-label="Tabs"
+  >
+    <slot name="list" />
+  </div>
+  <div class="mt-3">
+    <slot name="panels" />
+  </div>
+</div>
+
+<style>
+  .tabs-root [role="tab"] {
+    @apply rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground;
+  }
+  .tabs-root [role="tab"][aria-selected="true"] {
+    @apply bg-card text-card-foreground shadow;
+  }
+  .tabs-root [role="tabpanel"] {
+    @apply hidden;
+  }
+  .tabs-root [role="tabpanel"][aria-hidden="false"] {
+    @apply block;
+  }
+</style>
+
+<script>
+  document.querySelectorAll("[data-tabs]").forEach((root) => {
+    const tabs = root.querySelectorAll('[role="tab"]')
+    const panels = root.querySelectorAll('[role="tabpanel"]')
+    const select = (i: number) => {
+      tabs.forEach((t, j) => {
+        ;(t as HTMLElement).setAttribute("aria-selected", j === i ? "true" : "false")
+      })
+      panels.forEach((p, j) => {
+        ;(p as HTMLElement).setAttribute("aria-hidden", j !== i ? "true" : "false")
+        ;(p as HTMLElement).classList.toggle("hidden", j !== i)
+      })
+    }
+    tabs.forEach((tab, i) => {
+      tab.addEventListener("click", () => select(i))
+    })
+    select(0)
+  })
+</script>

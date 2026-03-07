@@ -1,0 +1,46 @@
+---
+/**
+ * Dropdown: trigger slot + menu slot. Toggle bằng click (client script).
+ */
+interface Props {
+  id?: string
+  class?: string
+}
+
+const { id = "dropdown", class: className = "" } = Astro.props
+---
+<div id={id} class:list={["relative inline-block", className]} data-dropdown>
+  <div data-dropdown-trigger><slot name="trigger" /></div>
+  <div
+    data-dropdown-menu
+    class="absolute right-0 z-50 mt-1 hidden min-w-[10rem] rounded-lg border border-border bg-card py-1 shadow-lg"
+  >
+    <slot name="menu" />
+  </div>
+</div>
+
+<script>
+  document.addEventListener("click", (e) => {
+    const trigger = (e.target as HTMLElement).closest("[data-dropdown-trigger]")
+    const menu = (e.target as HTMLElement).closest("[data-dropdown-menu]")
+    const inside = (e.target as HTMLElement).closest("[data-dropdown]")
+    if (trigger) {
+      const container = trigger.closest("[data-dropdown]")
+      const m = container?.querySelector("[data-dropdown-menu]") as HTMLElement
+      if (m) {
+        m.classList.toggle("hidden")
+      }
+      // Đóng các dropdown khác
+      document.querySelectorAll("[data-dropdown-menu]").forEach((el) => {
+        if (el !== m) (el as HTMLElement).classList.add("hidden")
+      })
+      e.stopPropagation()
+      return
+    }
+    if (!inside) {
+      document.querySelectorAll("[data-dropdown-menu]").forEach((el) => {
+        (el as HTMLElement).classList.add("hidden")
+      })
+    }
+  })
+</script>

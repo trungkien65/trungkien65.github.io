@@ -1,0 +1,27 @@
+---
+/**
+ * Code: inline hoặc block (pre).
+ */
+interface Props {
+  block?: boolean
+  class?: string
+}
+
+const { block = false, class: className = "" } = Astro.props
+
+const inlineClass =
+  "rounded bg-muted px-1.5 py-0.5 font-mono text-sm text-foreground"
+const blockClass =
+  "block w-full overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm text-foreground"
+---
+{block ? (
+  <pre class:list={[blockClass, className]}>
+    <code>
+      <slot />
+    </code>
+  </pre>
+) : (
+  <code class:list={[inlineClass, className]}>
+    <slot />
+  </code>
+)}

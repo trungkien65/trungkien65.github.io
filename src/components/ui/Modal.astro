@@ -1,0 +1,82 @@
+---
+/**
+ * Modal: overlay + dialog. Trigger mở modal qua id; nội dung slot.
+ * Dùng với client script hoặc form action. Ở showcase dùng button + script.
+ */
+import { Button, Heading } from "@/components/ui"
+
+interface Props {
+  id: string
+  title?: string
+  class?: string
+}
+
+const { id, title, class: className = "" } = Astro.props
+---
+<div
+  id={id}
+  class="fixed inset-0 z-50 hidden items-center justify-center p-4"
+  aria-modal="true"
+  aria-labelledby={title ? `${id}-title` : undefined}
+  role="dialog"
+>
+  <!-- Backdrop -->
+  <div
+    class="absolute inset-0 bg-black/50 backdrop-blur-sm"
+    data-modal-close
+  ></div>
+  <!-- Panel -->
+  <div
+    class:list={[
+      "relative z-10 w-full max-w-md rounded-xl border border-border bg-card p-6 shadow-xl text-card-foreground",
+      className,
+    ]}
+  >
+    {title && (
+      <Heading as="h2" size="md" id={`${id}-title`}>
+        {title}
+      </Heading>
+    )}
+    <div class={title ? "mt-4" : ""}>
+      <slot />
+    </div>
+    <Button
+      type="button"
+      variant="ghost"
+      size="sm"
+      data-modal-close
+      class="absolute right-4 top-4 !min-w-0 !p-1"
+      aria-label="Close"
+    >
+      <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </Button>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("click", (e) => {
+    const openBtn = (e.target as HTMLElement).closest("[data-modal-open]")
+    const closeBtn = (e.target as HTMLElement).closest("[data-modal-close]")
+    if (openBtn) {
+      const id = (openBtn as HTMLElement).getAttribute("data-modal-open")
+      if (id) {
+        const el = document.getElementById(id)
+        if (el) {
+          el.classList.remove("hidden")
+          el.classList.add("flex")
+          document.body.style.overflow = "hidden"
+        }
+      }
+    }
+    if (closeBtn) {
+      const modal = (closeBtn as HTMLElement).closest("[role=dialog]")
+      if (modal) {
+        modal.classList.add("hidden")
+        modal.classList.remove("flex")
+        document.body.style.overflow = ""
+      }
+    }
+  })
+</script>

@@ -12,7 +12,8 @@
     "biome:fix": "biome check . --write"
   },
   "dependencies": {
-    "astro": "^4.0.0"
+    "astro": "^4.0.0",
+    "tailwind-merge": "^3.5.0"
   },
   "devDependencies": {
     "@astrojs/tailwind": "^5.1.0",

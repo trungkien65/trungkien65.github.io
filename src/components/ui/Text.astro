@@ -1,0 +1,26 @@
+---
+/**
+ * Text: đoạn / span với variant (lead, default, muted, small).
+ */
+interface Props {
+  as?: "p" | "span" | "div"
+  variant?: "lead" | "default" | "muted" | "small"
+  class?: string
+}
+
+const { as = "p", variant = "default", class: className = "" } = Astro.props
+
+type Variant = NonNullable<Props["variant"]>
+const base = "leading-relaxed"
+const variants: Record<Variant, string> = {
+  lead: "text-lg text-foreground",
+  default: "text-base text-foreground",
+  muted: "text-base text-muted-foreground",
+  small: "text-sm text-muted-foreground",
+}
+
+const Tag = as
+---
+<Tag class:list={[base, variants[variant as Variant], className]}>
+  <slot />
+</Tag>

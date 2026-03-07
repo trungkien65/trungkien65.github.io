@@ -1,0 +1,33 @@
+---
+/**
+ * Card: container với optional header, footer. Variants: default, bordered, elevated.
+ */
+interface Props {
+  variant?: "default" | "bordered" | "elevated"
+  class?: string
+}
+
+const { variant = "default", class: className = "" } = Astro.props
+
+const base = "rounded-xl bg-card text-card-foreground"
+const variants = {
+  default: "shadow-sm",
+  bordered: "border border-border",
+  elevated: "shadow-md border border-border",
+}
+---
+<div class:list={[base, variants[variant], className]}>
+  {Astro.slots.has("header") && (
+    <div class="border-b border-border px-4 py-3">
+      <slot name="header" />
+    </div>
+  )}
+  <div class="p-4">
+    <slot />
+  </div>
+  {Astro.slots.has("footer") && (
+    <div class="border-t border-border px-4 py-3">
+      <slot name="footer" />
+    </div>
+  )}
+</div>

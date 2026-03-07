@@ -1,0 +1,269 @@
+---
+/**
+ * Theme page: showcase tất cả base UI components.
+ */
+import { DashboardLayout } from "@/layouts";
+import {
+  Alert,
+  Badge,
+  Blockquote,
+  Button,
+  Card,
+  Code,
+  Dropdown,
+  Heading,
+  Input,
+  Link,
+  List,
+  Modal,
+  Table,
+  Tabs,
+  Text,
+} from "@/components/ui";
+---
+
+<DashboardLayout title="Theme – Component Showcase">
+  <div class="space-y-12">
+    <section>
+      <Heading as="h2" size="lg" class="mb-1">Button</Heading>
+      <Text variant="muted" class="mb-4">Các biến thể và kích thước.</Text>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <Button variant="primary">Primary</Button>
+        <Button variant="secondary">Secondary</Button>
+        <Button variant="outline">Outline</Button>
+        <Button variant="ghost">Ghost</Button>
+        <Button variant="danger">Danger</Button>
+        <Button variant="primary" disabled>Disabled</Button>
+      </div>
+      <div class="mt-3 flex flex-wrap gap-3">
+        <Button variant="primary" size="sm">Small</Button>
+        <Button variant="primary" size="md">Medium</Button>
+        <Button variant="primary" size="lg">Large</Button>
+      </div>
+    </section>
+
+    <section>
+      <Heading as="h2" size="lg" class="mb-1">Input</Heading>
+      <Text variant="muted" class="mb-4">Default, label, error.</Text>
+      <div class="mt-4 max-w-sm space-y-4">
+        <Input placeholder="Default input" />
+        <Input label="With label" placeholder="Enter value" />
+        <Input
+          label="With error"
+          error="This field is required"
+          placeholder="Invalid"
+        />
+        <Input label="Required" required placeholder="Required field" />
+      </div>
+    </section>
+
+    <section>
+      <Heading as="h2" size="lg" class="mb-1">Link</Heading>
+      <Text variant="muted" class="mb-4">Các kiểu link.</Text>
+      <div class="mt-4 flex flex-wrap gap-4">
+        <Link href="/">Primary link</Link>
+        <Link href="/theme" variant="secondary">Secondary link</Link>
+        <Link href="/" variant="muted">Muted link</Link>
+      </div>
+    </section>
+
+    <section>
+      <Heading as="h2" size="lg" class="mb-1">Typography</Heading>
+      <Text variant="muted" class="mb-4">Heading, Text, Code, Blockquote, List.</Text>
+      <div class="space-y-4">
+        <div>
+          <Heading as="h1" size="xl">Heading XL</Heading>
+          <Heading as="h2" size="lg">Heading LG</Heading>
+          <Heading as="h3" size="md">Heading MD</Heading>
+        </div>
+        <Text variant="lead">Lead paragraph: đoạn dẫn lớn hơn.</Text>
+        <Text>Body default. Lorem ipsum dolor sit amet.</Text>
+        <Text variant="muted">Text muted cho nội dung phụ.</Text>
+        <Text variant="small">Small text.</Text>
+        <Text as="p">
+          Inline <Code>code</Code> và <Code>variable_name</Code>.
+        </Text>
+        <Code block>const example = "block code"</Code>
+        <Blockquote>
+          Blockquote: trích dẫn với viền primary.
+        </Blockquote>
+        <List as="ul">
+          <li>Item 1</li>
+          <li>Item 2</li>
+          <li>Item 3</li>
+        </List>
+        <List as="ol">
+          <li>Bước một</li>
+          <li>Bước hai</li>
+        </List>
+      </div>
+    </section>
+
+    <section>
+      <Heading as="h2" size="lg" class="mb-1">Modal</Heading>
+      <Text variant="muted" class="mb-4">Mở modal bằng nút bên dưới.</Text>
+      <div class="mt-4">
+        <Button variant="primary" data-modal-open="demo-modal">
+          Mở modal
+        </Button>
+      </div>
+      <Modal id="demo-modal" title="Modal mẫu">
+        <Text variant="muted">
+          Nội dung modal. Đóng bằng nút X hoặc click ra ngoài.
+        </Text>
+      </Modal>
+    </section>
+
+    <section>
+      <Heading as="h2" size="lg" class="mb-1">Table</Heading>
+      <Text variant="muted" class="mb-4">Bảng với header, hover, responsive.</Text>
+      <div class="mt-4">
+        <Table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Role</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Alice</td>
+              <td>Admin</td>
+              <td>Active</td>
+            </tr>
+            <tr>
+              <td>Bob</td>
+              <td>Editor</td>
+              <td>Active</td>
+            </tr>
+            <tr>
+              <td>Carol</td>
+              <td>Viewer</td>
+              <td>Inactive</td>
+            </tr>
+          </tbody>
+        </Table>
+      </div>
+    </section>
+
+    <section>
+      <Heading as="h2" size="lg" class="mb-1">Card</Heading>
+      <Text variant="muted" class="mb-4">Default, bordered, elevated.</Text>
+      <div class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <Card variant="default">
+          <Text variant="small">Card nội dung đơn giản.</Text>
+        </Card>
+        <Card variant="bordered">
+          <Text variant="small">Card có viền.</Text>
+        </Card>
+        <Card variant="elevated">
+          <span slot="header" class="font-medium">Card có header</span>
+          <Text variant="small">Nội dung và footer.</Text>
+          <span slot="footer" class="text-sm text-muted-foreground">Footer</span>
+        </Card>
+      </div>
+    </section>
+
+    <section>
+      <Heading as="h2" size="lg" class="mb-1">Badge</Heading>
+      <Text variant="muted" class="mb-4">Các biến thể badge.</Text>
+      <div class="mt-4 flex flex-wrap gap-2">
+        <Badge variant="primary">Primary</Badge>
+        <Badge variant="secondary">Secondary</Badge>
+        <Badge variant="success">Success</Badge>
+        <Badge variant="warning">Warning</Badge>
+        <Badge variant="danger">Danger</Badge>
+        <Badge variant="outline">Outline</Badge>
+      </div>
+    </section>
+
+    <section>
+      <Heading as="h2" size="lg" class="mb-1">Alert</Heading>
+      <Text variant="muted" class="mb-4">Info, success, warning, danger.</Text>
+      <div class="mt-4 max-w-xl space-y-3">
+        <Alert variant="info" title="Info">Thông báo thông tin.</Alert>
+        <Alert variant="success" title="Success">Thao tác thành công.</Alert>
+        <Alert variant="warning" title="Warning">Cảnh báo cần lưu ý.</Alert>
+        <Alert variant="danger" title="Danger">Lỗi hoặc rủi ro.</Alert>
+      </div>
+    </section>
+
+    <section>
+      <Heading as="h2" size="lg" class="mb-1">Dropdown</Heading>
+      <Text variant="muted" class="mb-4">Click nút để mở menu.</Text>
+      <div class="mt-4">
+        <Dropdown>
+          <Button slot="trigger" variant="outline">
+            Mở dropdown
+          </Button>
+          <div slot="menu">
+            <Link href="#" class="block px-4 py-2 text-sm hover:bg-muted">Action 1</Link>
+            <Link href="#" class="block px-4 py-2 text-sm hover:bg-muted">Action 2</Link>
+            <Link href="#" class="block px-4 py-2 text-sm hover:bg-muted">Action 3</Link>
+          </div>
+        </Dropdown>
+      </div>
+    </section>
+
+    <section>
+      <Heading as="h2" size="lg" class="mb-1">Tabs</Heading>
+      <Text variant="muted" class="mb-4">Chuyển tab để xem nội dung.</Text>
+      <div class="mt-4 max-w-xl">
+        <Tabs>
+          <button
+            slot="list"
+            type="button"
+            role="tab"
+            aria-selected="false"
+            aria-controls="panel-1"
+            id="tab-1">Tab 1</button
+          >
+          <button
+            slot="list"
+            type="button"
+            role="tab"
+            aria-selected="false"
+            aria-controls="panel-2"
+            id="tab-2">Tab 2</button
+          >
+          <button
+            slot="list"
+            type="button"
+            role="tab"
+            aria-selected="false"
+            aria-controls="panel-3"
+            id="tab-3">Tab 3</button
+          >
+          <div
+            slot="panels"
+            role="tabpanel"
+            id="panel-1"
+            aria-labelledby="tab-1"
+            aria-hidden="true"
+          >
+            <Text variant="small">Nội dung tab 1.</Text>
+          </div>
+          <div
+            slot="panels"
+            role="tabpanel"
+            id="panel-2"
+            aria-labelledby="tab-2"
+            aria-hidden="true"
+          >
+            <Text variant="small">Nội dung tab 2.</Text>
+          </div>
+          <div
+            slot="panels"
+            role="tabpanel"
+            id="panel-3"
+            aria-labelledby="tab-3"
+            aria-hidden="true"
+          >
+            <Text variant="small">Nội dung tab 3.</Text>
+          </div>
+        </Tabs>
+      </div>
+    </section>
+  </div>
+</DashboardLayout>
