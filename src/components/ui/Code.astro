@@ -2,6 +2,8 @@
 /**
  * Code: inline or block (pre).
  */
+import { cn } from "@/lib/utils"
+
 interface Props {
   block?: boolean
   class?: string
@@ -15,13 +17,13 @@ const blockClass =
   "block w-full overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm text-foreground"
 ---
 {block ? (
-  <pre class:list={[blockClass, className]}>
+  <pre class={cn(blockClass, className)}>
     <code>
       <slot />
     </code>
   </pre>
 ) : (
-  <code class:list={[inlineClass, className]}>
+  <code class={cn(inlineClass, className)}>
     <slot />
   </code>
 )}

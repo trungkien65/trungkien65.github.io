@@ -4,6 +4,7 @@
  * Desktop: fixed on left. Mobile: collapsible (toggle from Header).
  */
 import { Link, List } from "@/components/ui"
+import { cn } from "@/lib/utils"
 
 const currentPath = Astro.url.pathname
 
@@ -11,6 +12,7 @@ const menuItems = [
   { href: "/", label: "Dashboard" },
   { href: "/theme", label: "Theme" },
   { href: "/game", label: "Game" },
+  { href: "/dev-tools", label: "Tool" },
 ]
 ---
 <aside
@@ -31,10 +33,10 @@ const menuItems = [
             <li class="!list-none">
               <Link
                 href={item.href}
-                class:list={[
+                class={cn(
                   "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground",
-                  isActive && "bg-muted text-foreground",
-                ]}
+                  isActive && "bg-muted text-foreground"
+                )}
               >
                 {item.label}
               </Link>

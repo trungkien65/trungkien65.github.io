@@ -2,6 +2,8 @@
 /**
  * Badge: primary, secondary, success, warning, danger, outline.
  */
+import { cn } from "@/lib/utils"
+
 interface Props {
   variant?: "primary" | "secondary" | "success" | "warning" | "danger" | "outline"
   class?: string
@@ -19,6 +21,6 @@ const variants = {
   outline: "border border-border bg-transparent",
 }
 ---
-<span class:list={[base, variants[variant], className]}>
+<span class={cn(base, variants[variant], className)}>
   <slot />
 </span>

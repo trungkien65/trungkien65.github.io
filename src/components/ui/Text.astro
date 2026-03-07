@@ -2,6 +2,8 @@
 /**
  * Text: paragraph / span with variant (lead, default, muted, small).
  */
+import { cn } from "@/lib/utils"
+
 interface Props {
   as?: "p" | "span" | "div"
   variant?: "lead" | "default" | "muted" | "small"
@@ -21,6 +23,6 @@ const variants: Record<Variant, string> = {
 
 const Tag = as
 ---
-<Tag class:list={[base, variants[variant as Variant], className]}>
+<Tag class={cn(base, variants[variant as Variant], className)}>
   <slot />
 </Tag>

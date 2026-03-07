@@ -3,6 +3,7 @@
  * Alert: info, success, warning, danger.
  */
 import { Text } from "@/components/ui"
+import { cn } from "@/lib/utils"
 
 interface Props {
   variant?: "info" | "success" | "warning" | "danger"
@@ -23,7 +24,7 @@ const variants = {
     "border-red-200 bg-red-50 text-red-800 dark:border-red-800 dark:bg-red-950/40 dark:text-red-200",
 }
 ---
-<div class:list={[base, variants[variant], className]} role="alert">
+<div class={cn(base, variants[variant], className)} role="alert">
   {title && <Text as="p" class="font-semibold">{title}</Text>}
   <div class={title ? "mt-1" : ""}>
     <slot />

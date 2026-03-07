@@ -1,0 +1,41 @@
+---
+/**
+ * Dynamic route cho tất cả dev tools - render placeholder theo config
+ */
+import { DashboardLayout } from "@/layouts"
+import { DEV_TOOL_GROUPS } from "@/lib/devTools/config"
+import { Card, Heading, Text } from "@/components/ui"
+
+export function getStaticPaths() {
+  const allTools = DEV_TOOL_GROUPS.flatMap((g) =>
+    g.tools.map((tool) => ({
+      params: { tool: tool.id },
+      props: { tool, group: g },
+    }))
+  )
+  return allTools
+}
+
+interface Props {
+  tool: { id: string; label: string; href: string; description?: string }
+  group: { label: string; description: string }
+}
+
+const { tool, group } = Astro.props
+---
+<DashboardLayout title={`${tool.label} | Dev Tools`}>
+  <div class="space-y-6">
+    <div>
+      <span class="text-sm font-medium text-muted-foreground">{group.label}</span>
+      <Heading as="h1" size="xl" class="mb-2 mt-1">{tool.label}</Heading>
+      {tool.description && (
+        <Text class="text-muted-foreground">{tool.description}</Text>
+      )}
+    </div>
+    <Card>
+      <p class="text-sm text-muted-foreground">
+        Tool <strong>{tool.label}</strong> đang được phát triển. Logic sẽ được triển khai theo từng giai đoạn.
+      </p>
+    </Card>
+  </div>
+</DashboardLayout>

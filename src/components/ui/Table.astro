@@ -2,6 +2,8 @@
 /**
  * Table: wrapper for thead/tbody. Styled with hover rows, responsive.
  */
+import { cn } from "@/lib/utils"
+
 interface Props {
   class?: string
 }
@@ -9,7 +11,7 @@ interface Props {
 const { class: className = "" } = Astro.props
 ---
 <div class="overflow-x-auto rounded-lg border border-border">
-  <table class:list={["min-w-full divide-y divide-border", className]}>
+  <table class={cn("min-w-full divide-y divide-border", className)}>
     <slot />
   </table>
 </div>

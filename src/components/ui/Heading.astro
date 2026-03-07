@@ -2,6 +2,8 @@
 /**
  * Heading: h1–h6 with consistent size, use semantic tag.
  */
+import { cn } from "@/lib/utils"
+
 interface Props {
   as?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
   size?: "xl" | "lg" | "md" | "sm"
@@ -26,6 +28,6 @@ const sizes: Record<SizeKey, string> = {
 
 const Tag = as
 ---
-<Tag class:list={[sizes[s], className]}>
+<Tag class={cn(sizes[s], className)}>
   <slot />
 </Tag>

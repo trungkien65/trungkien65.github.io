@@ -3,6 +3,8 @@
  * Button: primary, secondary, outline, ghost, danger + sizes.
  * HTML attributes of <button> (data-*, aria-*, etc.) are forwarded via ...rest.
  */
+import { cn } from "@/lib/utils"
+
 interface Props {
   variant?: "primary" | "secondary" | "outline" | "ghost" | "danger"
   size?: "sm" | "md" | "lg"
@@ -45,7 +47,7 @@ const sizes = {
 <button
   type={type}
   disabled={disabled}
-  class:list={[base, variants[variant], sizes[size], className]}
+  class={cn(base, variants[variant], sizes[size], className)}
   {...rest}
 >
   <slot />

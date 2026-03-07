@@ -2,6 +2,8 @@
 /**
  * List: ul or ol, compact style.
  */
+import { cn } from "@/lib/utils"
+
 interface Props {
   as?: "ul" | "ol"
   class?: string
@@ -13,6 +15,6 @@ const base = "list-outside space-y-1 text-foreground"
 const listStyle = { ul: "list-disc", ol: "list-decimal" }
 const Tag = as
 ---
-<Tag class:list={[base, listStyle[as as "ul" | "ol"], className]}>
+<Tag class={cn(base, listStyle[as as "ul" | "ol"], className)}>
   <slot />
 </Tag>

@@ -2,6 +2,8 @@
 /**
  * Blockquote: quote with left border.
  */
+import { cn } from "@/lib/utils"
+
 interface Props {
   class?: string
 }
@@ -9,10 +11,7 @@ interface Props {
 const { class: className = "" } = Astro.props
 ---
 <blockquote
-  class:list={[
-    "border-l-4 border-primary pl-4 italic text-muted-foreground",
-    className,
-  ]}
+  class={cn("border-l-4 border-primary pl-4 italic text-muted-foreground", className)}
 >
   <slot />
 </blockquote>

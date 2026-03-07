@@ -2,6 +2,8 @@
 /**
  * Card: container with optional header, footer. Variants: default, bordered, elevated.
  */
+import { cn } from "@/lib/utils"
+
 interface Props {
   variant?: "default" | "bordered" | "elevated"
   class?: string
@@ -16,7 +18,7 @@ const variants = {
   elevated: "shadow-md border border-border",
 }
 ---
-<div class:list={[base, variants[variant], className]}>
+<div class={cn(base, variants[variant], className)}>
   {Astro.slots.has("header") && (
     <div class="border-b border-border px-4 py-3">
       <slot name="header" />

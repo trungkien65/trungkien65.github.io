@@ -1,0 +1,51 @@
+---
+/**
+ * Tools - Tất cả tools hiển thị dưới dạng tab dọc
+ */
+import { DashboardLayout } from "@/layouts"
+import { ALL_TOOLS } from "@/lib/devTools/config"
+import { Button, Heading, Tabs, Text } from "@/components/ui"
+import { ToolRenderer } from "@/components/devTools/ToolRenderer"
+---
+<DashboardLayout title="Tools">
+  <div class="space-y-6">
+    <div>
+      <Heading as="h1" size="xl" class="mb-2">Tools</Heading>
+      <Text variant="lead" class="text-muted-foreground">
+        All tools displayed as a vertical tab.
+      </Text>
+    </div>
+
+    <Tabs orientation="vertical" class="w-full">
+      <div slot="list" class="flex flex-col gap-1">
+        {ALL_TOOLS.map((tool) => (
+          <Button
+            variant="ghost"
+            class="w-full justify-start p-2"
+            key={`tab-${tool.id}`}
+            role="tab"
+            aria-controls={`panel-${tool.id}`}
+            aria-selected="false"
+            data-tab-id={tool.id}
+          >
+            {tool.label}
+          </Button>
+        ))}
+      </div>
+      <div slot="panels">
+        {ALL_TOOLS.map((tool) => (
+          <div
+            role="tabpanel"
+            id={`panel-${tool.id}`}
+            aria-labelledby={`tab-${tool.id}`}
+            aria-hidden="true"
+          >
+            <div class="rounded-xl border border-border bg-card p-6">
+              <ToolRenderer client:load toolId={tool.id} />
+            </div>
+          </div>
+        ))}
+      </div>
+    </Tabs>
+  </div>
+</DashboardLayout>

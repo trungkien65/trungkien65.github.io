@@ -2,6 +2,8 @@
 /**
  * Dropdown: trigger slot + menu slot. Toggle by click (client script).
  */
+import { cn } from "@/lib/utils"
+
 interface Props {
   id?: string
   class?: string
@@ -9,7 +11,7 @@ interface Props {
 
 const { id = "dropdown", class: className = "" } = Astro.props
 ---
-<div id={id} class:list={["relative inline-block", className]} data-dropdown>
+<div id={id} class={cn("relative inline-block", className)} data-dropdown>
   <div data-dropdown-trigger><slot name="trigger" /></div>
   <div
     data-dropdown-menu

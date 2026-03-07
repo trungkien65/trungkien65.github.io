@@ -1,22 +1,30 @@
 ---
 /**
  * Tabs: tab list slot + panels. Use role="tablist" and aria. Client script to switch tabs.
+ * orientation: horizontal (default) | vertical - tab list theo chiều ngang hoặc dọc
  */
+import { cn } from "@/lib/utils"
+
 interface Props {
   class?: string
+  orientation?: "horizontal" | "vertical"
 }
 
-const { class: className = "" } = Astro.props
+const { class: className = "", orientation = "horizontal" } = Astro.props
+const isVertical = orientation === "vertical"
 ---
-<div class:list={["tabs-root", className]} data-tabs>
+<div class={cn("tabs-root", isVertical && "flex gap-4", className)} data-tabs>
   <div
     role="tablist"
-    class="flex gap-1 rounded-lg bg-muted p-1"
+    class={cn(
+      "rounded-lg p-1",
+      isVertical ? "flex flex-col w-48 shrink-0 max-h-[70vh] overflow-y-auto" : "flex gap-1"
+    )}
     aria-label="Tabs"
   >
     <slot name="list" />
   </div>
-  <div class="mt-3">
+  <div class={cn(isVertical ? "flex-1 min-w-0" : "mt-3")}>
     <slot name="panels" />
   </div>
 </div>
@@ -26,6 +34,7 @@ const { class: className = "" } = Astro.props
     @apply rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground;
   }
   .tabs-root [role="tab"][aria-selected="true"] {
+    background-color: #ffffff;
     @apply bg-card text-card-foreground shadow;
   }
   .tabs-root [role="tabpanel"] {
