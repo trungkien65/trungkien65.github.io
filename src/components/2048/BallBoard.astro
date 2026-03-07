@@ -1,0 +1,11 @@
+---
+/**
+ * Ball game board: Astro wrapper, imports React island + styles.
+ * UI only – no game logic.
+ */
+import { BallBoard as BallBoardReact } from "./BallBoard"
+import "@/styles/ballgame.css"
+---
+<div class="flex justify-center p-6">
+  <BallBoardReact client:load />
+</div>

@@ -1,4 +1,5 @@
 import { fileURLToPath } from "node:url"
+import react from "@astrojs/react"
 import tailwind from "@astrojs/tailwind"
 import { defineConfig } from "astro/config"
 
@@ -6,7 +7,7 @@ import { defineConfig } from "astro/config"
 export default defineConfig({
   // Static site generation (no SSR)
   output: "static",
-  integrations: [tailwind()],
+  integrations: [tailwind(), react()],
   vite: {
     resolve: {
       alias: {

@@ -1,0 +1,18 @@
+---
+/**
+ * Ball game UI prototype: board with dropping balls (no game logic).
+ */
+import { DashboardLayout } from "@/layouts"
+import { Heading, Text } from "@/components/ui"
+import BallBoard from "@/components/2048/BallBoard.astro"
+---
+<DashboardLayout title="Ball 2048 – Prototype">
+  <div class="space-y-6">
+    <div>
+      <Heading as="h1" size="xl" class="mb-1">Ball 2048</Heading>
+      <Text variant="muted">Click board to spawn balls (2/4/8). Same-value collision merges and adds to score.</Text>
+    </div>
+    <BallBoard />
+  </div>
+</DashboardLayout>
+
