@@ -20,8 +20,10 @@ const {
   disabled = false,
   type = "button",
   class: className = "",
+  key: _key,
+  slot: _slot,
   ...rest
-} = Astro.props
+} = Astro.props as Props & { key?: unknown; slot?: unknown }
 
 const base =
   "inline-flex items-center justify-center font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"

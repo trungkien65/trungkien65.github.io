@@ -1,0 +1,21 @@
+---
+/**
+ * Tiêu đề + mô tả tool: Heading + Text (UI Astro). Nội dung tương tác qua slot (island).
+ */
+import { Heading, Text } from "@/components/ui"
+
+interface Props {
+  title: string
+  description?: string
+}
+
+const { title, description } = Astro.props
+---
+
+<div class="space-y-4">
+  <div>
+    <Heading as="h2" size="lg">{title}</Heading>
+    {description && <Text variant="muted" class="mt-1">{description}</Text>}
+  </div>
+  <slot />
+</div>

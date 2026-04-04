@@ -1,16 +1,17 @@
 ---
+import ToolPanel from "@/components/devTools/ToolPanel.astro"
+import { Heading, Text } from "@/components/ui"
 /**
- * Dynamic route cho tất cả dev tools - render placeholder theo config
+ * Trang từng tool — dùng chung ToolRenderer với /dev-tools
  */
 import { DashboardLayout } from "@/layouts"
 import { DEV_TOOL_GROUPS } from "@/lib/devTools/config"
-import { Card, Heading, Text } from "@/components/ui"
 
 export function getStaticPaths() {
   const allTools = DEV_TOOL_GROUPS.flatMap((g) =>
     g.tools.map((tool) => ({
       params: { tool: tool.id },
-      props: { tool, group: g },
+      props: { tool, group: g }
     }))
   )
   return allTools
@@ -32,10 +33,11 @@ const { tool, group } = Astro.props
         <Text class="text-muted-foreground">{tool.description}</Text>
       )}
     </div>
-    <Card>
-      <p class="text-sm text-muted-foreground">
-        Tool <strong>{tool.label}</strong> đang được phát triển. Logic sẽ được triển khai theo từng giai đoạn.
-      </p>
-    </Card>
+    <ToolPanel toolId={tool.id} />
   </div>
 </DashboardLayout>
+
+<script>
+  import { bootDevTools } from "@/scripts/dev-tools/boot"
+  bootDevTools()
+</script>

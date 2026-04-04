@@ -12,19 +12,18 @@ interface Props {
 
 const { class: className = "", orientation = "horizontal" } = Astro.props
 const isVertical = orientation === "vertical"
+const tabListClass = cn(
+  "rounded-lg p-1",
+  isVertical
+    ? "flex max-h-[70vh] w-full min-w-0 shrink-0 flex-col overflow-y-auto sm:min-w-[11rem] sm:max-w-[14rem]"
+    : "flex gap-1"
+)
 ---
 <div class={cn("tabs-root", isVertical && "flex gap-4", className)} data-tabs>
-  <div
-    role="tablist"
-    class={cn(
-      "rounded-lg p-1",
-      isVertical ? "flex flex-col w-48 shrink-0 max-h-[70vh] overflow-y-auto" : "flex gap-1"
-    )}
-    aria-label="Tabs"
-  >
+  <div role="tablist" class={tabListClass} aria-label={isVertical ? "Danh sách tab" : "Tabs"}>
     <slot name="list" />
   </div>
-  <div class={cn(isVertical ? "flex-1 min-w-0" : "mt-3")}>
+  <div class={cn(isVertical ? "min-w-0 flex-1" : "mt-3")}>
     <slot name="panels" />
   </div>
 </div>
@@ -34,14 +33,11 @@ const isVertical = orientation === "vertical"
     @apply rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground;
   }
   .tabs-root [role="tab"][aria-selected="true"] {
-    background-color: #ffffff;
-    @apply bg-card text-card-foreground shadow;
+    @apply bg-muted text-foreground shadow-sm ring-1 ring-border;
   }
-  .tabs-root [role="tabpanel"] {
-    @apply hidden;
-  }
-  .tabs-root [role="tabpanel"][aria-hidden="false"] {
-    @apply block;
+  /* Panel: dùng thuộc tính HTML hidden (UA ẩn trước CSS bundle) — tránh nháy khi reload */
+  .tabs-root [role="tabpanel"][hidden] {
+    display: none !important;
   }
 </style>
 
@@ -54,13 +50,16 @@ const isVertical = orientation === "vertical"
         ;(t as HTMLElement).setAttribute("aria-selected", j === i ? "true" : "false")
       })
       panels.forEach((p, j) => {
-        ;(p as HTMLElement).setAttribute("aria-hidden", j !== i ? "true" : "false")
-        ;(p as HTMLElement).classList.toggle("hidden", j !== i)
+        const on = j === i
+        const el = p as HTMLElement
+        el.setAttribute("aria-hidden", on ? "false" : "true")
+        el.hidden = !on
       })
     }
     tabs.forEach((tab, i) => {
       tab.addEventListener("click", () => select(i))
     })
-    select(0)
+    const initial = [...tabs].findIndex((t) => t.getAttribute("aria-selected") === "true")
+    select(initial >= 0 ? initial : 0)
   })
 </script>

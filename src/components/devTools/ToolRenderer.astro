@@ -1,0 +1,783 @@
+---
+/**
+ * Shell ToolCard + markup vanilla; logic trong bootDevTools().
+ */
+import { Button, Input, Text, Textarea } from "@/components/ui"
+import { ALL_TOOLS } from "@/lib/devTools/config"
+import ToolCard from "@/components/devTools/ToolCard.astro"
+
+interface Props {
+  toolId: string;
+}
+
+const { toolId } = Astro.props;
+const tool = ALL_TOOLS.find((t) => t.id === toolId);
+const title = tool?.label ?? toolId;
+const description = tool?.description;
+
+const HANDLED = new Set([
+  "jwt",
+  "hash",
+  "case",
+  "json-type",
+  "uuid",
+  "json",
+  "json-xml",
+  "json-csv",
+  "json-yaml",
+  "base64",
+  "url",
+  "query",
+  "html",
+  "timestamp",
+  "relative",
+  "regex",
+  "cron",
+  "slug",
+  "diff",
+  "headers",
+  "csv",
+  "color",
+  "number-base",
+]);
+const missing = tool && !HANDLED.has(toolId)
+
+/** Nút Copy dạng liên kết — ghost + không nền khi hover */
+const copyGhost =
+  "h-auto min-h-0 px-1 py-0.5 text-xs font-normal text-primary hover:bg-transparent hover:underline"
+
+const preO =
+  "max-h-72 overflow-auto rounded-lg border border-border bg-muted/40 p-3 font-mono text-xs break-all"
+---
+
+{
+  !tool && (
+    <Text variant="small" class="text-muted-foreground">
+      Tool chưa có.
+    </Text>
+  )
+}
+
+{
+  tool && toolId === "jwt" && (
+    <ToolCard title={title} description={description}>
+      <div data-dev-tool-id="jwt" class="space-y-4">
+        <Textarea
+          label="JWT"
+          rows={3}
+          data-dt-jwt-input
+          placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        />
+        <p
+          data-dt-jwt-error
+          class="hidden text-sm text-red-600 dark:text-red-400"
+        />
+        <div data-dt-jwt-block class="hidden space-y-4">
+          <div>
+            <div class="mb-1 flex items-center justify-between">
+              <Text as="span" variant="small" class="font-medium text-foreground">
+                HEADER
+              </Text>
+              <Button type="button" variant="ghost" size="sm" data-dt-jwt-copy-h class={copyGhost}>
+                Copy
+              </Button>
+            </div>
+            <pre
+              data-dt-jwt-header
+              class="overflow-x-auto rounded bg-muted p-3 text-xs"
+            />
+          </div>
+          <div>
+            <div class="mb-1 flex items-center justify-between">
+              <Text as="span" variant="small" class="font-medium text-foreground">
+                PAYLOAD
+              </Text>
+              <Button type="button" variant="ghost" size="sm" data-dt-jwt-copy-p class={copyGhost}>
+                Copy
+              </Button>
+            </div>
+            <pre
+              data-dt-jwt-payload
+              class="overflow-x-auto rounded bg-muted p-3 text-xs"
+            />
+          </div>
+          <div data-dt-jwt-times-wrap class="hidden">
+            <Text as="span" variant="small" class="font-medium text-foreground">
+              TIME CLAIMS
+            </Text>
+            <ul data-dt-jwt-times class="mt-2 space-y-1 text-sm" />
+          </div>
+        </div>
+      </div>
+    </ToolCard>
+  )
+}
+
+{
+  tool && toolId === "hash" && (
+    <ToolCard title={title} description={description}>
+      <div data-dev-tool-id="hash" class="space-y-4">
+        <Textarea
+          label="TEXT"
+          rows={3}
+          data-dt-hash-text
+          placeholder="Nhập text cần hash"
+        />
+        <div class="flex flex-wrap gap-2">
+          {["SHA-1", "SHA-256", "SHA-384", "SHA-512"].map((a, i) => (
+            <button
+              type="button"
+              data-dt-hash-algo={a}
+              class:list={[
+                "rounded px-3 py-1.5 text-sm",
+                i === 1
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-muted hover:bg-muted/80",
+              ]}
+            >
+              {a}
+            </button>
+          ))}
+          <Button type="button" variant="primary" data-dt-hash-go>
+            Sinh hash
+          </Button>
+        </div>
+        <div data-dt-hash-out class="hidden">
+          <div class="mb-1 flex justify-between">
+            <Text as="span" variant="small" class="font-medium text-foreground">
+              HASH OUTPUT
+            </Text>
+            <Button type="button" variant="ghost" size="sm" data-dt-hash-copy class={copyGhost}>
+              Copy
+            </Button>
+          </div>
+          <pre data-dt-hash-pre class:list={[preO, "break-all"]} />
+        </div>
+      </div>
+    </ToolCard>
+  )
+}
+
+{
+  tool && toolId === "case" && (
+    <ToolCard title={title} description={description}>
+      <div data-dev-tool-id="case" class="space-y-4">
+        <Input
+          label="SOURCE TEXT"
+          type="text"
+          data-dt-case-input
+          placeholder="devPocketToolsV2"
+        />
+        <div data-dt-case-rows class="space-y-2" />
+      </div>
+    </ToolCard>
+  )
+}
+
+{
+  tool && toolId === "json-type" && (
+    <ToolCard title={title} description={description}>
+      <div data-dev-tool-id="json-type" class="space-y-4">
+        <Textarea
+          label="JSON SAMPLE"
+          rows={6}
+          data-dt-jts-input
+          placeholder='{"id":1}'
+        />
+        <p data-dt-jts-error class="hidden text-sm text-red-600" />
+        <div data-dt-jts-out class="hidden">
+          <div class="mb-1 flex justify-between">
+            <Text as="span" variant="small" class="font-medium text-foreground">
+              TYPESCRIPT
+            </Text>
+            <Button type="button" variant="ghost" size="sm" data-dt-jts-copy class={copyGhost}>
+              Copy
+            </Button>
+          </div>
+          <pre data-dt-jts-pre class={preO} />
+        </div>
+      </div>
+    </ToolCard>
+  )
+}
+
+{
+  tool && toolId === "uuid" && (
+    <ToolCard title={title} description={description}>
+      <div data-dev-tool-id="uuid" class="space-y-4">
+        <div class="flex flex-wrap items-end gap-4">
+          <Input
+            label="SỐ LƯỢNG"
+            type="number"
+            data-dt-uuid-count
+            class="w-auto shrink-0"
+            inputClass="w-20"
+            min={1}
+            max={50}
+            value="3"
+          />
+          <Button type="button" variant="primary" data-dt-uuid-go>
+            Tạo UUID
+          </Button>
+        </div>
+        <div data-dt-uuid-wrap class="hidden">
+          <div class="mb-2 flex justify-between">
+            <Text as="span" variant="small" class="font-medium text-foreground">
+              UUID
+            </Text>
+            <Button type="button" variant="ghost" size="sm" data-dt-uuid-copy-all class={copyGhost}>
+              Copy All
+            </Button>
+          </div>
+          <ul data-dt-uuid-list class="space-y-2" />
+        </div>
+      </div>
+    </ToolCard>
+  )
+}
+
+{
+  tool && toolId === "json" && (
+    <ToolCard title={title} description={description}>
+      <div data-dev-tool-id="json" class="min-w-0" />
+    </ToolCard>
+  )
+}
+
+{
+  tool && toolId === "json-xml" && (
+    <ToolCard title={title} description={description}>
+      <div data-dev-tool-id="json-xml" class="space-y-4">
+        <div class="grid gap-4 sm:grid-cols-[1fr_auto] sm:items-end">
+          <Textarea
+            label="JSON"
+            rows={8}
+            data-dt-jc-input
+            placeholder='{"user":{"name":"A"}}'
+          />
+          <div class="sm:min-w-[140px]">
+            <Input
+              label="Tên root"
+              type="text"
+              data-dt-jc-root
+              value="root"
+              inputClass="font-mono"
+            />
+          </div>
+        </div>
+        <Button type="button" variant="primary" data-dt-jc-go>
+          Chuyển sang XML
+        </Button>
+        <p data-dt-jc-error class="hidden text-sm text-red-600" />
+        <div data-dt-jc-wrap class="hidden">
+          <div class="mb-1 flex justify-between">
+            <Text
+              as="span"
+              data-dt-jc-out-label
+              variant="small"
+              class="text-xs font-medium uppercase text-muted-foreground"
+            >
+              XML
+            </Text>
+            <Button type="button" variant="ghost" size="sm" data-dt-jc-copy class={copyGhost}>
+              Copy
+            </Button>
+          </div>
+          <pre data-dt-jc-pre class={preO} />
+        </div>
+      </div>
+    </ToolCard>
+  )
+}
+
+{
+  tool && toolId === "json-csv" && (
+    <ToolCard title={title} description={description}>
+      <div data-dev-tool-id="json-csv" class="space-y-4">
+        <Textarea
+          label="JSON"
+          rows={8}
+          data-dt-jc-input
+          placeholder='[{"a":1}]'
+        />
+        <Button type="button" variant="primary" data-dt-jc-go>
+          Chuyển sang CSV
+        </Button>
+        <p data-dt-jc-error class="hidden text-sm text-red-600" />
+        <div data-dt-jc-wrap class="hidden">
+          <div class="mb-1 flex justify-between">
+            <Text
+              as="span"
+              data-dt-jc-out-label
+              variant="small"
+              class="text-xs font-medium uppercase text-muted-foreground"
+            >
+              CSV
+            </Text>
+            <Button type="button" variant="ghost" size="sm" data-dt-jc-copy class={copyGhost}>
+              Copy
+            </Button>
+          </div>
+          <pre data-dt-jc-pre class={preO} />
+        </div>
+      </div>
+    </ToolCard>
+  )
+}
+
+{
+  tool && toolId === "json-yaml" && (
+    <ToolCard title={title} description={description}>
+      <div data-dev-tool-id="json-yaml" class="space-y-4">
+        <Textarea
+          label="JSON"
+          rows={8}
+          data-dt-jc-input
+          placeholder='{"a":1}'
+        />
+        <Button type="button" variant="primary" data-dt-jc-go>
+          Chuyển sang YAML
+        </Button>
+        <p data-dt-jc-error class="hidden text-sm text-red-600" />
+        <div data-dt-jc-wrap class="hidden">
+          <div class="mb-1 flex justify-between">
+            <Text
+              as="span"
+              data-dt-jc-out-label
+              variant="small"
+              class="text-xs font-medium uppercase text-muted-foreground"
+            >
+              YAML
+            </Text>
+            <Button type="button" variant="ghost" size="sm" data-dt-jc-copy class={copyGhost}>
+              Copy
+            </Button>
+          </div>
+          <pre data-dt-jc-pre class={preO} />
+        </div>
+      </div>
+    </ToolCard>
+  )
+}
+
+{
+  tool && toolId === "base64" && (
+    <ToolCard title={title} description={description}>
+      <div data-dev-tool-id="base64" class="space-y-4">
+        <Textarea label="INPUT" rows={4} data-dt-b64-input />
+        <div class="flex flex-wrap gap-2">
+          <Button type="button" variant="primary" data-dt-b64-enc>
+            Encode
+          </Button>
+          <Button type="button" variant="outline" data-dt-b64-dec>
+            Decode
+          </Button>
+        </div>
+        <p data-dt-b64-error class="hidden text-sm text-red-600" />
+        <div data-dt-b64-out class="hidden">
+          <div class="mb-1 flex justify-between">
+            <Text as="span" variant="small" class="font-medium text-foreground">
+              OUTPUT
+            </Text>
+            <Button type="button" variant="ghost" size="sm" data-dt-b64-copy class={copyGhost}>
+              Copy
+            </Button>
+          </div>
+          <pre data-dt-b64-pre class={preO} />
+        </div>
+      </div>
+    </ToolCard>
+  )
+}
+
+{
+  tool && toolId === "url" && (
+    <ToolCard title={title} description={description}>
+      <div data-dev-tool-id="url" class="space-y-4">
+        <Input
+          label="URL"
+          type="text"
+          data-dt-url-input
+          placeholder="https://example.com/path?foo=bar"
+        />
+        <p data-dt-url-error class="hidden text-sm text-red-600" />
+        <div data-dt-url-wrap class="hidden">
+          <div class="mb-1 flex justify-between">
+            <Text as="span" variant="small" class="font-medium text-foreground">
+              PARSED
+            </Text>
+            <Button type="button" variant="ghost" size="sm" data-dt-url-copy class={copyGhost}>
+              Copy
+            </Button>
+          </div>
+          <pre data-dt-url-pre class={preO} />
+        </div>
+      </div>
+    </ToolCard>
+  )
+}
+
+{
+  tool && toolId === "query" && (
+    <ToolCard title={title} description={description}>
+      <div data-dev-tool-id="query" class="space-y-4">
+        <Textarea label="Query string hoặc JSON" rows={4} data-dt-q-input />
+        <div class="flex flex-wrap gap-2">
+          <Button type="button" variant="primary" data-dt-q-parse>
+            Parse
+          </Button>
+          <Button type="button" variant="outline" data-dt-q-build>
+            Build (từ JSON)
+          </Button>
+        </div>
+        <p data-dt-q-error class="hidden text-sm text-red-600" />
+        <div data-dt-q-wrap class="hidden">
+          <div class="mb-1 flex justify-between">
+            <Text as="span" variant="small" class="font-medium text-foreground">
+              OUTPUT
+            </Text>
+            <Button type="button" variant="ghost" size="sm" data-dt-q-copy class={copyGhost}>
+              Copy
+            </Button>
+          </div>
+          <pre data-dt-q-pre class={preO} />
+        </div>
+      </div>
+    </ToolCard>
+  )
+}
+
+{
+  tool && toolId === "html" && (
+    <ToolCard title={title} description={description}>
+      <div data-dev-tool-id="html" class="space-y-4">
+        <Textarea label="INPUT" rows={4} data-dt-html-input />
+        <div class="flex flex-wrap gap-2">
+          <Button type="button" variant="primary" data-dt-html-enc>
+            Encode
+          </Button>
+          <Button type="button" variant="outline" data-dt-html-dec>
+            Decode
+          </Button>
+        </div>
+        <div data-dt-html-wrap class="hidden">
+          <div class="mb-1 flex justify-between">
+            <Text as="span" variant="small" class="font-medium text-foreground">
+              OUTPUT
+            </Text>
+            <Button type="button" variant="ghost" size="sm" data-dt-html-copy class={copyGhost}>
+              Copy
+            </Button>
+          </div>
+          <pre data-dt-html-pre class={preO} />
+        </div>
+      </div>
+    </ToolCard>
+  )
+}
+
+{
+  tool && toolId === "timestamp" && (
+    <ToolCard title={title} description={description}>
+      <div data-dev-tool-id="timestamp" class="space-y-4">
+        <Input label="Timestamp (giây) hoặc ngày" type="text" data-dt-ts-input />
+        <div class="flex flex-wrap gap-2">
+          <Button type="button" variant="primary" data-dt-ts-to-date>
+            Timestamp → Ngày
+          </Button>
+          <Button type="button" variant="outline" data-dt-ts-to-ts>
+            Ngày → Timestamp
+          </Button>
+          <Button type="button" variant="outline" data-dt-ts-now>
+            Now
+          </Button>
+        </div>
+        <p data-dt-ts-error class="hidden text-sm text-red-600" />
+        <p data-dt-ts-out class="rounded bg-muted p-3 font-mono text-sm" />
+        <Button type="button" variant="outline" data-dt-ts-copy>
+          Copy output
+        </Button>
+      </div>
+    </ToolCard>
+  )
+}
+
+{
+  tool && toolId === "relative" && (
+    <ToolCard title={title} description={description}>
+      <div data-dev-tool-id="relative" class="space-y-4">
+        <Input label="Ngày" type="text" data-dt-rel-input />
+        <Button type="button" variant="primary" data-dt-rel-go>
+          Format
+        </Button>
+        <p data-dt-rel-error class="hidden text-sm text-red-600" />
+        <p data-dt-rel-out class="rounded bg-muted p-3 text-sm" />
+        <Button type="button" variant="outline" data-dt-rel-copy>
+          Copy
+        </Button>
+      </div>
+    </ToolCard>
+  )
+}
+
+{
+  tool && toolId === "regex" && (
+    <ToolCard title={title} description={description}>
+      <div data-dev-tool-id="regex" class="space-y-4">
+        <Input
+          label="Pattern"
+          type="text"
+          data-dt-re-pat
+          placeholder="\d+"
+          inputClass="font-mono"
+        />
+        <Input
+          label="Flags"
+          type="text"
+          data-dt-re-flags
+          class="w-auto"
+          inputClass="w-20 font-mono"
+          value="g"
+        />
+        <Textarea label="Text" rows={4} data-dt-re-text />
+        <Button type="button" variant="primary" data-dt-re-go>
+          Test
+        </Button>
+        <p data-dt-re-error class="hidden text-sm text-red-600" />
+        <div data-dt-re-wrap class="hidden">
+          <div class="mb-1 flex justify-between">
+            <Text as="span" variant="small" class="font-medium text-foreground">
+              Matches
+            </Text>
+            <Button type="button" variant="ghost" size="sm" data-dt-re-copy class={copyGhost}>
+              Copy
+            </Button>
+          </div>
+          <pre data-dt-re-pre class={preO} />
+        </div>
+      </div>
+    </ToolCard>
+  )
+}
+
+{
+  tool && toolId === "cron" && (
+    <ToolCard title={title} description={description}>
+      <div data-dev-tool-id="cron" class="space-y-4">
+        <Input
+          label="Cron"
+          type="text"
+          data-dt-cron-input
+          placeholder="*/5 * * * *"
+          inputClass="font-mono"
+        />
+        <Button type="button" variant="primary" data-dt-cron-go>
+          Parse
+        </Button>
+        <p data-dt-cron-error class="hidden text-sm text-red-600" />
+        <div data-dt-cron-wrap class="hidden">
+          <div class="mb-1 flex justify-between">
+            <Text as="span" variant="small" class="font-medium text-foreground">
+              PARSED
+            </Text>
+            <Button type="button" variant="ghost" size="sm" data-dt-cron-copy class={copyGhost}>
+              Copy
+            </Button>
+          </div>
+          <pre data-dt-cron-pre class={preO} />
+        </div>
+      </div>
+    </ToolCard>
+  )
+}
+
+{
+  tool && toolId === "slug" && (
+    <ToolCard title={title} description={description}>
+      <div data-dev-tool-id="slug" class="space-y-4">
+        <Input label="SOURCE TEXT" type="text" data-dt-slug-input />
+        <div data-dt-slug-wrap class="hidden">
+          <div class="mb-1 flex justify-between">
+            <Text as="span" variant="small" class="font-medium text-foreground">
+              SLUG
+            </Text>
+            <Button type="button" variant="ghost" size="sm" data-dt-slug-copy class={copyGhost}>
+              Copy
+            </Button>
+          </div>
+          <code
+            data-dt-slug-out
+            class="block rounded bg-muted p-3 font-mono text-sm"
+          />
+        </div>
+      </div>
+    </ToolCard>
+  )
+}
+
+{
+  tool && toolId === "diff" && (
+    <ToolCard title={title} description={description}>
+      <div data-dev-tool-id="diff" class="space-y-4">
+        <div class="grid gap-4 sm:grid-cols-2">
+          <Textarea label="Text A" rows={6} data-dt-diff-a />
+          <Textarea label="Text B" rows={6} data-dt-diff-b />
+        </div>
+        <div data-dt-diff-wrap class="hidden">
+          <div class="mb-1 flex justify-between">
+            <span class="text-sm font-medium">DIFF</span>
+            <button
+              type="button"
+              data-dt-diff-copy
+              class="text-xs text-primary hover:underline"
+            >
+              Copy
+            </button>
+          </div>
+          <pre data-dt-diff-pre class:list={[preO, "max-h-64"]} />
+        </div>
+      </div>
+    </ToolCard>
+  )
+}
+
+{
+  tool && toolId === "headers" && (
+    <ToolCard title={title} description={description}>
+      <div data-dev-tool-id="headers" class="space-y-4">
+        <Textarea
+          label="Headers"
+          rows={6}
+          data-dt-hdr-input
+          placeholder="Content-Type: application/json"
+        />
+        <div data-dt-hdr-wrap class="hidden">
+          <div class="mb-1 flex justify-between">
+            <Text as="span" variant="small" class="font-medium text-foreground">
+              PARSED
+            </Text>
+            <Button type="button" variant="ghost" size="sm" data-dt-hdr-copy class={copyGhost}>
+              Copy
+            </Button>
+          </div>
+          <pre data-dt-hdr-pre class={preO} />
+        </div>
+      </div>
+    </ToolCard>
+  )
+}
+
+{
+  tool && toolId === "csv" && (
+    <ToolCard title={title} description={description}>
+      <div data-dev-tool-id="csv" class="space-y-4">
+        <Textarea label="CSV" rows={6} data-dt-csv-input />
+        <Button type="button" variant="primary" data-dt-csv-go>
+          Parse
+        </Button>
+        <p data-dt-csv-error class="hidden text-sm text-red-600" />
+        <div data-dt-csv-wrap class="hidden">
+          <div class="mb-1 flex justify-between">
+            <Text as="span" variant="small" class="font-medium text-foreground">
+              JSON
+            </Text>
+            <Button type="button" variant="ghost" size="sm" data-dt-csv-copy class={copyGhost}>
+              Copy
+            </Button>
+          </div>
+          <pre data-dt-csv-pre class={preO} />
+        </div>
+      </div>
+    </ToolCard>
+  )
+}
+
+{
+  tool && toolId === "color" && (
+    <ToolCard title={title} description={description}>
+      <div data-dev-tool-id="color" class="space-y-4">
+        <div class="flex gap-2">
+          <Input
+            type="text"
+            data-dt-col-hex
+            class="min-w-0 flex-1"
+            inputClass="font-mono"
+            value="#38bdf8"
+          />
+          <div
+            data-dt-col-swatch
+            class="h-10 w-14 shrink-0 rounded border border-border"
+            style="background-color:#38bdf8"
+          />
+        </div>
+        <Input label="RGB" type="text" data-dt-col-rgb inputClass="font-mono" />
+        <Input
+          label="HSL"
+          type="text"
+          data-dt-col-hsl
+          readonly
+          inputClass="bg-muted font-mono"
+        />
+        <div class="flex flex-wrap gap-2">
+          <Button type="button" variant="primary" data-dt-col-from-hex>
+            HEX → RGB/HSL
+          </Button>
+          <Button type="button" variant="outline" data-dt-col-copy>
+            Copy HEX
+          </Button>
+        </div>
+      </div>
+    </ToolCard>
+  )
+}
+
+{
+  tool && toolId === "number-base" && (
+    <ToolCard title={title} description={description}>
+      <div data-dev-tool-id="number-base" class="space-y-4">
+        <div class="flex gap-2">
+          <Input
+            type="text"
+            data-dt-nb-input
+            class="min-w-0 flex-1"
+            inputClass="font-mono"
+          />
+          <select
+            data-dt-nb-base
+            class="rounded-lg border border-border bg-card px-3 py-2 text-sm"
+          >
+            <option value="dec">Decimal</option>
+            <option value="hex">Hex</option>
+            <option value="bin">Binary</option>
+          </select>
+        </div>
+        <Button type="button" variant="primary" data-dt-nb-go>
+          Convert
+        </Button>
+        <p data-dt-nb-error class="hidden text-sm text-red-600" />
+        <div data-dt-nb-wrap class="hidden">
+          <div class="mb-1 flex justify-between">
+            <Text as="span" variant="small" class="font-medium text-foreground">
+              OUTPUT
+            </Text>
+            <Button type="button" variant="ghost" size="sm" data-dt-nb-copy class={copyGhost}>
+              Copy
+            </Button>
+          </div>
+          <div
+            data-dt-nb-out
+            class="space-y-2 rounded border border-border bg-muted p-3 font-mono text-sm"
+          />
+        </div>
+      </div>
+    </ToolCard>
+  )
+}
+
+{
+  missing && (
+    <Text variant="small" class="text-muted-foreground">
+      Tool chưa gắn component.
+    </Text>
+  )
+}

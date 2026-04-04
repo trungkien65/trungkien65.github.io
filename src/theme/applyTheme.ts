@@ -1,20 +1,19 @@
 /**
  * Apply theme: set CSS variables on documentElement and save to localStorage.
- * initTheme() used on load: prefer localStorage, fallback prefers-color-scheme.
+ * initTheme() used on load: prefer localStorage, mặc định light.
  */
 import { themes, type ThemeMode } from "./theme"
 
 const STORAGE_KEY = "theme"
 
 /**
- * Read saved theme or system preference.
+ * Read saved theme; không có key thì mặc định light (không theo prefers-color-scheme).
  */
 export function getSavedTheme(): ThemeMode {
   if (typeof window === "undefined") return "light"
   const stored = localStorage.getItem(STORAGE_KEY) as ThemeMode | null
   if (stored === "dark" || stored === "light") return stored
-  if (typeof window.matchMedia !== "function") return "light"
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
+  return "light"
 }
 
 /**

@@ -8,9 +8,17 @@ interface Props {
   as?: "p" | "span" | "div"
   variant?: "lead" | "default" | "muted" | "small"
   class?: string
+  [key: string]: unknown
 }
 
-const { as = "p", variant = "default", class: className = "" } = Astro.props
+const {
+  as = "p",
+  variant = "default",
+  class: className = "",
+  key: _key,
+  slot: _slot,
+  ...rest
+} = Astro.props as Props & { key?: unknown; slot?: unknown }
 
 type Variant = NonNullable<Props["variant"]>
 const base = "leading-relaxed"
@@ -23,6 +31,6 @@ const variants: Record<Variant, string> = {
 
 const Tag = as
 ---
-<Tag class={cn(base, variants[variant as Variant], className)}>
+<Tag class={cn(base, variants[variant as Variant], className)} {...rest}>
   <slot />
 </Tag>

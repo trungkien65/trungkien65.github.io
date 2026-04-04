@@ -12,42 +12,81 @@ export interface DevToolGroup {
   tools: DevTool[]
 }
 
-/** 4 nhóm chính với 20 tools */
+/** Nhóm dev tools (JSON converters bổ sung theo jsonformatter.org) */
 export const DEV_TOOL_GROUPS: DevToolGroup[] = [
+  {
+    id: "data-text",
+    label: "Data & Text",
+    description: "JSON, chuyển đổi, Base64, URL, query, HTML",
+    tools: [
+      {
+        id: "json",
+        label: "JSON Formatter",
+        href: "/dev-tools/json",
+        description: "Input · thao tác · output — bố cục tương tự jsonformatter.org.",
+      },
+      {
+        id: "json-xml",
+        label: "JSON → XML",
+        href: "/dev-tools/json-xml",
+        description: "Chuyển JSON thành XML (phần tử gốc tùy chỉnh).",
+      },
+      {
+        id: "json-csv",
+        label: "JSON → CSV",
+        href: "/dev-tools/json-csv",
+        description: "Mảng object → bảng CSV; mảng scalar hoặc một object → một cột / một dòng.",
+      },
+      {
+        id: "json-yaml",
+        label: "JSON → YAML",
+        href: "/dev-tools/json-yaml",
+        description: "Chuyển JSON sang YAML (định dạng block đơn giản).",
+      },
+      { id: "base64", label: "Base64 Encode/Decode", href: "/dev-tools/base64", description: "Encode và decode Base64." },
+      { id: "url", label: "URL Parser", href: "/dev-tools/url", description: "Parse URL components." },
+      { id: "query", label: "Query String", href: "/dev-tools/query", description: "Parse và build query string." },
+      { id: "html", label: "HTML Encode/Decode", href: "/dev-tools/html", description: "Encode và decode HTML entities." },
+    ],
+  },
   {
     id: "builders",
     label: "Builders",
     description: "JWT, hash, case, type, UUID",
     tools: [
-      { id: "jwt", label: "JWT Decoder", href: "/dev-tools/jwt", description: "Decode JWT header & payload" },
-      { id: "hash", label: "Hash Generator", href: "/dev-tools/hash", description: "SHA-1, SHA-256, SHA-384, SHA-512" },
-      { id: "case", label: "Case Converter", href: "/dev-tools/case", description: "camelCase, snake_case, kebab-case..." },
-      { id: "json-type", label: "JSON to TypeScript", href: "/dev-tools/json-type", description: "Sinh type TS từ JSON" },
-      { id: "uuid", label: "UUID Generator", href: "/dev-tools/uuid", description: "Tạo UUID v4" },
+      {
+        id: "jwt",
+        label: "JWT Decoder",
+        href: "/dev-tools/jwt",
+        description: "Decode header và payload của JWT. Signature chưa được verify.",
+      },
+      {
+        id: "hash",
+        label: "Hash Generator",
+        href: "/dev-tools/hash",
+        description: "Sinh hash từ text bằng Web Crypto API.",
+      },
+      { id: "case", label: "Case Converter", href: "/dev-tools/case", description: "Đổi nhanh giữa các naming convention." },
+      {
+        id: "json-type",
+        label: "JSON to TypeScript",
+        href: "/dev-tools/json-type",
+        description: "Sinh type hoặc interface TypeScript từ JSON mẫu.",
+      },
+      { id: "uuid", label: "UUID Generator", href: "/dev-tools/uuid", description: "Tạo UUID v4 ngay trên trình duyệt." },
     ],
   },
-  {
-    id: "data-text",
-    label: "Data & Text",
-    description: "JSON, Base64, URL, query, HTML",
-    tools: [
-      { id: "json", label: "JSON Formatter", href: "/dev-tools/json", description: "Format & validate JSON" },
-      { id: "base64", label: "Base64 Encode/Decode", href: "/dev-tools/base64", description: "Encode/Decode Base64" },
-      { id: "url", label: "URL Parser", href: "/dev-tools/url", description: "Parse URL components" },
-      { id: "query", label: "Query String", href: "/dev-tools/query", description: "Parse & build query string" },
-      { id: "html", label: "HTML Encode/Decode", href: "/dev-tools/html", description: "HTML entities" },
-    ],
-  },
+
   {
     id: "time-rules",
     label: "Time & Rules",
     description: "Timestamp, relative, regex, cron, slug",
     tools: [
-      { id: "timestamp", label: "Timestamp", href: "/dev-tools/timestamp", description: "Unix timestamp converter" },
-      { id: "relative", label: "Relative Time", href: "/dev-tools/relative", description: "Relative time format" },
-      { id: "regex", label: "Regex Tester", href: "/dev-tools/regex", description: "Test regex patterns" },
-      { id: "cron", label: "Cron Parser", href: "/dev-tools/cron", description: "Parse cron expression" },
-      { id: "slug", label: "Slug Generator", href: "/dev-tools/slug", description: "Tạo slug từ text" },
+      { id: "timestamp", label: "Timestamp", href: "/dev-tools/timestamp", description: "Chuyển đổi Unix timestamp và ngày." },
+      { id: "relative", label: "Relative Time", href: "/dev-tools/relative", description: "Chuyển ngày thành thời gian tương đối." },
+      { id: "regex", label: "Regex Tester", href: "/dev-tools/regex", description: "Test regex patterns." },
+      { id: "cron", label: "Cron Parser", href: "/dev-tools/cron", description: "Parse cron expression (đơn giản)." },
+      { id: "slug", label: "Slug Generator", href: "/dev-tools/slug", description: "Tạo slug từ text (URL-friendly)." },
     ],
   },
   {
@@ -57,9 +96,9 @@ export const DEV_TOOL_GROUPS: DevToolGroup[] = [
     tools: [
       { id: "diff", label: "Text Diff", href: "/dev-tools/diff", description: "So sánh 2 đoạn text" },
       { id: "headers", label: "HTTP Headers", href: "/dev-tools/headers", description: "Parse HTTP headers" },
-      { id: "csv", label: "CSV Parser", href: "/dev-tools/csv", description: "Parse CSV to JSON" },
-      { id: "color", label: "Color Converter", href: "/dev-tools/color", description: "HEX, RGB, HSL converter" },
-      { id: "number-base", label: "Number Base", href: "/dev-tools/number-base", description: "Binary, hex, decimal" },
+      { id: "csv", label: "CSV Parser", href: "/dev-tools/csv", description: "Parse CSV sang JSON." },
+      { id: "color", label: "Color Converter", href: "/dev-tools/color", description: "Chuyển đổi HEX, RGB, HSL." },
+      { id: "number-base", label: "Number Base", href: "/dev-tools/number-base", description: "Chuyển đổi giữa binary, hex, decimal." },
     ],
   },
 ]

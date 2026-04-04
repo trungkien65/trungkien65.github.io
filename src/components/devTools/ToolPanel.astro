@@ -1,0 +1,16 @@
+---
+/**
+ * Bọc nội dung tool bằng Card (UI Astro) + ToolRenderer.astro (shell + islands).
+ */
+import { Card } from "@/components/ui"
+import ToolRenderer from "@/components/devTools/ToolRenderer.astro"
+
+interface Props {
+  toolId: string
+}
+
+const { toolId } = Astro.props
+---
+<Card variant="bordered" class="shadow-sm">
+  <ToolRenderer toolId={toolId} />
+</Card>

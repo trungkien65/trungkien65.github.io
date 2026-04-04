@@ -1,0 +1,44 @@
+---
+/**
+ * Textarea: cùng “skin” với Input; label tùy chọn; forward data-* / rows / name…
+ */
+import { cn } from "@/lib/utils"
+
+interface Props {
+  label?: string
+  rows?: number
+  placeholder?: string
+  /** Class bọc ngoài (ví dụ w-full, min-w-0) */
+  class?: string
+  /** Class thêm trên thẻ textarea (ví dụ min-h, max-h) */
+  textareaClass?: string
+  [key: string]: unknown
+}
+
+const {
+  label,
+  rows = 4,
+  placeholder,
+  class: wrapperClass = "",
+  textareaClass = "",
+  key: _key,
+  slot: _slot,
+  ...rest
+} = Astro.props as Props & { key?: unknown; slot?: unknown }
+
+const field = cn(
+  "w-full resize-y rounded-lg border border-border bg-card px-3 py-2 font-mono text-sm text-foreground",
+  "placeholder:text-muted-foreground transition-colors",
+  "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-0 disabled:opacity-50",
+  textareaClass,
+)
+---
+
+<div class={wrapperClass}>
+  {
+    label && (
+      <label class="mb-1 block text-sm font-medium text-foreground">{label}</label>
+    )
+  }
+  <textarea rows={rows} placeholder={placeholder} class={field} {...rest} />
+</div>

@@ -1,51 +1,60 @@
 ---
+import ToolPanel from "@/components/devTools/ToolPanel.astro"
+import { Button, Heading, Tabs, Text } from "@/components/ui"
 /**
- * Tools - Tất cả tools hiển thị dưới dạng tab dọc
+ * Tools — tab dọc; mỗi panel bọc Card (ToolPanel) + island.
  */
 import { DashboardLayout } from "@/layouts"
 import { ALL_TOOLS } from "@/lib/devTools/config"
-import { Button, Heading, Tabs, Text } from "@/components/ui"
-import { ToolRenderer } from "@/components/devTools/ToolRenderer"
+import { cn } from "@/lib/utils"
 ---
 <DashboardLayout title="Tools">
   <div class="space-y-6">
     <div>
       <Heading as="h1" size="xl" class="mb-2">Tools</Heading>
       <Text variant="lead" class="text-muted-foreground">
-        All tools displayed as a vertical tab.
+        Tab dọc; JSON formatter &amp; chuyển đổi XML / CSV / YAML (gợi ý từ jsonformatter.org).
       </Text>
     </div>
 
-    <Tabs orientation="vertical" class="w-full">
+    <Tabs orientation="vertical" class="w-full min-w-0">
       <div slot="list" class="flex flex-col gap-1">
-        {ALL_TOOLS.map((tool) => (
-          <Button
-            variant="ghost"
-            class="w-full justify-start p-2"
-            key={`tab-${tool.id}`}
-            role="tab"
-            aria-controls={`panel-${tool.id}`}
-            aria-selected="false"
-            data-tab-id={tool.id}
-          >
-            {tool.label}
-          </Button>
+        {ALL_TOOLS.map((tool, index) => (
+          <div class="contents" key={tool.id}>
+            <Button
+              variant="ghost"
+              type="button"
+              class={cn(
+                "h-auto w-full justify-start whitespace-normal px-3 py-2 text-left text-sm font-normal"
+              )}
+              role="tab"
+              aria-controls={`panel-${tool.id}`}
+              aria-selected={index === 0 ? "true" : "false"}
+              data-tab-id={tool.id}
+            >
+              {tool.label}
+            </Button>
+          </div>
         ))}
       </div>
       <div slot="panels">
-        {ALL_TOOLS.map((tool) => (
+        {ALL_TOOLS.map((tool, index) => (
           <div
             role="tabpanel"
             id={`panel-${tool.id}`}
             aria-labelledby={`tab-${tool.id}`}
-            aria-hidden="true"
+            aria-hidden={index === 0 ? "false" : "true"}
+            hidden={index !== 0}
           >
-            <div class="rounded-xl border border-border bg-card p-6">
-              <ToolRenderer client:load toolId={tool.id} />
-            </div>
+            <ToolPanel toolId={tool.id} />
           </div>
         ))}
       </div>
     </Tabs>
   </div>
 </DashboardLayout>
+
+<script>
+  import { bootDevTools } from "@/scripts/dev-tools/boot"
+  bootDevTools()
+</script>

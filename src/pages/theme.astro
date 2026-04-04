@@ -13,6 +13,7 @@ import {
   Dropdown,
   Heading,
   Input,
+  Textarea,
   Link,
   List,
   Modal,
@@ -54,6 +55,15 @@ import {
           placeholder="Invalid"
         />
         <Input label="Required" required placeholder="Required field" />
+      </div>
+    </section>
+
+    <section>
+      <Heading as="h2" size="lg" class="mb-1">Textarea</Heading>
+      <Text variant="muted" class="mb-4">Nhiều dòng, font mono (dev tools).</Text>
+      <div class="mt-4 max-w-xl space-y-4">
+        <Textarea placeholder="Không nhãn" rows={3} />
+        <Textarea label="Có nhãn" rows={4} placeholder="Nhập nội dung…" />
       </div>
     </section>
 
@@ -215,32 +225,29 @@ import {
             slot="list"
             type="button"
             role="tab"
-            aria-selected="false"
+            aria-selected="true"
             aria-controls="panel-1"
-            id="tab-1">Tab 1</button
-          >
+            id="tab-1">Tab 1</button>
           <button
             slot="list"
             type="button"
             role="tab"
             aria-selected="false"
             aria-controls="panel-2"
-            id="tab-2">Tab 2</button
-          >
+            id="tab-2">Tab 2</button>
           <button
             slot="list"
             type="button"
             role="tab"
             aria-selected="false"
             aria-controls="panel-3"
-            id="tab-3">Tab 3</button
-          >
+            id="tab-3">Tab 3</button>
           <div
             slot="panels"
             role="tabpanel"
             id="panel-1"
             aria-labelledby="tab-1"
-            aria-hidden="true"
+            aria-hidden="false"
           >
             <Text variant="small">Tab 1 content.</Text>
           </div>
@@ -250,6 +257,7 @@ import {
             id="panel-2"
             aria-labelledby="tab-2"
             aria-hidden="true"
+            hidden
           >
             <Text variant="small">Tab 2 content.</Text>
           </div>
@@ -259,6 +267,7 @@ import {
             id="panel-3"
             aria-labelledby="tab-3"
             aria-hidden="true"
+            hidden
           >
             <Text variant="small">Tab 3 content.</Text>
           </div>

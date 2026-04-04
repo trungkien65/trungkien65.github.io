@@ -20,27 +20,65 @@ const { title } = Astro.props
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
-    <!-- Set data-theme early so theme.css applies correctly, avoid flash -->
+    <!-- Theme + sidebar: chạy trước paint để tránh FOUC / nháy mở-đóng -->
     <script is:inline>
       (function () {
         var t = localStorage.getItem("theme");
-        if (t !== "dark" && t !== "light") t = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        if (t !== "dark" && t !== "light") t = "light";
         document.documentElement.setAttribute("data-theme", t);
+
+        var SK = "dashboard-sidebar-desktop-collapsed";
+        var html = document.documentElement;
+        var mob =
+          typeof window.matchMedia === "function" && window.matchMedia("(max-width: 1023px)").matches;
+        var collapsed = false;
+        try {
+          collapsed = localStorage.getItem(SK) === "1";
+        } catch (e) {}
+        if (mob) html.classList.add("sidebar-pre-m-closed");
+        else if (collapsed) html.classList.add("sidebar-pre-d-collapsed");
       })();
     </script>
+    <style is:inline>
+      /* Khớp transform/padding với trạng thái lưu — specificity cao hơn utility Tailwind tạm thời */
+      html.sidebar-pre-m-closed #sidebar,
+      html.sidebar-pre-d-collapsed #sidebar {
+        transition: none !important;
+      }
+      html.sidebar-pre-d-collapsed #dashboard-main {
+        transition: none !important;
+      }
+      html.sidebar-pre-m-closed #sidebar {
+        transform: translate3d(-100%, 0, 0);
+      }
+      @media (min-width: 1024px) {
+        html.sidebar-pre-m-closed #sidebar {
+          transform: translate3d(0, 0, 0);
+        }
+        html.sidebar-pre-d-collapsed #sidebar {
+          transform: translate3d(-100%, 0, 0);
+        }
+        html.sidebar-pre-d-collapsed #dashboard-main {
+          padding-left: 0;
+        }
+      }
+    </style>
   </head>
   <body class="min-h-screen bg-background text-foreground antialiased">
-    <div class="flex min-h-screen">
+    <div id="dashboard-shell" class="flex min-h-screen">
       <Sidebar />
 
       <!-- Overlay when sidebar open on mobile -->
       <div
         id="sidebar-overlay"
-        class="fixed inset-0 z-30 bg-black/50 opacity-0 transition-opacity duration-200 lg:hidden lg:opacity-0"
+        class="fixed inset-0 z-30 bg-black/50 opacity-0 transition-opacity duration-200 lg:pointer-events-none lg:opacity-0"
         aria-hidden="true"
       ></div>
 
-      <div class="flex flex-1 flex-col lg:pl-64">
+      <div
+        id="dashboard-main"
+        class="flex flex-1 flex-col transition-[padding] duration-200 ease-out lg:pl-64"
+      >
         <Header title={title} />
 
         <main class="flex-1 p-4 md:p-6">
@@ -50,31 +88,113 @@ const { title } = Astro.props
     </div>
 
     <script>
-      // Mobile sidebar toggle
+      const STORAGE_KEY = "dashboard-sidebar-desktop-collapsed"
       const sidebar = document.getElementById("sidebar")
       const overlay = document.getElementById("sidebar-overlay")
       const toggle = document.getElementById("sidebar-toggle")
-      if (sidebar && overlay && toggle) {
-        const open = () => {
+      const mainCol = document.getElementById("dashboard-main")
+
+      const isMobile = () => window.matchMedia("(max-width: 1023px)").matches
+
+      /** Desktop: thu sidebar + bỏ padding trái */
+      const applyDesktopCollapsed = (collapsed: boolean) => {
+        if (!sidebar || !mainCol) return
+        if (collapsed) {
+          sidebar.classList.add("lg:-translate-x-full")
+          sidebar.classList.remove("lg:translate-x-0")
+          mainCol.classList.remove("lg:pl-64")
+          mainCol.classList.add("lg:pl-0")
+        } else {
+          sidebar.classList.remove("lg:-translate-x-full")
+          sidebar.classList.add("lg:translate-x-0")
+          mainCol.classList.add("lg:pl-64")
+          mainCol.classList.remove("lg:pl-0")
+        }
+        try {
+          localStorage.setItem(STORAGE_KEY, collapsed ? "1" : "0")
+        } catch {
+          /* ignore */
+        }
+      }
+
+      if (sidebar && overlay && toggle && mainCol) {
+        const clearSidebarPreClasses = () => {
+          document.documentElement.classList.remove("sidebar-pre-m-closed", "sidebar-pre-d-collapsed")
+        }
+
+        const openMobile = () => {
           sidebar.classList.remove("-translate-x-full")
-          overlay.classList.remove("opacity-0")
+          overlay.classList.remove("opacity-0", "pointer-events-none")
           overlay.classList.add("opacity-100")
           toggle.setAttribute("aria-expanded", "true")
         }
-        const close = () => {
+        const closeMobile = () => {
           sidebar.classList.add("-translate-x-full")
           overlay.classList.remove("opacity-100")
-          overlay.classList.add("opacity-0")
+          overlay.classList.add("opacity-0", "pointer-events-none")
           toggle.setAttribute("aria-expanded", "false")
         }
-        toggle.addEventListener("click", () => {
-          if (toggle.getAttribute("aria-expanded") === "true") close()
-          else open()
-        })
-        overlay.addEventListener("click", close)
-        if (window.matchMedia("(max-width: 1023px)").matches) {
-          sidebar.classList.add("-translate-x-full")
+
+        const syncToggleLabel = (desktopCollapsed: boolean) => {
+          if (isMobile()) {
+            toggle.setAttribute("aria-label", "Mở hoặc đóng menu")
+          } else {
+            toggle.setAttribute("aria-label", desktopCollapsed ? "Mở sidebar" : "Thu gọn sidebar")
+          }
         }
+
+        let desktopCollapsed = false
+        try {
+          desktopCollapsed = localStorage.getItem(STORAGE_KEY) === "1"
+        } catch {
+          desktopCollapsed = false
+        }
+
+        if (!isMobile()) {
+          applyDesktopCollapsed(desktopCollapsed)
+          toggle.setAttribute("aria-expanded", desktopCollapsed ? "false" : "true")
+          syncToggleLabel(desktopCollapsed)
+        } else {
+          sidebar.classList.add("-translate-x-full")
+          overlay.classList.add("pointer-events-none")
+          syncToggleLabel(false)
+        }
+
+        requestAnimationFrame(() => {
+          clearSidebarPreClasses()
+        })
+
+        toggle.addEventListener("click", () => {
+          if (isMobile()) {
+            if (toggle.getAttribute("aria-expanded") === "true") closeMobile()
+            else openMobile()
+            return
+          }
+          desktopCollapsed = !desktopCollapsed
+          applyDesktopCollapsed(desktopCollapsed)
+          toggle.setAttribute("aria-expanded", desktopCollapsed ? "false" : "true")
+          syncToggleLabel(desktopCollapsed)
+        })
+
+        overlay.addEventListener("click", () => {
+          if (isMobile()) closeMobile()
+        })
+
+        window.addEventListener("resize", () => {
+          if (isMobile()) {
+            sidebar.classList.add("-translate-x-full")
+            overlay.classList.remove("opacity-100")
+            overlay.classList.add("opacity-0", "pointer-events-none")
+            toggle.setAttribute("aria-expanded", "false")
+            syncToggleLabel(false)
+          } else {
+            sidebar.classList.remove("-translate-x-full")
+            overlay.classList.add("opacity-0", "pointer-events-none")
+            applyDesktopCollapsed(desktopCollapsed)
+            toggle.setAttribute("aria-expanded", desktopCollapsed ? "false" : "true")
+            syncToggleLabel(desktopCollapsed)
+          }
+        })
       }
     </script>
   </body>
