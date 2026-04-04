@@ -12,7 +12,6 @@ export interface DevToolGroup {
   tools: DevTool[]
 }
 
-/** Nhóm dev tools (JSON converters bổ sung theo jsonformatter.org) */
 export const DEV_TOOL_GROUPS: DevToolGroup[] = [
   {
     id: "data-text",
@@ -23,7 +22,7 @@ export const DEV_TOOL_GROUPS: DevToolGroup[] = [
         id: "json",
         label: "JSON Formatter",
         href: "/dev-tools/json",
-        description: "Input · thao tác · output — bố cục tương tự jsonformatter.org.",
+        description: "Input · thao tác · output",
       },
       {
         id: "json-xml",
