@@ -1,7 +1,7 @@
 {
   "name": "todo-list-astro",
   "type": "module",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "packageManager": "pnpm@9.11.0",
   "scripts": {
     "dev": "astro dev",
@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "astro": "^4.0.0",
+    "axios": "^1.15.0",
     "tailwind-merge": "^3.5.0"
   },
   "devDependencies": {

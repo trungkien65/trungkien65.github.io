@@ -20,6 +20,37 @@ const { title } = Astro.props
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+    <!-- Dashboard bắt buộc cookie access_token (static: redirect phía client). -->
+    <script is:inline>
+      (function () {
+        function readCookie(name) {
+          if (!document.cookie) return "";
+          var parts = document.cookie.split(";");
+          for (var i = 0; i < parts.length; i++) {
+            var p = parts[i].trim();
+            var eq = p.indexOf("=");
+            if (eq === -1) continue;
+            var k = p.slice(0, eq);
+            try {
+              k = decodeURIComponent(k);
+            } catch (e) {}
+            if (k !== name) continue;
+            var v = p.slice(eq + 1);
+            try {
+              return decodeURIComponent(v);
+            } catch (e2) {
+              return v;
+            }
+          }
+          return "";
+        }
+        if (!readCookie("access_token")) {
+          location.replace(
+            "/auth/login?next=" + encodeURIComponent(location.pathname + location.search)
+          );
+        }
+      })();
+    </script>
     <!-- Theme + sidebar: chạy trước paint để tránh FOUC / nháy mở-đóng -->
     <script is:inline>
       (function () {

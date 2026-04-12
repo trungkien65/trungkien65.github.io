@@ -1,0 +1,143 @@
+---
+/**
+ * GET /auth/me — làm mới token (POST /auth/refresh), đăng xuất (POST /auth/logout).
+ */
+import { PublicLayout } from "@/layouts"
+import { Button, Card, Heading, Link, Text } from "@/components/ui"
+---
+
+<PublicLayout title="Tài khoản">
+  <div class="mx-auto max-w-lg space-y-6">
+    <Heading as="h1" size="xl">Tài khoản</Heading>
+
+    <div id="auth-me-guest" class="hidden">
+      <Card variant="bordered">
+        <Text>Bạn chưa đăng nhập hoặc phiên đã hết hạn.</Text>
+        <Text variant="small" class="mt-4">
+          <Link href="/auth/login">Đăng nhập</Link>
+          <span class="text-muted-foreground"> · </span>
+          <Link href="/auth/register">Đăng ký</Link>
+        </Text>
+      </Card>
+    </div>
+
+    <div id="auth-me-loading" class="rounded-lg border border-border bg-card p-6 text-sm text-muted-foreground">
+      Đang tải…
+    </div>
+
+    <div id="auth-me-content" class="hidden space-y-4">
+      <Card variant="bordered">
+        <Text as="p" variant="small" class="font-medium uppercase tracking-wide text-muted-foreground">Email</Text>
+        <p id="auth-me-email" class="mt-1 text-foreground"></p>
+        <Text as="p" variant="small" class="mt-4 font-medium uppercase tracking-wide text-muted-foreground">ID</Text>
+        <p id="auth-me-id" class="mt-1 font-mono text-sm text-foreground"></p>
+        <Text as="p" variant="small" class="mt-4 font-medium uppercase tracking-wide text-muted-foreground">
+          Ngày tạo
+        </Text>
+        <p id="auth-me-created" class="mt-1 text-sm text-foreground"></p>
+        <div class="mt-6 flex flex-wrap gap-2">
+          <Button type="button" variant="outline" id="auth-me-refresh">Làm mới token</Button>
+          <Button type="button" variant="danger" id="auth-me-logout">Đăng xuất</Button>
+        </div>
+      </Card>
+    </div>
+
+    <p id="auth-me-error" class="hidden text-sm text-red-600 dark:text-red-400" role="alert"></p>
+  </div>
+</PublicLayout>
+
+<script>
+  import axios from "axios"
+  import { apiErrorMessage } from "@/lib/api/errors"
+  import {
+    ACCESS_TOKEN_COOKIE,
+    REFRESH_TOKEN_COOKIE,
+    authLogout,
+    authMe,
+    authRefresh,
+    clearAuthTokenCookies,
+    persistAuthTokenPair,
+  } from "@/lib/api/auth"
+  import { getCookie } from "@/lib/http/cookies"
+
+  const guest = document.getElementById("auth-me-guest")
+  const loading = document.getElementById("auth-me-loading")
+  const content = document.getElementById("auth-me-content")
+  const errEl = document.getElementById("auth-me-error")
+  const emailEl = document.getElementById("auth-me-email")
+  const idEl = document.getElementById("auth-me-id")
+  const createdEl = document.getElementById("auth-me-created")
+  const btnRefresh = document.getElementById("auth-me-refresh")
+  const btnLogout = document.getElementById("auth-me-logout")
+
+  function showGuest() {
+    loading?.classList.add("hidden")
+    content?.classList.add("hidden")
+    guest?.classList.remove("hidden")
+  }
+
+  function showProfile(me: { id: string; email: string; createdAt: string }) {
+    loading?.classList.add("hidden")
+    guest?.classList.add("hidden")
+    content?.classList.remove("hidden")
+    if (emailEl) emailEl.textContent = me.email
+    if (idEl) idEl.textContent = me.id
+    if (createdEl) createdEl.textContent = new Date(me.createdAt).toLocaleString("vi-VN")
+  }
+
+  function showErr(msg: string) {
+    if (!errEl) return
+    errEl.textContent = msg
+    errEl.classList.remove("hidden")
+  }
+
+  async function loadMe() {
+    if (!getCookie(ACCESS_TOKEN_COOKIE)) {
+      showGuest()
+      return
+    }
+    try {
+      const me = await authMe()
+      showProfile(me)
+    } catch (e) {
+      if (axios.isAxiosError(e) && e.response?.status === 401) {
+        clearAuthTokenCookies()
+        showGuest()
+        return
+      }
+      loading?.classList.add("hidden")
+      showErr(apiErrorMessage(e))
+    }
+  }
+
+  void loadMe()
+
+  btnRefresh?.addEventListener("click", async () => {
+    const rt = getCookie(REFRESH_TOKEN_COOKIE)
+    if (!rt) {
+      showErr("Không có refresh token. Đăng nhập lại.")
+      return
+    }
+    errEl?.classList.add("hidden")
+    try {
+      const pair = await authRefresh({ refresh_token: rt })
+      persistAuthTokenPair(pair)
+      await loadMe()
+    } catch (e) {
+      showErr(apiErrorMessage(e, "Làm mới token thất bại"))
+    }
+  })
+
+  btnLogout?.addEventListener("click", async () => {
+    const rt = getCookie(REFRESH_TOKEN_COOKIE)
+    errEl?.classList.add("hidden")
+    try {
+      if (rt) await authLogout({ refresh_token: rt })
+    } catch {
+      /* vẫn xóa cookie phía client */
+    } finally {
+      clearAuthTokenCookies()
+      window.location.href = "/auth/login"
+    }
+  })
+</script>

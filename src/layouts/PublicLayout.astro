@@ -1,0 +1,39 @@
+---
+/**
+ * Layout công khai: không sidebar, không yêu cầu đăng nhập (dev-tools, auth).
+ */
+import PublicHeader from "@/components/layout/PublicHeader.astro"
+import "@/styles/theme.css"
+
+interface Props {
+  title: string
+}
+
+const { title } = Astro.props
+---
+
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <script is:inline>
+      (function () {
+        var t = localStorage.getItem("theme");
+        if (t !== "dark" && t !== "light") t = "light";
+        document.documentElement.setAttribute("data-theme", t);
+      })();
+    </script>
+  </head>
+  <body class="min-h-screen bg-background text-foreground antialiased">
+    <div class="flex min-h-screen flex-col">
+      <PublicHeader title={title} />
+      <main class="flex-1 p-4 md:p-6">
+        <slot />
+      </main>
+    </div>
+  </body>
+</html>

@@ -4,11 +4,11 @@ import { Button, Heading, Tabs, Text } from "@/components/ui"
 /**
  * Tools — tab dọc; mỗi panel bọc Card (ToolPanel) + island.
  */
-import { DashboardLayout } from "@/layouts"
+import { PublicLayout } from "@/layouts"
 import { ALL_TOOLS } from "@/lib/devTools/config"
 import { cn } from "@/lib/utils"
 ---
-<DashboardLayout title="Tools">
+<PublicLayout title="Dev Tools">
   <div class="space-y-6">
     <div>
       <Heading as="h1" size="xl" class="mb-2">Tools</Heading>
@@ -52,7 +52,7 @@ import { cn } from "@/lib/utils"
       </div>
     </Tabs>
   </div>
-</DashboardLayout>
+</PublicLayout>
 
 <script>
   import { bootDevTools } from "@/scripts/dev-tools/boot"

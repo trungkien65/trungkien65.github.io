@@ -1,0 +1,139 @@
+---
+/**
+ * Trang tài khoản trong dashboard: GET /auth/me — user đã qua guard cookie ở layout.
+ */
+import { DashboardLayout } from "@/layouts"
+import { Button, Card, Heading, Link, Text } from "@/components/ui"
+---
+
+<DashboardLayout title="Tài khoản">
+  <div class="mx-auto max-w-lg space-y-6">
+    <Heading as="h1" size="xl">Tài khoản</Heading>
+
+    <div id="account-loading" class="rounded-lg border border-border bg-card p-6 text-sm text-muted-foreground">
+      Đang tải thông tin…
+    </div>
+
+    <div id="account-content" class="hidden space-y-4">
+      <Card variant="bordered">
+        <Text as="p" variant="small" class="font-medium uppercase tracking-wide text-muted-foreground">
+          Email
+        </Text>
+        <p id="account-email" class="mt-1 text-foreground"></p>
+        <Text as="p" variant="small" class="mt-4 font-medium uppercase tracking-wide text-muted-foreground">ID</Text>
+        <p id="account-id" class="mt-1 font-mono text-sm text-foreground"></p>
+        <Text as="p" variant="small" class="mt-4 font-medium uppercase tracking-wide text-muted-foreground">
+          Ngày tạo
+        </Text>
+        <p id="account-created" class="mt-1 text-sm text-foreground"></p>
+        <div class="mt-6 flex flex-wrap gap-2">
+          <Button type="button" variant="outline" id="account-refresh">Làm mới token</Button>
+          <Button type="button" variant="danger" id="account-logout">Đăng xuất</Button>
+        </div>
+      </Card>
+    </div>
+
+    <div id="account-error" class="hidden">
+      <Card variant="bordered">
+        <p id="account-error-msg" class="text-sm text-red-600 dark:text-red-400" role="alert"></p>
+        <div class="mt-4">
+          <Link href="/auth/login?next=/account" class="text-sm font-medium text-primary hover:underline">
+            Đăng nhập lại
+          </Link>
+        </div>
+      </Card>
+    </div>
+  </div>
+</DashboardLayout>
+
+<script>
+  import axios from "axios"
+  import { apiErrorMessage } from "@/lib/api/errors"
+  import {
+    ACCESS_TOKEN_COOKIE,
+    REFRESH_TOKEN_COOKIE,
+    authLogout,
+    authMe,
+    authRefresh,
+    clearAuthTokenCookies,
+    persistAuthTokenPair,
+  } from "@/lib/api/auth"
+  import { getCookie } from "@/lib/http/cookies"
+
+  const loading = document.getElementById("account-loading")
+  const content = document.getElementById("account-content")
+  const errBox = document.getElementById("account-error")
+  const errMsg = document.getElementById("account-error-msg")
+  const emailEl = document.getElementById("account-email")
+  const idEl = document.getElementById("account-id")
+  const createdEl = document.getElementById("account-created")
+  const btnRefresh = document.getElementById("account-refresh")
+  const btnLogout = document.getElementById("account-logout")
+
+  function showProfile(me: { id: string; email: string; createdAt: string }) {
+    loading?.classList.add("hidden")
+    errBox?.classList.add("hidden")
+    content?.classList.remove("hidden")
+    if (emailEl) emailEl.textContent = me.email
+    if (idEl) idEl.textContent = me.id
+    if (createdEl) createdEl.textContent = new Date(me.createdAt).toLocaleString("vi-VN")
+  }
+
+  function showError(msg: string) {
+    loading?.classList.add("hidden")
+    content?.classList.add("hidden")
+    if (errMsg) errMsg.textContent = msg
+    errBox?.classList.remove("hidden")
+  }
+
+  async function loadMe() {
+    if (!getCookie(ACCESS_TOKEN_COOKIE)) {
+      window.location.replace("/auth/login?next=" + encodeURIComponent("/account"))
+      return
+    }
+    try {
+      const me = await authMe()
+      showProfile(me)
+    } catch (e) {
+      if (axios.isAxiosError(e) && e.response?.status === 401) {
+        clearAuthTokenCookies()
+        window.location.replace("/auth/login?next=" + encodeURIComponent("/account"))
+        return
+      }
+      showError(apiErrorMessage(e))
+    }
+  }
+
+  void loadMe()
+
+  btnRefresh?.addEventListener("click", async () => {
+    const rt = getCookie(REFRESH_TOKEN_COOKIE)
+    if (!rt) {
+      showError("Không có refresh token. Đăng nhập lại.")
+      return
+    }
+    errBox?.classList.add("hidden")
+    loading?.classList.remove("hidden")
+    content?.classList.add("hidden")
+    try {
+      const pair = await authRefresh({ refresh_token: rt })
+      persistAuthTokenPair(pair)
+      await loadMe()
+    } catch (err) {
+      loading?.classList.add("hidden")
+      showError(apiErrorMessage(err, "Làm mới token thất bại"))
+    }
+  })
+
+  btnLogout?.addEventListener("click", async () => {
+    const rt = getCookie(REFRESH_TOKEN_COOKIE)
+    try {
+      if (rt) await authLogout({ refresh_token: rt })
+    } catch {
+      /* ignore */
+    } finally {
+      clearAuthTokenCookies()
+      window.location.href = "/auth/login"
+    }
+  })
+</script>

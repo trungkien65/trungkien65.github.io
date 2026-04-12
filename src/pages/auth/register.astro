@@ -1,0 +1,77 @@
+---
+/**
+ * Đăng ký — POST /auth/register.
+ */
+import { PublicLayout } from "@/layouts"
+import { Button, Card, Heading, Input, Link, Text } from "@/components/ui"
+---
+
+<PublicLayout title="Đăng ký">
+  <div class="mx-auto max-w-md space-y-6">
+    <Heading as="h1" size="xl">Đăng ký</Heading>
+    <Card variant="bordered">
+      <form id="auth-register-form" class="space-y-4">
+        <p id="auth-register-error" class="hidden text-sm text-red-600 dark:text-red-400" role="alert"></p>
+        <div id="auth-register-success" class="hidden rounded-lg border border-emerald-500/40 bg-emerald-500/10 p-3 text-sm text-foreground">
+          <p id="auth-register-success-msg"></p>
+          <p class="mt-2">
+            <Link href="/auth/login">Đi tới đăng nhập</Link>
+          </p>
+        </div>
+        <div id="auth-register-fields" class="space-y-4">
+          <Input label="Email" type="email" name="email" id="auth-register-email" required autocomplete="email" />
+          <Input
+            label="Mật khẩu (tối thiểu 6 ký tự)"
+            type="password"
+            name="password"
+            id="auth-register-password"
+            required
+            minlength={6}
+            autocomplete="new-password"
+          />
+          <Button type="submit" variant="primary" class="w-full" id="auth-register-submit">
+            Tạo tài khoản
+          </Button>
+        </div>
+      </form>
+      <Text variant="small" class="mt-4 block">
+        Đã có tài khoản? <Link href="/auth/login">Đăng nhập</Link>
+      </Text>
+    </Card>
+  </div>
+</PublicLayout>
+
+<script>
+  import { apiErrorMessage } from "@/lib/api/errors"
+  import { authRegister } from "@/lib/api/auth"
+
+  const form = document.getElementById("auth-register-form") as HTMLFormElement | null
+  const errEl = document.getElementById("auth-register-error") as HTMLParagraphElement | null
+  const okBox = document.getElementById("auth-register-success") as HTMLDivElement | null
+  const okMsg = document.getElementById("auth-register-success-msg") as HTMLParagraphElement | null
+  const fields = document.getElementById("auth-register-fields") as HTMLDivElement | null
+  const submitBtn = document.getElementById("auth-register-submit") as HTMLButtonElement | null
+
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault()
+    if (!errEl || !submitBtn || !okBox || !okMsg || !fields) return
+    errEl.classList.add("hidden")
+    errEl.textContent = ""
+    okBox.classList.add("hidden")
+    submitBtn.disabled = true
+    const fd = new FormData(form)
+    const email = String(fd.get("email") ?? "").trim()
+    const password = String(fd.get("password") ?? "")
+    try {
+      const res = await authRegister({ email, password })
+      fields.classList.add("hidden")
+      okMsg.textContent = `${res.message} (ID: ${res.userId})`
+      okBox.classList.remove("hidden")
+    } catch (err) {
+      errEl.textContent = apiErrorMessage(err, "Đăng ký thất bại")
+      errEl.classList.remove("hidden")
+    } finally {
+      submitBtn.disabled = false
+    }
+  })
+</script>

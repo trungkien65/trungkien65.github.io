@@ -1,0 +1,19 @@
+---
+/**
+ * Hub auth: liên kết nhanh tới đăng nhập / đăng ký.
+ */
+import { PublicLayout } from "@/layouts"
+import { Heading, Link, Text } from "@/components/ui"
+---
+
+<PublicLayout title="Auth">
+  <div class="mx-auto max-w-lg space-y-4">
+    <Heading as="h1" size="xl">Xác thực</Heading>
+    <Text variant="muted">API: hono.thekien.workers.dev — JWT access + refresh.</Text>
+    <ul class="list-inside list-disc space-y-2 text-sm text-foreground">
+      <li><Link href="/auth/login">Đăng nhập</Link></li>
+      <li><Link href="/auth/register">Đăng ký</Link></li>
+      <li><Link href="/auth/me">Thông tin tài khoản</Link> (cần đăng nhập)</li>
+    </ul>
+  </div>
+</PublicLayout>

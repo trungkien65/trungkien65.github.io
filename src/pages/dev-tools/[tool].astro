@@ -4,7 +4,7 @@ import { Heading, Text } from "@/components/ui"
 /**
  * Trang từng tool — dùng chung ToolRenderer với /dev-tools
  */
-import { DashboardLayout } from "@/layouts"
+import { PublicLayout } from "@/layouts"
 import { DEV_TOOL_GROUPS } from "@/lib/devTools/config"
 
 export function getStaticPaths() {
@@ -24,7 +24,7 @@ interface Props {
 
 const { tool, group } = Astro.props
 ---
-<DashboardLayout title={`${tool.label} | Dev Tools`}>
+<PublicLayout title={`${tool.label} | Dev Tools`}>
   <div class="space-y-6">
     <div>
       <span class="text-sm font-medium text-muted-foreground">{group.label}</span>
@@ -35,7 +35,7 @@ const { tool, group } = Astro.props
     </div>
     <ToolPanel toolId={tool.id} />
   </div>
-</DashboardLayout>
+</PublicLayout>
 
 <script>
   import { bootDevTools } from "@/scripts/dev-tools/boot"
