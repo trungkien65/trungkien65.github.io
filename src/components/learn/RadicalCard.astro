@@ -1,0 +1,64 @@
+---
+/**
+ * Thẻ một bộ thủ: glyph ~50% trái, thông tin căn giữa ~50% phải.
+ * Dùng Card / Badge / Text; clone qua `<template id="radical-card-tmpl">` + script.
+ */
+import { Badge, Card, Text } from "@/components/ui"
+import type { RadicalItem } from "@/lib/api/radicals"
+
+type Props = RadicalItem
+
+const { glyph, kangxiNumber, strokeCount, pinyin, english, nameVi } = Astro.props
+
+const ariaLabel = `Bộ thủ số ${kangxiNumber}, ${nameVi}`
+---
+
+<div class="contents min-w-0" data-radical-card aria-label={ariaLabel}>
+  <Card variant="elevated" class="min-h-[96px] overflow-hidden shadow-sm transition-shadow hover:shadow-lg">
+    <article class="-m-4 flex min-h-[96px] flex-row items-stretch gap-0 p-2">
+      <div
+        class="flex min-w-0 flex-1 basis-0 select-none items-center justify-center border-r border-border text-7xl font-medium leading-none text-foreground sm:text-8xl"
+        data-radical-glyph
+        lang="zh-Hans"
+      >
+        {glyph}
+      </div>
+      <div
+        class="flex min-w-0 flex-1 basis-0 flex-col justify-center gap-1 px-1 text-center text-balance"
+        data-radical-info
+      >
+        <div class="flex justify-center">
+          <Badge
+            variant="outline"
+            class="max-w-full truncate px-2 py-0.5 text-[10px] font-normal normal-case leading-tight sm:text-xs"
+            data-radical-badge
+          >
+            Kangxi {kangxiNumber} · {strokeCount} nét
+          </Badge>
+        </div>
+        <Text
+          variant="default"
+          class="mb-0 line-clamp-2 text-center text-xs font-semibold leading-tight sm:text-sm"
+          data-radical-name-vi
+        >
+          {nameVi}
+        </Text>
+        <Text
+          variant="muted"
+          class="mb-0 text-center text-[10px] leading-tight sm:text-xs"
+          data-radical-pinyin
+        >
+          {pinyin}
+        </Text>
+        <Text
+          variant="muted"
+          class="mb-0 line-clamp-2 text-center text-[10px] leading-snug sm:line-clamp-3 sm:text-xs"
+          data-radical-english
+          lang="en"
+        >
+          {english}
+        </Text>
+      </div>
+    </article>
+  </Card>
+</div>

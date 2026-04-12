@@ -1,0 +1,81 @@
+---
+/**
+ * Học từ vựng: flashcard, quiz, ôn tập (client script + axios cache GET).
+ */
+import Flashcard from "@/components/learn/Flashcard.astro"
+import Quiz from "@/components/learn/Quiz.astro"
+import ReviewFlow from "@/components/learn/ReviewFlow.astro"
+import { Heading, Tabs, Text } from "@/components/ui"
+import { DashboardLayout } from "@/layouts"
+---
+
+<DashboardLayout title="Học từ vựng">
+  <div class="space-y-6">
+    <div>
+      <Heading as="h1" size="xl" class="mb-1">Từ vựng</Heading>
+      <Text variant="muted">Flashcard, trắc nghiệm và ôn theo lịch (chất lượng 0–5).</Text>
+    </div>
+
+    <div class="max-w-3xl" data-vocab-app>
+      <Tabs class="w-full min-w-0">
+        <button
+          slot="list"
+          type="button"
+          role="tab"
+          aria-selected="true"
+          aria-controls="panel-vocab-flash"
+          id="tab-vocab-flash">Flashcard</button>
+        <button
+          slot="list"
+          type="button"
+          role="tab"
+          aria-selected="false"
+          aria-controls="panel-vocab-quiz"
+          id="tab-vocab-quiz">Quiz</button>
+        <button
+          slot="list"
+          type="button"
+          role="tab"
+          aria-selected="false"
+          aria-controls="panel-vocab-review"
+          id="tab-vocab-review">Ôn tập</button>
+        <div
+          slot="panels"
+          role="tabpanel"
+          id="panel-vocab-flash"
+          aria-labelledby="tab-vocab-flash"
+          aria-hidden="false"
+        >
+          <Flashcard />
+        </div>
+        <div
+          slot="panels"
+          role="tabpanel"
+          id="panel-vocab-quiz"
+          aria-labelledby="tab-vocab-quiz"
+          aria-hidden="true"
+          hidden
+        >
+          <Quiz />
+        </div>
+        <div
+          slot="panels"
+          role="tabpanel"
+          id="panel-vocab-review"
+          aria-labelledby="tab-vocab-review"
+          aria-hidden="true"
+          hidden
+        >
+          <ReviewFlow />
+        </div>
+      </Tabs>
+    </div>
+  </div>
+</DashboardLayout>
+
+<script>
+  import { initVocabLearn } from "@/scripts/vocab-learn"
+  for (const el of document.querySelectorAll("[data-vocab-app]")) {
+    initVocabLearn(el as HTMLElement)
+  }
+</script>

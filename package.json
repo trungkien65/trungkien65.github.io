@@ -1,7 +1,7 @@
 {
   "name": "todo-list-astro",
   "type": "module",
-  "version": "1.0.6",
+  "version": "1.0.8",
   "packageManager": "pnpm@9.11.0",
   "scripts": {
     "dev": "astro dev",

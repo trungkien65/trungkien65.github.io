@@ -1,0 +1,56 @@
+---
+/**
+ * Danh sách bộ thủ Kangxi — GET /learning/radicals (public, cache GET).
+ */
+import RadicalCard from "@/components/learn/RadicalCard.astro"
+import { Heading, Link, Text } from "@/components/ui"
+import { DashboardLayout } from "@/layouts"
+---
+
+<DashboardLayout title="Bộ thủ">
+  <template id="radical-card-tmpl" class="hidden">
+    <RadicalCard
+      glyph="一"
+      kangxiNumber={1}
+      strokeCount={1}
+      pinyin=" "
+      english=" "
+      nameVi=" "
+    />
+  </template>
+
+  <div class="space-y-6">
+    <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+      <div>
+        <Heading as="h1" size="xl" class="mb-1">Bộ thủ</Heading>
+        <Text variant="muted">
+          Danh sách nhóm theo số nét — <code class="rounded bg-muted px-1 py-0.5 text-xs">GET /learning/radicals</code> (public, field{" "}
+          <code class="rounded bg-muted px-1 py-0.5 text-xs">groups</code>). Cấu hình{" "}
+          <code class="rounded bg-muted px-1 py-0.5 text-xs">PUBLIC_API_BASE_URL</code> nếu API khác host.
+        </Text>
+      </div>
+      <Text variant="small">
+        <Link href="/learn/vocab" class="text-primary">→ Học từ vựng</Link>
+      </Text>
+    </div>
+
+    <div class="space-y-4" data-radicals-app>
+      <Text as="p" variant="muted" data-radicals-status class="text-sm">Đang tải danh sách…</Text>
+      <div
+        data-radicals-error
+        class="hidden rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-800 dark:border-red-800 dark:bg-red-950/40 dark:text-red-200"
+        role="alert"
+      >
+      </div>
+      <Text as="p" variant="small" data-radicals-meta class="hidden font-medium text-foreground"></Text>
+      <div data-radicals-groups class="hidden space-y-10"></div>
+    </div>
+  </div>
+</DashboardLayout>
+
+<script>
+  import { initRadicalsPage } from "@/scripts/radicals-page"
+  for (const el of document.querySelectorAll("[data-radicals-app]")) {
+    initRadicalsPage(el as HTMLElement)
+  }
+</script>

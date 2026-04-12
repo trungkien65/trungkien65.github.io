@@ -7,9 +7,16 @@ import { cn } from "@/lib/utils"
 interface Props {
   variant?: "primary" | "secondary" | "success" | "warning" | "danger" | "outline"
   class?: string
+  [key: string]: unknown
 }
 
-const { variant = "primary", class: className = "" } = Astro.props
+const {
+  variant = "primary",
+  class: className = "",
+  key: _key,
+  slot: _slot,
+  ...rest
+} = Astro.props as Props & { key?: unknown; slot?: unknown }
 
 const base = "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium"
 const variants = {
@@ -18,9 +25,9 @@ const variants = {
   success: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-400",
   warning: "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-400",
   danger: "bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-400",
-  outline: "border border-border bg-transparent",
+  outline: "border border-border bg-transparent"
 }
 ---
-<span class={cn(base, variants[variant], className)}>
+<span class={cn(base, variants[variant], className)} {...rest}>
   <slot />
 </span>

@@ -1,0 +1,21 @@
+---
+/**
+ * Quiz: chọn định nghĩa đúng — đáp án & phản hồi do script gán.
+ */
+import { Button, Card, Text } from "@/components/ui"
+---
+<div class="max-w-xl space-y-4" data-learn-quiz>
+  <Card variant="bordered" class="min-h-[200px]">
+    <div class="space-y-4">
+      <div>
+        <Text variant="small" class="text-muted-foreground">Chọn định nghĩa đúng cho</Text>
+        <p data-quiz-term class="mt-1 text-xl font-semibold text-foreground"></p>
+      </div>
+      <div data-quiz-options class="grid gap-2"></div>
+      <Text variant="small" data-quiz-feedback class="min-h-[1.25rem] font-medium"></Text>
+    </div>
+  </Card>
+  <Button type="button" variant="primary" data-quiz-next>Câu tiếp</Button>
+  <Text variant="muted" data-quiz-progress></Text>
+  <div data-quiz-error class="hidden rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-800 dark:border-red-800 dark:bg-red-950/40 dark:text-red-200" role="alert"></div>
+</div>

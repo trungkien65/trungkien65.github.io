@@ -1,0 +1,32 @@
+---
+/**
+ * Luồng ôn tập: hiển thị từ đến hạn + nút chất lượng 0–5 (SM-2).
+ */
+import { Button, Card, Text } from "@/components/ui"
+---
+<div class="max-w-xl space-y-4" data-learn-review>
+  <Card variant="bordered">
+    <div class="space-y-2">
+      <Text variant="small" class="text-muted-foreground">Ôn tập</Text>
+      <p data-review-term class="text-xl font-semibold text-foreground"></p>
+      <div data-review-meta class="text-sm text-muted-foreground"></div>
+    </div>
+  </Card>
+  <div>
+    <Text variant="small" class="mb-2 block text-muted-foreground">Chất lượng nhớ (0 = quên, 5 = rất dễ)</Text>
+    <div class="flex flex-wrap gap-2" data-review-quality>
+      {
+        [0, 1, 2, 3, 4, 5].map((q) => (
+          <Button type="button" variant="outline" size="sm" data-review-q={String(q)}>
+            {q}
+          </Button>
+        ))
+      }
+    </div>
+  </div>
+  <Text variant="muted" data-review-progress></Text>
+  <div data-review-done class="hidden rounded-lg border border-border bg-muted/50 p-4 text-sm text-foreground">
+    Không còn từ đến hạn trong danh sách hiện tại.
+  </div>
+  <div data-review-error class="hidden rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-800 dark:border-red-800 dark:bg-red-950/40 dark:text-red-200" role="alert"></div>
+</div>

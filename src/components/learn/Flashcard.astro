@@ -1,0 +1,27 @@
+---
+/**
+ * Flashcard: thuật ngữ / định nghĩa — nội dung do `vocab-learn` script cập nhật DOM.
+ */
+import { Button, Card, Text } from "@/components/ui"
+---
+<div class="max-w-xl space-y-4" data-learn-flashcard>
+  <Card variant="elevated" class="min-h-[220px]">
+    <div class="flex min-h-[180px] flex-col items-center justify-center text-center">
+      <div data-flash-face="front" class="w-full space-y-2">
+        <Text variant="small" class="text-muted-foreground">Thuật ngữ</Text>
+        <p data-flash-term class="text-xl font-semibold tracking-tight text-foreground"></p>
+      </div>
+      <div data-flash-face="back" class="hidden w-full space-y-2">
+        <Text variant="small" class="text-muted-foreground">Định nghĩa</Text>
+        <p data-flash-definition class="text-base leading-relaxed text-foreground"></p>
+      </div>
+    </div>
+  </Card>
+  <div class="flex flex-wrap items-center gap-2">
+    <Button type="button" variant="secondary" data-flash-flip>Lật thẻ</Button>
+    <Button type="button" variant="outline" data-flash-prev>Trước</Button>
+    <Button type="button" variant="primary" data-flash-next>Tiếp</Button>
+  </div>
+  <Text variant="muted" data-flash-progress></Text>
+  <div data-flash-error class="hidden rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-800 dark:border-red-800 dark:bg-red-950/40 dark:text-red-200" role="alert"></div>
+</div>
