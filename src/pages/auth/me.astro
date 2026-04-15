@@ -50,7 +50,6 @@ import { Button, Card, Heading, Link, Text } from "@/components/ui"
   import axios from "axios"
   import { apiErrorMessage } from "@/lib/api/errors"
   import {
-    ACCESS_TOKEN_COOKIE,
     REFRESH_TOKEN_COOKIE,
     authLogout,
     authMe,
@@ -92,10 +91,7 @@ import { Button, Card, Heading, Link, Text } from "@/components/ui"
   }
 
   async function loadMe() {
-    if (!getCookie(ACCESS_TOKEN_COOKIE)) {
-      showGuest()
-      return
-    }
+    // Tránh kiểm tra access cookie sớm để không chặn flow auto-refresh.
     try {
       const me = await authMe()
       showProfile(me)

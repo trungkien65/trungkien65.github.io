@@ -117,6 +117,9 @@ export function persistAuthTokenPair(
   const accessAge = opts.accessMaxAgeSec ?? 15 * 60
   const refreshAge = opts.refreshMaxAgeSec ?? REFRESH_TOKEN_COOKIE_MAX_AGE_SEC
   const base = opts.cookie ?? { path: "/", sameSite: "Lax" as const }
+  // Xóa token cũ trước khi set mới để tránh tích lũy cookie gây header quá lớn.
+  removeCookie(ACCESS_TOKEN_COOKIE)
+  removeCookie(REFRESH_TOKEN_COOKIE)
   setCookie(ACCESS_TOKEN_COOKIE, pair.access_token, { ...base, maxAge: accessAge })
   setCookie(REFRESH_TOKEN_COOKIE, pair.refresh_token, { ...base, maxAge: refreshAge })
 }

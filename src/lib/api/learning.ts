@@ -18,6 +18,22 @@ export type LearningWordsResponse = {
   offset: number
 }
 
+type LearningWordRaw = {
+  id: string
+  term?: string
+  definition?: string
+  hanzi?: string
+  pinyin?: string
+  meaning?: string
+  createdAt: string
+}
+
+type LearningWordsResponseRaw = {
+  items: LearningWordRaw[]
+  limit: number
+  offset?: number
+}
+
 export type WordReviewState = {
   easeFactor: number
   intervalDays: number
@@ -57,12 +73,29 @@ const REVIEW_POST_PATH = "/learning/review"
 
 /** GET danh sách từ — có cache (mặc định TTL axios). */
 export async function fetchLearningWords(params?: { limit?: number; offset?: number }): Promise<LearningWordsResponse> {
-  return httpGetCached<LearningWordsResponse>(WORDS_PATH, {
+  const data = await httpGetCached<LearningWordsResponseRaw>(WORDS_PATH, {
     params: {
       limit: params?.limit ?? 50,
       offset: params?.offset ?? 0
     }
   })
+
+  return {
+    limit: data.limit,
+    // API có thể không trả offset, fallback theo input để UI vẫn hiển thị ổn định.
+    offset: data.offset ?? (params?.offset ?? 0),
+    items: data.items.map((item) => {
+      const term = item.term ?? item.hanzi ?? ""
+      const defParts = [item.definition, item.meaning].filter(Boolean)
+      const definition = defParts.length > 0 ? defParts.join(" | ") : item.pinyin ?? ""
+      return {
+        id: item.id,
+        term,
+        definition,
+        createdAt: item.createdAt
+      }
+    })
+  }
 }
 
 /** GET hàng đợi ôn — có cache. */
