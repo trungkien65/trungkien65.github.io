@@ -3,6 +3,7 @@
  */
 import type { LearningWord, ReviewDueItem } from "@/lib/api/learning"
 import { fetchLearningWords, fetchReviewDue, learningApiErrorMessage, postLearningReview } from "@/lib/api/learning"
+import { showToast } from "@/lib/ui/toast"
 
 type QuizChoice = { definition: string; correct: boolean }
 
@@ -52,7 +53,6 @@ export function initVocabLearn(root: HTMLElement) {
   const flashPrev = flash.querySelector<HTMLButtonElement>("[data-flash-prev]")
   const flashNext = flash.querySelector<HTMLButtonElement>("[data-flash-next]")
   const flashProgress = flash.querySelector<HTMLElement>("[data-flash-progress]")
-  const flashError = flash.querySelector<HTMLElement>("[data-flash-error]")
 
   // --- Quiz DOM ---
   const quizTerm = quiz.querySelector<HTMLElement>("[data-quiz-term]")
@@ -60,14 +60,12 @@ export function initVocabLearn(root: HTMLElement) {
   const quizFeedback = quiz.querySelector<HTMLElement>("[data-quiz-feedback]")
   const quizNext = quiz.querySelector<HTMLButtonElement>("[data-quiz-next]")
   const quizProgress = quiz.querySelector<HTMLElement>("[data-quiz-progress]")
-  const quizError = quiz.querySelector<HTMLElement>("[data-quiz-error]")
 
   // --- Review DOM ---
   const reviewTerm = review.querySelector<HTMLElement>("[data-review-term]")
   const reviewMeta = review.querySelector<HTMLElement>("[data-review-meta]")
   const reviewProgress = review.querySelector<HTMLElement>("[data-review-progress]")
   const reviewDone = review.querySelector<HTMLElement>("[data-review-done]")
-  const reviewError = review.querySelector<HTMLElement>("[data-review-error]")
 
   if (
     !flashTerm ||
@@ -78,18 +76,15 @@ export function initVocabLearn(root: HTMLElement) {
     !flashPrev ||
     !flashNext ||
     !flashProgress ||
-    !flashError ||
     !quizTerm ||
     !quizOptions ||
     !quizFeedback ||
     !quizNext ||
     !quizProgress ||
-    !quizError ||
     !reviewTerm ||
     !reviewMeta ||
     !reviewProgress ||
-    !reviewDone ||
-    !reviewError
+    !reviewDone
   ) {
     return
   }
@@ -107,37 +102,18 @@ export function initVocabLearn(root: HTMLElement) {
   let reviewBusy = false
 
   function showFlashError(msg: string) {
-    flashError.textContent = msg
-    flashError.classList.remove("hidden")
-  }
-
-  function hideFlashError() {
-    flashError.classList.add("hidden")
-    flashError.textContent = ""
+    showToast(msg, { variant: "destructive" })
   }
 
   function showQuizError(msg: string) {
-    quizError.textContent = msg
-    quizError.classList.remove("hidden")
-  }
-
-  function hideQuizError() {
-    quizError.classList.add("hidden")
-    quizError.textContent = ""
+    showToast(msg, { variant: "destructive" })
   }
 
   function showReviewError(msg: string) {
-    reviewError.textContent = msg
-    reviewError.classList.remove("hidden")
-  }
-
-  function hideReviewError() {
-    reviewError.classList.add("hidden")
-    reviewError.textContent = ""
+    showToast(msg, { variant: "destructive" })
   }
 
   function renderFlashcard() {
-    hideFlashError()
     if (words.length === 0) {
       flashTerm.textContent = ""
       flashDef.textContent = ""
@@ -214,7 +190,6 @@ export function initVocabLearn(root: HTMLElement) {
   }
 
   function nextQuizQuestion() {
-    hideQuizError()
     if (words.length < 4) {
       showQuizError("Cần ít nhất 4 từ trong danh sách để làm quiz.")
       quizState = null
@@ -228,7 +203,6 @@ export function initVocabLearn(root: HTMLElement) {
   }
 
   function renderReview() {
-    hideReviewError()
     reviewDone.classList.add("hidden")
     if (reviewItems.length === 0) {
       reviewTerm.textContent = ""
@@ -277,7 +251,6 @@ export function initVocabLearn(root: HTMLElement) {
       if (Number.isNaN(q) || q < 0 || q > 5) return
       const wordId = reviewItems[reviewIndex].word.id
       reviewBusy = true
-      hideReviewError()
       for (const b of review.querySelectorAll<HTMLButtonElement>("[data-review-q]")) {
         b.disabled = true
       }

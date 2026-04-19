@@ -1,8 +1,4 @@
 ---
-/**
- * Theme page: showcase all base UI components.
- */
-import { DashboardLayout } from "@/layouts";
 import {
   Alert,
   Badge,
@@ -13,14 +9,18 @@ import {
   Dropdown,
   Heading,
   Input,
-  Textarea,
   Link,
   List,
   Modal,
   Table,
   Tabs,
   Text,
-} from "@/components/ui";
+  Textarea
+} from "@/components/ui"
+/**
+ * Theme page: showcase all base UI components.
+ */
+import { DashboardLayout } from "@/layouts"
 ---
 
 <DashboardLayout title="Theme – Component Showcase">
@@ -200,6 +200,26 @@ import {
     </section>
 
     <section>
+      <Heading as="h2" size="lg" class="mb-1">Toast</Heading>
+      <Text variant="muted" class="mb-4">
+        API <Code>showToast</Code> — mặc định <Code>position: &quot;top-center&quot;</Code>; có thể truyền{" "}
+        <Code>top-right</Code>, <Code>bottom-center</Code>, <Code>bottom-right</Code> (tự đóng, có nút đóng).
+      </Text>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <Button type="button" variant="outline" data-demo-toast="default">Default</Button>
+        <Button type="button" variant="outline" data-demo-toast="success">Success</Button>
+        <Button type="button" variant="outline" data-demo-toast="destructive">Destructive</Button>
+      </div>
+      <Text variant="small" class="mt-3 block text-muted-foreground">Vị trí (variant default)</Text>
+      <div class="mt-2 flex flex-wrap gap-3">
+        <Button type="button" variant="ghost" size="sm" data-demo-toast-pos="top-center">top-center</Button>
+        <Button type="button" variant="ghost" size="sm" data-demo-toast-pos="top-right">top-right</Button>
+        <Button type="button" variant="ghost" size="sm" data-demo-toast-pos="bottom-center">bottom-center</Button>
+        <Button type="button" variant="ghost" size="sm" data-demo-toast-pos="bottom-right">bottom-right</Button>
+      </div>
+    </section>
+
+    <section>
       <Heading as="h2" size="lg" class="mb-1">Dropdown</Heading>
       <Text variant="muted" class="mb-4">Click button to open menu.</Text>
       <div class="mt-4">
@@ -276,3 +296,27 @@ import {
     </section>
   </div>
 </DashboardLayout>
+
+<script>
+  import type { ToastPosition } from "@/lib/ui/toast"
+  import { showToast } from "@/lib/ui/toast"
+
+  const positions: ToastPosition[] = ["top-center", "top-right", "bottom-center", "bottom-right"]
+
+  for (const btn of document.querySelectorAll<HTMLButtonElement>("[data-demo-toast]")) {
+    btn.addEventListener("click", () => {
+      const v = btn.getAttribute("data-demo-toast")
+      if (v === "default") showToast("Toast mặc định — đóng tay hoặc chờ vài giây.")
+      else if (v === "success") showToast("Thao tác thành công.", { variant: "success" })
+      else if (v === "destructive") showToast("Có lỗi xảy ra (demo).", { variant: "destructive" })
+    })
+  }
+
+  for (const btn of document.querySelectorAll<HTMLButtonElement>("[data-demo-toast-pos]")) {
+    btn.addEventListener("click", () => {
+      const raw = btn.getAttribute("data-demo-toast-pos")
+      const position = positions.includes(raw as ToastPosition) ? (raw as ToastPosition) : "top-center"
+      showToast(`Vị trí: ${position}`, { position })
+    })
+  }
+</script>

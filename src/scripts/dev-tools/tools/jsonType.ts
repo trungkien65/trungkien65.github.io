@@ -1,4 +1,5 @@
 import { copyToClipboard } from "@/lib/devTools/clipboard"
+import { showToast } from "@/lib/ui/toast"
 
 function jsonToTs(obj: unknown, _name = "RootPayload"): string {
   if (obj === null) return "null"
@@ -26,13 +27,11 @@ function generateInterface(obj: unknown): string {
 
 export function initJsonType(root: HTMLElement) {
   const ta = root.querySelector<HTMLTextAreaElement>("[data-dt-jts-input]")
-  const err = root.querySelector<HTMLElement>("[data-dt-jts-error]")
   const out = root.querySelector<HTMLElement>("[data-dt-jts-out]")
   const pre = root.querySelector<HTMLElement>("[data-dt-jts-pre]")
-  if (!ta || !err || !out || !pre) return
+  if (!ta || !out || !pre) return
 
   const run = () => {
-    err.classList.add("hidden")
     out.classList.add("hidden")
     const t = ta.value.trim()
     if (!t) return
@@ -40,8 +39,7 @@ export function initJsonType(root: HTMLElement) {
       pre.textContent = generateInterface(JSON.parse(t))
       out.classList.remove("hidden")
     } catch {
-      err.textContent = "JSON không hợp lệ"
-      err.classList.remove("hidden")
+      showToast("JSON không hợp lệ", { variant: "destructive" })
     }
   }
   ta.addEventListener("blur", run)

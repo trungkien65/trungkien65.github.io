@@ -1,14 +1,13 @@
 import { copyToClipboard } from "@/lib/devTools/clipboard"
+import { showToast } from "@/lib/ui/toast"
 
 export function initUrl(root: HTMLElement) {
   const inp = root.querySelector<HTMLInputElement>("[data-dt-url-input]")
-  const err = root.querySelector<HTMLElement>("[data-dt-url-error]")
   const pre = root.querySelector<HTMLElement>("[data-dt-url-pre]")
   const wrap = root.querySelector<HTMLElement>("[data-dt-url-wrap]")
-  if (!inp || !err || !pre || !wrap) return
+  if (!inp || !pre || !wrap) return
 
   const parse = () => {
-    err.classList.add("hidden")
     wrap.classList.add("hidden")
     const trimmed = inp.value.trim()
     if (!trimmed) return
@@ -32,8 +31,7 @@ export function initUrl(root: HTMLElement) {
       pre.textContent = lines.join("\n")
       wrap.classList.remove("hidden")
     } catch {
-      err.textContent = "URL không hợp lệ"
-      err.classList.remove("hidden")
+      showToast("URL không hợp lệ", { variant: "destructive" })
     }
   }
   inp.addEventListener("blur", parse)

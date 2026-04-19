@@ -1,4 +1,5 @@
 import { copyToClipboard } from "@/lib/devTools/clipboard"
+import { showToast } from "@/lib/ui/toast"
 
 const ALGOS = ["SHA-1", "SHA-256", "SHA-384", "SHA-512"] as const
 
@@ -37,8 +38,8 @@ export function initHash(root: HTMLElement) {
       outPre.textContent = await hashText(text, algo)
       out.classList.remove("hidden")
     } catch (e) {
-      outPre.textContent = "Lỗi: " + (e instanceof Error ? e.message : "Unknown")
-      out.classList.remove("hidden")
+      out.classList.add("hidden")
+      showToast("Lỗi: " + (e instanceof Error ? e.message : "Unknown"), { variant: "destructive" })
     }
   })
   root.querySelector<HTMLButtonElement>("[data-dt-hash-copy]")?.addEventListener("click", () =>

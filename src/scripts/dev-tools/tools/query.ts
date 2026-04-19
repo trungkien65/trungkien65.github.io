@@ -1,14 +1,13 @@
 import { copyToClipboard } from "@/lib/devTools/clipboard"
+import { showToast } from "@/lib/ui/toast"
 
 export function initQuery(root: HTMLElement) {
   const ta = root.querySelector<HTMLTextAreaElement>("[data-dt-q-input]")
-  const err = root.querySelector<HTMLElement>("[data-dt-q-error]")
   const pre = root.querySelector<HTMLElement>("[data-dt-q-pre]")
   const wrap = root.querySelector<HTMLElement>("[data-dt-q-wrap]")
-  if (!ta || !err || !pre || !wrap) return
+  if (!ta || !pre || !wrap) return
 
   root.querySelector<HTMLButtonElement>("[data-dt-q-parse]")?.addEventListener("click", () => {
-    err.classList.add("hidden")
     const trimmed = ta.value.trim()
     if (!trimmed) return
     try {
@@ -18,19 +17,16 @@ export function initQuery(root: HTMLElement) {
       pre.textContent = JSON.stringify(obj, null, 2)
       wrap.classList.remove("hidden")
     } catch {
-      err.textContent = "Query string không hợp lệ"
-      err.classList.remove("hidden")
+      showToast("Query string không hợp lệ", { variant: "destructive" })
     }
   })
   root.querySelector<HTMLButtonElement>("[data-dt-q-build]")?.addEventListener("click", () => {
-    err.classList.add("hidden")
     try {
       const obj = JSON.parse(ta.value.trim()) as Record<string, string>
       pre.textContent = new URLSearchParams(obj).toString()
       wrap.classList.remove("hidden")
     } catch {
-      err.textContent = 'Nhập JSON: {"foo":"bar"}'
-      err.classList.remove("hidden")
+      showToast('Nhập JSON: {"foo":"bar"}', { variant: "destructive" })
     }
   })
   root.querySelector<HTMLButtonElement>("[data-dt-q-copy]")?.addEventListener("click", () =>

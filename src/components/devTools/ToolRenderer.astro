@@ -68,10 +68,6 @@ const preO =
           data-dt-jwt-input
           placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
         />
-        <p
-          data-dt-jwt-error
-          class="hidden text-sm text-red-600 dark:text-red-400"
-        />
         <div data-dt-jwt-block class="hidden space-y-4">
           <div>
             <div class="mb-1 flex items-center justify-between">
@@ -184,7 +180,6 @@ const preO =
           data-dt-jts-input
           placeholder='{"id":1}'
         />
-        <p data-dt-jts-error class="hidden text-sm text-red-600" />
         <div data-dt-jts-out class="hidden">
           <div class="mb-1 flex justify-between">
             <Text as="span" variant="small" class="font-medium text-foreground">
@@ -268,7 +263,6 @@ const preO =
         <Button type="button" variant="primary" data-dt-jc-go>
           Chuyển sang XML
         </Button>
-        <p data-dt-jc-error class="hidden text-sm text-red-600" />
         <div data-dt-jc-wrap class="hidden">
           <div class="mb-1 flex justify-between">
             <Text
@@ -303,7 +297,6 @@ const preO =
         <Button type="button" variant="primary" data-dt-jc-go>
           Chuyển sang CSV
         </Button>
-        <p data-dt-jc-error class="hidden text-sm text-red-600" />
         <div data-dt-jc-wrap class="hidden">
           <div class="mb-1 flex justify-between">
             <Text
@@ -338,7 +331,6 @@ const preO =
         <Button type="button" variant="primary" data-dt-jc-go>
           Chuyển sang YAML
         </Button>
-        <p data-dt-jc-error class="hidden text-sm text-red-600" />
         <div data-dt-jc-wrap class="hidden">
           <div class="mb-1 flex justify-between">
             <Text
@@ -373,7 +365,6 @@ const preO =
             Decode
           </Button>
         </div>
-        <p data-dt-b64-error class="hidden text-sm text-red-600" />
         <div data-dt-b64-out class="hidden">
           <div class="mb-1 flex justify-between">
             <Text as="span" variant="small" class="font-medium text-foreground">
@@ -400,7 +391,6 @@ const preO =
           data-dt-url-input
           placeholder="https://example.com/path?foo=bar"
         />
-        <p data-dt-url-error class="hidden text-sm text-red-600" />
         <div data-dt-url-wrap class="hidden">
           <div class="mb-1 flex justify-between">
             <Text as="span" variant="small" class="font-medium text-foreground">
@@ -430,7 +420,6 @@ const preO =
             Build (từ JSON)
           </Button>
         </div>
-        <p data-dt-q-error class="hidden text-sm text-red-600" />
         <div data-dt-q-wrap class="hidden">
           <div class="mb-1 flex justify-between">
             <Text as="span" variant="small" class="font-medium text-foreground">
@@ -492,7 +481,6 @@ const preO =
             Now
           </Button>
         </div>
-        <p data-dt-ts-error class="hidden text-sm text-red-600" />
         <p data-dt-ts-out class="rounded bg-muted p-3 font-mono text-sm" />
         <Button type="button" variant="outline" data-dt-ts-copy>
           Copy output
@@ -510,7 +498,6 @@ const preO =
         <Button type="button" variant="primary" data-dt-rel-go>
           Format
         </Button>
-        <p data-dt-rel-error class="hidden text-sm text-red-600" />
         <p data-dt-rel-out class="rounded bg-muted p-3 text-sm" />
         <Button type="button" variant="outline" data-dt-rel-copy>
           Copy
@@ -543,7 +530,6 @@ const preO =
         <Button type="button" variant="primary" data-dt-re-go>
           Test
         </Button>
-        <p data-dt-re-error class="hidden text-sm text-red-600" />
         <div data-dt-re-wrap class="hidden">
           <div class="mb-1 flex justify-between">
             <Text as="span" variant="small" class="font-medium text-foreground">
@@ -574,7 +560,6 @@ const preO =
         <Button type="button" variant="primary" data-dt-cron-go>
           Parse
         </Button>
-        <p data-dt-cron-error class="hidden text-sm text-red-600" />
         <div data-dt-cron-wrap class="hidden">
           <div class="mb-1 flex justify-between">
             <Text as="span" variant="small" class="font-medium text-foreground">
@@ -675,7 +660,6 @@ const preO =
         <Button type="button" variant="primary" data-dt-csv-go>
           Parse
         </Button>
-        <p data-dt-csv-error class="hidden text-sm text-red-600" />
         <div data-dt-csv-wrap class="hidden">
           <div class="mb-1 flex justify-between">
             <Text as="span" variant="small" class="font-medium text-foreground">
@@ -754,7 +738,6 @@ const preO =
         <Button type="button" variant="primary" data-dt-nb-go>
           Convert
         </Button>
-        <p data-dt-nb-error class="hidden text-sm text-red-600" />
         <div data-dt-nb-wrap class="hidden">
           <div class="mb-1 flex justify-between">
             <Text as="span" variant="small" class="font-medium text-foreground">

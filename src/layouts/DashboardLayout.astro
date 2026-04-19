@@ -4,6 +4,7 @@
  * Responsive: sidebar collapsible on mobile with toggle.
  */
 import { Header, Sidebar } from "@/components/layout"
+import ToastRegion from "@/components/ui/ToastRegion.astro"
 import "@/styles/theme.css"
 
 interface Props {
@@ -202,5 +203,6 @@ const { title } = Astro.props
         })
       }
     </script>
+    <ToastRegion />
   </body>
 </html>

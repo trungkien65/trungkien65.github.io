@@ -16,6 +16,16 @@ const AUTH_REDIRECT_LOCK_TTL_MS = 3000
 /** Prefix route yêu cầu đăng nhập. */
 export const AUTHED_PATH_PREFIXES = ["/", "/account", "/learn", "/game", "/theme"] as const
 
+/**
+ * Route công khai — không gọi refresh/redirect login khi thiếu token
+ * (kể cả trang lỡ dùng layout có `ensureAuthForGuard`, ví dụ /dev-tools).
+ */
+export const PUBLIC_PATH_PREFIXES = ["/auth", "/dev-tools"] as const
+
+function isPublicPath(pathname: string): boolean {
+  return PUBLIC_PATH_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`))
+}
+
 /** Chỉ cho phép path nội bộ làm `next` để tránh open redirect. */
 export function getSafeAuthNextPath(pathname: string, search = ""): string {
   const raw = `${pathname}${search}`
@@ -32,6 +42,8 @@ export function hasAuthTokenForGuard(): boolean {
 export function redirectToLoginIfUnauthed(pathname: string, search = ""): void {
   // Không redirect lặp khi đã ở trang login.
   if (pathname.startsWith("/auth/login")) return
+  // Trang công khai: không đẩy về login.
+  if (isPublicPath(pathname)) return
   // Giảm vòng lặp redirect trong thời gian ngắn (race/network lỗi).
   if (typeof sessionStorage !== "undefined") {
     const now = Date.now()
@@ -54,6 +66,8 @@ export async function ensureAuthForGuard(pathname: string, search = ""): Promise
     // Dọn lock cũ để redirect lần sau hoạt động lại bình thường.
     sessionStorage.removeItem(AUTH_REDIRECT_LOCK_KEY)
   }
+  // Dev tools & auth: không chặn, không refresh token.
+  if (isPublicPath(pathname)) return
   if (getCookie(ACCESS_TOKEN_COOKIE)) return
 
   const refreshToken = getCookie(REFRESH_TOKEN_COOKIE)

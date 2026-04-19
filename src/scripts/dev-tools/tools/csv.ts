@@ -1,4 +1,5 @@
 import { copyToClipboard } from "@/lib/devTools/clipboard"
+import { showToast } from "@/lib/ui/toast"
 
 function csvToJson(csv: string): unknown[] {
   const lines = csv.split("\n").filter((l) => l.trim())
@@ -16,19 +17,16 @@ function csvToJson(csv: string): unknown[] {
 
 export function initCsv(root: HTMLElement) {
   const ta = root.querySelector<HTMLTextAreaElement>("[data-dt-csv-input]")
-  const err = root.querySelector<HTMLElement>("[data-dt-csv-error]")
   const pre = root.querySelector<HTMLElement>("[data-dt-csv-pre]")
   const wrap = root.querySelector<HTMLElement>("[data-dt-csv-wrap]")
-  if (!ta || !err || !pre || !wrap) return
+  if (!ta || !pre || !wrap) return
 
   root.querySelector<HTMLButtonElement>("[data-dt-csv-go]")?.addEventListener("click", () => {
-    err.classList.add("hidden")
     try {
       pre.textContent = JSON.stringify(csvToJson(ta.value.trim()), null, 2)
       wrap.classList.remove("hidden")
     } catch {
-      err.textContent = "CSV không hợp lệ"
-      err.classList.remove("hidden")
+      showToast("CSV không hợp lệ", { variant: "destructive" })
     }
   })
   root.querySelector<HTMLButtonElement>("[data-dt-csv-copy]")?.addEventListener("click", () =>

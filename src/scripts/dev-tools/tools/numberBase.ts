@@ -1,15 +1,14 @@
 import { copyToClipboard } from "@/lib/devTools/clipboard"
+import { showToast } from "@/lib/ui/toast"
 
 export function initNumberBase(root: HTMLElement) {
   const inp = root.querySelector<HTMLInputElement>("[data-dt-nb-input]")
   const sel = root.querySelector<HTMLSelectElement>("[data-dt-nb-base]")
-  const err = root.querySelector<HTMLElement>("[data-dt-nb-error]")
   const out = root.querySelector<HTMLElement>("[data-dt-nb-out]")
   const wrap = root.querySelector<HTMLElement>("[data-dt-nb-wrap]")
-  if (!inp || !sel || !err || !out || !wrap) return
+  if (!inp || !sel || !out || !wrap) return
 
   root.querySelector<HTMLButtonElement>("[data-dt-nb-go]")?.addEventListener("click", () => {
-    err.classList.add("hidden")
     wrap.classList.add("hidden")
     const trimmed = inp.value.trim()
     if (!trimmed) return
@@ -32,8 +31,7 @@ export function initNumberBase(root: HTMLElement) {
       }
       wrap.classList.remove("hidden")
     } catch {
-      err.textContent = "Số không hợp lệ"
-      err.classList.remove("hidden")
+      showToast("Số không hợp lệ", { variant: "destructive" })
     }
   })
   root.querySelector<HTMLButtonElement>("[data-dt-nb-copy]")?.addEventListener("click", () => {

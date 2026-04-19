@@ -42,7 +42,6 @@ import { Button, Card, Heading, Link, Text } from "@/components/ui"
       </Card>
     </div>
 
-    <p id="auth-me-error" class="hidden text-sm text-red-600 dark:text-red-400" role="alert"></p>
   </div>
 </PublicLayout>
 
@@ -58,11 +57,11 @@ import { Button, Card, Heading, Link, Text } from "@/components/ui"
     persistAuthTokenPair,
   } from "@/lib/api/auth"
   import { getCookie } from "@/lib/http/cookies"
+  import { showToast } from "@/lib/ui/toast"
 
   const guest = document.getElementById("auth-me-guest")
   const loading = document.getElementById("auth-me-loading")
   const content = document.getElementById("auth-me-content")
-  const errEl = document.getElementById("auth-me-error")
   const emailEl = document.getElementById("auth-me-email")
   const idEl = document.getElementById("auth-me-id")
   const createdEl = document.getElementById("auth-me-created")
@@ -84,12 +83,6 @@ import { Button, Card, Heading, Link, Text } from "@/components/ui"
     if (createdEl) createdEl.textContent = new Date(me.createdAt).toLocaleString("vi-VN")
   }
 
-  function showErr(msg: string) {
-    if (!errEl) return
-    errEl.textContent = msg
-    errEl.classList.remove("hidden")
-  }
-
   async function loadMe() {
     // Tránh kiểm tra access cookie sớm để không chặn flow auto-refresh.
     try {
@@ -102,7 +95,7 @@ import { Button, Card, Heading, Link, Text } from "@/components/ui"
         return
       }
       loading?.classList.add("hidden")
-      showErr(apiErrorMessage(e))
+      showToast(apiErrorMessage(e), { variant: "destructive" })
     }
   }
 
@@ -111,22 +104,20 @@ import { Button, Card, Heading, Link, Text } from "@/components/ui"
   btnRefresh?.addEventListener("click", async () => {
     const rt = getCookie(REFRESH_TOKEN_COOKIE)
     if (!rt) {
-      showErr("Không có refresh token. Đăng nhập lại.")
+      showToast("Không có refresh token. Đăng nhập lại.", { variant: "destructive" })
       return
     }
-    errEl?.classList.add("hidden")
     try {
       const pair = await authRefresh({ refresh_token: rt })
       persistAuthTokenPair(pair)
       await loadMe()
     } catch (e) {
-      showErr(apiErrorMessage(e, "Làm mới token thất bại"))
+      showToast(apiErrorMessage(e, "Làm mới token thất bại"), { variant: "destructive" })
     }
   })
 
   btnLogout?.addEventListener("click", async () => {
     const rt = getCookie(REFRESH_TOKEN_COOKIE)
-    errEl?.classList.add("hidden")
     try {
       if (rt) await authLogout({ refresh_token: rt })
     } catch {

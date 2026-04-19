@@ -1,4 +1,5 @@
 import { copyToClipboard } from "@/lib/devTools/clipboard"
+import { showToast } from "@/lib/ui/toast"
 
 function base64UrlDecode(str: string): string {
   try {
@@ -22,23 +23,19 @@ function formatTimestamp(ts: number): string {
 
 export function initJwt(root: HTMLElement) {
   const input = root.querySelector<HTMLTextAreaElement>("[data-dt-jwt-input]")
-  const err = root.querySelector<HTMLElement>("[data-dt-jwt-error]")
   const block = root.querySelector<HTMLElement>("[data-dt-jwt-block]")
   const preH = root.querySelector<HTMLElement>("[data-dt-jwt-header]")
   const preP = root.querySelector<HTMLElement>("[data-dt-jwt-payload]")
   const timeUl = root.querySelector<HTMLElement>("[data-dt-jwt-times]")
-  if (!input || !err || !block || !preH || !preP || !timeUl) return
+  if (!input || !block || !preH || !preP || !timeUl) return
 
   const decode = () => {
-    err.classList.add("hidden")
-    err.textContent = ""
     block.classList.add("hidden")
     const trimmed = input.value.trim()
     if (!trimmed) return
     const parts = trimmed.split(".")
     if (parts.length !== 3) {
-      err.textContent = "JWT phải có 3 phần (header.payload.signature)"
-      err.classList.remove("hidden")
+      showToast("JWT phải có 3 phần (header.payload.signature)", { variant: "destructive" })
       return
     }
     try {
@@ -59,8 +56,7 @@ export function initJwt(root: HTMLElement) {
       if (tw) tw.classList.toggle("hidden", timeUl.children.length === 0)
       block.classList.remove("hidden")
     } catch {
-      err.textContent = "Không thể decode. Kiểm tra JWT hợp lệ."
-      err.classList.remove("hidden")
+      showToast("Không thể decode. Kiểm tra JWT hợp lệ.", { variant: "destructive" })
     }
   }
   root.querySelector<HTMLButtonElement>("[data-dt-jwt-copy-h]")?.addEventListener("click", () =>

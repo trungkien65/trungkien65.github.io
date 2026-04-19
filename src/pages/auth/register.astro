@@ -11,7 +11,6 @@ import { Button, Card, Heading, Input, Link, Text } from "@/components/ui"
     <Heading as="h1" size="xl">Đăng ký</Heading>
     <Card variant="bordered">
       <form id="auth-register-form" class="space-y-4">
-        <p id="auth-register-error" class="hidden text-sm text-red-600 dark:text-red-400" role="alert"></p>
         <div id="auth-register-success" class="hidden rounded-lg border border-emerald-500/40 bg-emerald-500/10 p-3 text-sm text-foreground">
           <p id="auth-register-success-msg"></p>
           <p class="mt-2">
@@ -44,9 +43,9 @@ import { Button, Card, Heading, Input, Link, Text } from "@/components/ui"
 <script>
   import { apiErrorMessage } from "@/lib/api/errors"
   import { authRegister } from "@/lib/api/auth"
+  import { showToast } from "@/lib/ui/toast"
 
   const form = document.getElementById("auth-register-form") as HTMLFormElement | null
-  const errEl = document.getElementById("auth-register-error") as HTMLParagraphElement | null
   const okBox = document.getElementById("auth-register-success") as HTMLDivElement | null
   const okMsg = document.getElementById("auth-register-success-msg") as HTMLParagraphElement | null
   const fields = document.getElementById("auth-register-fields") as HTMLDivElement | null
@@ -54,9 +53,7 @@ import { Button, Card, Heading, Input, Link, Text } from "@/components/ui"
 
   form?.addEventListener("submit", async (e) => {
     e.preventDefault()
-    if (!errEl || !submitBtn || !okBox || !okMsg || !fields) return
-    errEl.classList.add("hidden")
-    errEl.textContent = ""
+    if (!submitBtn || !okBox || !okMsg || !fields) return
     okBox.classList.add("hidden")
     submitBtn.disabled = true
     const fd = new FormData(form)
@@ -68,8 +65,7 @@ import { Button, Card, Heading, Input, Link, Text } from "@/components/ui"
       okMsg.textContent = `${res.message} (ID: ${res.userId})`
       okBox.classList.remove("hidden")
     } catch (err) {
-      errEl.textContent = apiErrorMessage(err, "Đăng ký thất bại")
-      errEl.classList.remove("hidden")
+      showToast(apiErrorMessage(err, "Đăng ký thất bại"), { variant: "destructive" })
     } finally {
       submitBtn.disabled = false
     }

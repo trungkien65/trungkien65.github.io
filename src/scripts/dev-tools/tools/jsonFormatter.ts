@@ -1,4 +1,5 @@
 import { copyToClipboard } from "@/lib/devTools/clipboard"
+import { showToast } from "@/lib/ui/toast"
 
 const SAMPLE = `{
   "name": "demo",
@@ -76,12 +77,6 @@ export function initJsonFormatter(root: HTMLElement) {
     })
   indentSel.addEventListener("change", () => (indent = Number(indentSel.value) as 2 | 3 | 4))
 
-  const errBox = document.createElement("div")
-  errBox.className = "hidden rounded-md border border-red-300/80 bg-red-950/30 px-3 py-2 text-sm text-red-100"
-  const okBox = document.createElement("div")
-  okBox.className =
-    "hidden rounded-md border border-emerald-200/80 bg-emerald-950/20 px-3 py-2 text-sm text-emerald-50"
-
   const parseJson = (s: string) => {
     const t = s.trim()
     if (!t) return { ok: false as const, err: "Chưa có JSON" }
@@ -94,8 +89,6 @@ export function initJsonFormatter(root: HTMLElement) {
 
   let debounceId: ReturnType<typeof setTimeout> | null = null
   left.ta.addEventListener("input", () => {
-    okBox.classList.add("hidden")
-    errBox.classList.add("hidden")
     if (debounceId) clearTimeout(debounceId)
     debounceId = setTimeout(() => {
       debounceId = null
@@ -107,7 +100,6 @@ export function initJsonFormatter(root: HTMLElement) {
       try {
         const data = JSON.parse(trimmed) as unknown
         right.ta.value = JSON.stringify(data, null, indent)
-        errBox.classList.add("hidden")
       } catch {
         /* typing */
       }
@@ -120,8 +112,6 @@ export function initJsonFormatter(root: HTMLElement) {
     const r = new FileReader()
     r.onload = () => {
       left.ta.value = typeof r.result === "string" ? r.result : ""
-      okBox.classList.add("hidden")
-      errBox.classList.add("hidden")
     }
     r.readAsText(f)
     fileInp.value = ""
@@ -130,16 +120,12 @@ export function initJsonFormatter(root: HTMLElement) {
   mid.appendChild(mkBtn("Upload", btnMid, () => fileInp.click()))
   mid.appendChild(
     mkBtn("Validate", btnMid, () => {
-      okBox.classList.add("hidden")
       const r = parseJson(left.ta.value)
       if (!r.ok) {
-        errBox.textContent = `Không hợp lệ: ${r.err}`
-        errBox.classList.remove("hidden")
+        showToast(`Không hợp lệ: ${r.err}`, { variant: "destructive" })
         return
       }
-      errBox.classList.add("hidden")
-      okBox.textContent = "JSON hợp lệ."
-      okBox.classList.remove("hidden")
+      showToast("JSON hợp lệ.", { variant: "success" })
     })
   )
   const indentLabel = document.createElement("label")
@@ -153,12 +139,9 @@ export function initJsonFormatter(root: HTMLElement) {
   row.className = "grid grid-cols-2 gap-1.5"
   row.appendChild(
     mkBtn("Format", btnMidSm, () => {
-      okBox.classList.add("hidden")
-      errBox.classList.add("hidden")
       const r = parseJson(left.ta.value)
       if (!r.ok) {
-        errBox.textContent = `JSON không hợp lệ: ${r.err}`
-        errBox.classList.remove("hidden")
+        showToast(`JSON không hợp lệ: ${r.err}`, { variant: "destructive" })
         right.ta.value = ""
         return
       }
@@ -167,12 +150,9 @@ export function initJsonFormatter(root: HTMLElement) {
   )
   row.appendChild(
     mkBtn("Beautify", btnMidSm, () => {
-      okBox.classList.add("hidden")
-      errBox.classList.add("hidden")
       const r = parseJson(left.ta.value)
       if (!r.ok) {
-        errBox.textContent = `JSON không hợp lệ: ${r.err}`
-        errBox.classList.remove("hidden")
+        showToast(`JSON không hợp lệ: ${r.err}`, { variant: "destructive" })
         return
       }
       const pretty = JSON.stringify(r.data, null, indent)
@@ -182,12 +162,9 @@ export function initJsonFormatter(root: HTMLElement) {
   )
   mid.appendChild(row)
   mid.appendChild(mkBtn("Minify", btnMid, () => {
-    okBox.classList.add("hidden")
-    errBox.classList.add("hidden")
     const r = parseJson(left.ta.value)
     if (!r.ok) {
-      errBox.textContent = "JSON không hợp lệ"
-      errBox.classList.remove("hidden")
+      showToast("JSON không hợp lệ", { variant: "destructive" })
       right.ta.value = ""
       return
     }
@@ -243,6 +220,4 @@ export function initJsonFormatter(root: HTMLElement) {
   grid.appendChild(mid)
   grid.appendChild(right.wrap)
   root.appendChild(grid)
-  root.appendChild(okBox)
-  root.appendChild(errBox)
 }

@@ -3,6 +3,7 @@
  * Layout công khai: không sidebar, không yêu cầu đăng nhập (dev-tools, auth).
  */
 import PublicHeader from "@/components/layout/PublicHeader.astro"
+import ToastRegion from "@/components/ui/ToastRegion.astro"
 import "@/styles/theme.css"
 
 interface Props {
@@ -35,5 +36,6 @@ const { title } = Astro.props
         <slot />
       </main>
     </div>
+    <ToastRegion />
   </body>
 </html>

@@ -2,6 +2,7 @@
  * Tải GET /learning/radicals (response theo `groups`) và dựng UI từng nhóm số nét.
  */
 import { apiErrorMessage } from "@/lib/api/errors"
+import { showToast } from "@/lib/ui/toast"
 import { type RadicalItem, fetchRadicals } from "@/lib/api/radicals"
 
 /** Khớp `id` của `<template>` trong `radicals.astro` (markup từ RadicalCard.astro). */
@@ -47,17 +48,15 @@ function buildRadicalCard(r: RadicalItem): HTMLLIElement {
 
 export function initRadicalsPage(root: HTMLElement) {
   const statusEl = root.querySelector<HTMLElement>("[data-radicals-status]")
-  const errorEl = root.querySelector<HTMLElement>("[data-radicals-error]")
   const metaEl = root.querySelector<HTMLElement>("[data-radicals-meta]")
   const groupsRoot = root.querySelector<HTMLElement>("[data-radicals-groups]")
-  if (!statusEl || !errorEl || !metaEl || !groupsRoot) return
+  if (!statusEl || !metaEl || !groupsRoot) return
 
   function showError(msg: string) {
+    showToast(msg, { variant: "destructive" })
     statusEl.classList.add("hidden")
     metaEl.classList.add("hidden")
     groupsRoot.classList.add("hidden")
-    errorEl.textContent = msg
-    errorEl.classList.remove("hidden")
   }
 
   void (async () => {
@@ -73,7 +72,6 @@ export function initRadicalsPage(root: HTMLElement) {
       const total = typeof data.count === "number" ? data.count : totalFromGroups
 
       statusEl.classList.add("hidden")
-      errorEl.classList.add("hidden")
       metaEl.textContent =
         groups.length === 0
           ? "Không có nhóm nào trong response."

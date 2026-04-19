@@ -34,10 +34,11 @@ import { Button, Card, Heading, Link, Text } from "@/components/ui"
     </div>
 
     <div id="account-error" class="hidden">
-      <Card variant="bordered">
-        <p id="account-error-msg" class="text-sm text-red-600 dark:text-red-400" role="alert"></p>
-        <div class="mt-4">
-          <Link href="/auth/login?next=/account" class="text-sm font-medium text-primary hover:underline">
+      <Card variant="bordered" class="space-y-4">
+        <Text variant="small">Không tải được thông tin tài khoản. Chi tiết đã hiển thị trong thông báo.</Text>
+        <div class="flex flex-wrap gap-2">
+          <Button type="button" variant="outline" id="account-retry-load">Thử lại</Button>
+          <Link href="/auth/login?next=/account" class="inline-flex items-center text-sm font-medium text-primary hover:underline">
             Đăng nhập lại
           </Link>
         </div>
@@ -58,11 +59,12 @@ import { Button, Card, Heading, Link, Text } from "@/components/ui"
     persistAuthTokenPair,
   } from "@/lib/api/auth"
   import { getCookie } from "@/lib/http/cookies"
+  import { showToast } from "@/lib/ui/toast"
 
   const loading = document.getElementById("account-loading")
   const content = document.getElementById("account-content")
   const errBox = document.getElementById("account-error")
-  const errMsg = document.getElementById("account-error-msg")
+  const btnRetryLoad = document.getElementById("account-retry-load")
   const emailEl = document.getElementById("account-email")
   const idEl = document.getElementById("account-id")
   const createdEl = document.getElementById("account-created")
@@ -78,10 +80,10 @@ import { Button, Card, Heading, Link, Text } from "@/components/ui"
     if (createdEl) createdEl.textContent = new Date(me.createdAt).toLocaleString("vi-VN")
   }
 
-  function showError(msg: string) {
+  function showLoadError(msg: string) {
+    showToast(msg, { variant: "destructive" })
     loading?.classList.add("hidden")
     content?.classList.add("hidden")
-    if (errMsg) errMsg.textContent = msg
     errBox?.classList.remove("hidden")
   }
 
@@ -96,7 +98,7 @@ import { Button, Card, Heading, Link, Text } from "@/components/ui"
         window.location.replace("/auth/login?next=" + encodeURIComponent("/account"))
         return
       }
-      showError(apiErrorMessage(e))
+      showLoadError(apiErrorMessage(e))
     }
   }
 
@@ -105,7 +107,7 @@ import { Button, Card, Heading, Link, Text } from "@/components/ui"
   btnRefresh?.addEventListener("click", async () => {
     const rt = getCookie(REFRESH_TOKEN_COOKIE)
     if (!rt) {
-      showError("Không có refresh token. Đăng nhập lại.")
+      showToast("Không có refresh token. Đăng nhập lại.", { variant: "destructive" })
       return
     }
     errBox?.classList.add("hidden")
@@ -117,8 +119,15 @@ import { Button, Card, Heading, Link, Text } from "@/components/ui"
       await loadMe()
     } catch (err) {
       loading?.classList.add("hidden")
-      showError(apiErrorMessage(err, "Làm mới token thất bại"))
+      content?.classList.remove("hidden")
+      showToast(apiErrorMessage(err, "Làm mới token thất bại"), { variant: "destructive" })
     }
+  })
+
+  btnRetryLoad?.addEventListener("click", () => {
+    errBox?.classList.add("hidden")
+    loading?.classList.remove("hidden")
+    void loadMe()
   })
 
   btnLogout?.addEventListener("click", async () => {

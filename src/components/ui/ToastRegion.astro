@@ -1,0 +1,14 @@
+---
+/**
+ * Vùng chứa toast — cuối body; vị trí mặc định giữa trên (showToast có thể đổi class khi gọi).
+ */
+import { DEFAULT_TOAST_POSITION, toastRootClassName } from "@/lib/ui/toast"
+---
+
+<div
+  id="toast-root"
+  aria-live="polite"
+  aria-relevant="additions"
+  class={toastRootClassName(DEFAULT_TOAST_POSITION)}
+>
+</div>

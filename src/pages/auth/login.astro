@@ -11,7 +11,6 @@ import { Button, Card, Heading, Input, Link, Text } from "@/components/ui"
     <Heading as="h1" size="xl">Đăng nhập</Heading>
     <Card variant="bordered">
       <form id="auth-login-form" class="space-y-4">
-        <p id="auth-login-error" class="hidden text-sm text-red-600 dark:text-red-400" role="alert"></p>
         <Input label="Email" type="email" name="email" id="auth-login-email" required autocomplete="email" />
         <Input
           label="Mật khẩu"
@@ -38,16 +37,14 @@ import { Button, Card, Heading, Input, Link, Text } from "@/components/ui"
   import { getSafeNextPath } from "@/lib/auth/safeNext"
   import { apiErrorMessage } from "@/lib/api/errors"
   import { authLogin, persistAuthTokenPair } from "@/lib/api/auth"
+  import { showToast } from "@/lib/ui/toast"
 
   const form = document.getElementById("auth-login-form") as HTMLFormElement | null
-  const errEl = document.getElementById("auth-login-error") as HTMLParagraphElement | null
   const submitBtn = document.getElementById("auth-login-submit") as HTMLButtonElement | null
 
   form?.addEventListener("submit", async (e) => {
     e.preventDefault()
-    if (!errEl || !submitBtn) return
-    errEl.classList.add("hidden")
-    errEl.textContent = ""
+    if (!submitBtn) return
     submitBtn.disabled = true
     const fd = new FormData(form)
     const email = String(fd.get("email") ?? "").trim()
@@ -57,8 +54,7 @@ import { Button, Card, Heading, Input, Link, Text } from "@/components/ui"
       persistAuthTokenPair(tokens)
       window.location.href = getSafeNextPath(window.location.search)
     } catch (err) {
-      errEl.textContent = apiErrorMessage(err, "Đăng nhập thất bại")
-      errEl.classList.remove("hidden")
+      showToast(apiErrorMessage(err, "Đăng nhập thất bại"), { variant: "destructive" })
     } finally {
       submitBtn.disabled = false
     }
