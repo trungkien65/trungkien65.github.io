@@ -5,7 +5,7 @@
 import Flashcard from "@/components/learn/Flashcard.astro"
 import Quiz from "@/components/learn/Quiz.astro"
 import ReviewFlow from "@/components/learn/ReviewFlow.astro"
-import { Heading, Tabs, Text } from "@/components/ui"
+import { Button, Heading, Tabs, Text } from "@/components/ui"
 import { DashboardLayout } from "@/layouts"
 ---
 
@@ -17,6 +17,12 @@ import { DashboardLayout } from "@/layouts"
     </div>
 
     <div class="max-w-3xl" data-vocab-app>
+      <div class="mb-4 flex flex-wrap items-center gap-2 rounded-lg border border-border bg-muted/40 p-3" data-vocab-pagination>
+        <Button type="button" variant="outline" size="sm" data-vocab-page-prev>Trang trước</Button>
+        <Button type="button" variant="outline" size="sm" data-vocab-page-next>Trang sau</Button>
+        <Text variant="muted" class="sm:ml-auto" data-vocab-page-label>Trang 1</Text>
+      </div>
+
       <Tabs class="w-full min-w-0">
         <button
           slot="list"

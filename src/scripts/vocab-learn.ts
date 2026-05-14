@@ -12,6 +12,8 @@ type QuizState = {
   choices: QuizChoice[]
 }
 
+const DEFAULT_WORDS_LIMIT = 50
+
 function shuffleInPlace<T>(arr: T[]): void {
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1))
@@ -45,51 +47,38 @@ export function initVocabLearn(root: HTMLElement) {
   if (!flash || !quiz || !review) return
 
   // --- Flashcard DOM ---
-  const flashTerm = flash.querySelector<HTMLElement>("[data-flash-term]")
-  const flashDef = flash.querySelector<HTMLElement>("[data-flash-definition]")
-  const flashFront = flash.querySelector<HTMLElement>('[data-flash-face="front"]')
-  const flashBack = flash.querySelector<HTMLElement>('[data-flash-face="back"]')
-  const flashFlip = flash.querySelector<HTMLButtonElement>("[data-flash-flip]")
-  const flashPrev = flash.querySelector<HTMLButtonElement>("[data-flash-prev]")
-  const flashNext = flash.querySelector<HTMLButtonElement>("[data-flash-next]")
-  const flashProgress = flash.querySelector<HTMLElement>("[data-flash-progress]")
+  const flashTerm = flash.querySelector<HTMLElement>("[data-flash-term]")!
+  const flashDef = flash.querySelector<HTMLElement>("[data-flash-definition]")!
+  const flashFront = flash.querySelector<HTMLElement>('[data-flash-face="front"]')!
+  const flashBack = flash.querySelector<HTMLElement>('[data-flash-face="back"]')!
+  const flashFlip = flash.querySelector<HTMLButtonElement>("[data-flash-flip]")!
+  const flashPrev = flash.querySelector<HTMLButtonElement>("[data-flash-prev]")!
+  const flashNext = flash.querySelector<HTMLButtonElement>("[data-flash-next]")!
+  const flashProgress = flash.querySelector<HTMLElement>("[data-flash-progress]")!
 
   // --- Quiz DOM ---
-  const quizTerm = quiz.querySelector<HTMLElement>("[data-quiz-term]")
-  const quizOptions = quiz.querySelector<HTMLElement>("[data-quiz-options]")
-  const quizFeedback = quiz.querySelector<HTMLElement>("[data-quiz-feedback]")
-  const quizNext = quiz.querySelector<HTMLButtonElement>("[data-quiz-next]")
-  const quizProgress = quiz.querySelector<HTMLElement>("[data-quiz-progress]")
+  const quizTerm = quiz.querySelector<HTMLElement>("[data-quiz-term]")!
+  const quizOptions = quiz.querySelector<HTMLElement>("[data-quiz-options]")!
+  const quizFeedback = quiz.querySelector<HTMLElement>("[data-quiz-feedback]")!
+  const quizNext = quiz.querySelector<HTMLButtonElement>("[data-quiz-next]")!
+  const quizProgress = quiz.querySelector<HTMLElement>("[data-quiz-progress]")!
 
   // --- Review DOM ---
-  const reviewTerm = review.querySelector<HTMLElement>("[data-review-term]")
-  const reviewMeta = review.querySelector<HTMLElement>("[data-review-meta]")
-  const reviewProgress = review.querySelector<HTMLElement>("[data-review-progress]")
-  const reviewDone = review.querySelector<HTMLElement>("[data-review-done]")
+  const reviewTerm = review.querySelector<HTMLElement>("[data-review-term]")!
+  const reviewMeta = review.querySelector<HTMLElement>("[data-review-meta]")!
+  const reviewProgress = review.querySelector<HTMLElement>("[data-review-progress]")!
+  const reviewDone = review.querySelector<HTMLElement>("[data-review-done]")!
 
-  if (
-    !flashTerm ||
-    !flashDef ||
-    !flashFront ||
-    !flashBack ||
-    !flashFlip ||
-    !flashPrev ||
-    !flashNext ||
-    !flashProgress ||
-    !quizTerm ||
-    !quizOptions ||
-    !quizFeedback ||
-    !quizNext ||
-    !quizProgress ||
-    !reviewTerm ||
-    !reviewMeta ||
-    !reviewProgress ||
-    !reviewDone
-  ) {
-    return
-  }
+  // --- Pagination DOM ---
+  const pagePrev = root.querySelector<HTMLButtonElement>("[data-vocab-page-prev]")!
+  const pageNext = root.querySelector<HTMLButtonElement>("[data-vocab-page-next]")!
+  const pageLabel = root.querySelector<HTMLElement>("[data-vocab-page-label]")!
 
   let words: LearningWord[] = []
+  let wordsLimit = DEFAULT_WORDS_LIMIT
+  let wordsOffset = 0
+  let hasNextWordsPage = false
+  let loadingWords = false
   let flashIndex = 0
   let flashFlipped = false
 
@@ -111,6 +100,13 @@ export function initVocabLearn(root: HTMLElement) {
 
   function showReviewError(msg: string) {
     showToast(msg, { variant: "destructive" })
+  }
+
+  function renderPagination() {
+    const page = Math.floor(wordsOffset / wordsLimit) + 1
+    pageLabel.textContent = loadingWords ? `Đang tải trang ${page}...` : `Trang ${page} · ${words.length} từ`
+    pagePrev.disabled = loadingWords || wordsOffset <= 0
+    pageNext.disabled = loadingWords || !hasNextWordsPage
   }
 
   function renderFlashcard() {
@@ -202,6 +198,42 @@ export function initVocabLearn(root: HTMLElement) {
     renderQuizOptions()
   }
 
+  async function loadWordsPage(offset: number): Promise<boolean> {
+    if (loadingWords) return false
+    loadingWords = true
+    renderPagination()
+    try {
+      const nextOffset = Math.max(0, offset)
+      const wRes = await fetchLearningWords({ limit: wordsLimit, offset: nextOffset })
+
+      if (wRes.items.length === 0 && nextOffset > 0) {
+        hasNextWordsPage = false
+        renderPagination()
+        showToast("Đã tới trang cuối cùng.")
+        return false
+      }
+
+      words = wRes.items
+      wordsLimit = Math.max(1, wRes.limit || wordsLimit)
+      wordsOffset = wRes.offset
+      hasNextWordsPage = wRes.items.length >= wordsLimit
+      flashIndex = 0
+      quizRound = 0
+
+      renderFlashcard()
+      nextQuizQuestion()
+      return true
+    } catch (e) {
+      const msg = learningApiErrorMessage(e)
+      showFlashError(msg)
+      showQuizError(msg)
+      return false
+    } finally {
+      loadingWords = false
+      renderPagination()
+    }
+  }
+
   function renderReview() {
     reviewDone.classList.add("hidden")
     if (reviewItems.length === 0) {
@@ -242,6 +274,14 @@ export function initVocabLearn(root: HTMLElement) {
   // --- Sự kiện quiz ---
   quizNext.addEventListener("click", () => nextQuizQuestion())
 
+  // --- Sự kiện phân trang từ vựng ---
+  pagePrev.addEventListener("click", () => {
+    void loadWordsPage(wordsOffset - wordsLimit)
+  })
+  pageNext.addEventListener("click", () => {
+    void loadWordsPage(wordsOffset + wordsLimit)
+  })
+
   // --- Sự kiện ôn tập (chất lượng 0–5) ---
   const qualityButtons = review.querySelectorAll<HTMLButtonElement>("[data-review-q]")
   for (const btn of qualityButtons) {
@@ -277,22 +317,17 @@ export function initVocabLearn(root: HTMLElement) {
 
   // --- Tải dữ liệu ban đầu (GET có cache) ---
   void (async () => {
+    renderPagination()
     try {
-      const [wRes, rRes] = await Promise.all([
-        fetchLearningWords({ limit: 50, offset: 0 }),
+      const [, rRes] = await Promise.all([
+        loadWordsPage(0),
         fetchReviewDue({ limit: 30 })
       ])
-      words = wRes.items
       reviewItems = rRes.items
-      flashIndex = 0
       reviewIndex = 0
-      renderFlashcard()
-      nextQuizQuestion()
       renderReview()
     } catch (e) {
       const msg = learningApiErrorMessage(e)
-      showFlashError(msg)
-      showQuizError(msg)
       showReviewError(msg)
     }
   })()
