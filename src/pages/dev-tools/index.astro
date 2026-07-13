@@ -8,7 +8,10 @@ import { PublicLayout } from "@/layouts"
 import { ALL_TOOLS } from "@/lib/devTools/config"
 import { cn } from "@/lib/utils"
 ---
-<PublicLayout title="Dev Tools">
+<PublicLayout
+  title="Dev Tools"
+  description="Bộ công cụ dev tiện ích chạy hoàn toàn trên trình duyệt: JSON formatter, chuyển đổi Base64/URL/JWT, hash, UUID và nhiều hơn nữa."
+>
   <div class="space-y-6">
     <div>
       <Heading as="h1" size="xl" class="mb-2">Tools</Heading>
@@ -53,8 +56,3 @@ import { cn } from "@/lib/utils"
     </Tabs>
   </div>
 </PublicLayout>
-
-<script>
-  import { bootDevTools } from "@/scripts/dev-tools/boot"
-  bootDevTools()
-</script>

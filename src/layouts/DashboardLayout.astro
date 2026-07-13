@@ -3,24 +3,27 @@
  * Dashboard layout: fixed sidebar + main content.
  * Responsive: sidebar collapsible on mobile with toggle.
  */
-import { Header, Sidebar } from "@/components/layout"
-import ToastRegion from "@/components/ui/ToastRegion.astro"
+import { Header, SeoMeta, Sidebar } from "@/components/layout"
+import { ToastRegion } from "@/components/ui"
 import "@/styles/theme.css"
 
 interface Props {
   title: string
+  description?: string
+  /** Dashboard pages require login, so they're excluded from indexing by default. */
+  noindex?: boolean
 }
 
-const { title } = Astro.props
+const { title, description, noindex = true } = Astro.props
 ---
 <!doctype html>
-<html lang="en">
+<html lang="vi">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
-    <title>{title}</title>
+    <SeoMeta title={title} description={description} noindex={noindex} />
     <!-- Layer auth check tập trung: access hết hạn theo maxAge thì thử refresh token. -->
     <script>
       import { ensureAuthForGuard } from "@/lib/auth/guard"

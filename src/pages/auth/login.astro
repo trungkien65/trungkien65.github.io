@@ -6,7 +6,11 @@ import { PublicLayout } from "@/layouts"
 import { Button, Card, Heading, Input, Link, Text } from "@/components/ui"
 ---
 
-<PublicLayout title="Đăng nhập">
+<PublicLayout
+  title="Đăng nhập"
+  description="Đăng nhập vào tài khoản để truy cập các tính năng cá nhân hoá."
+  noindex={true}
+>
   <div class="mx-auto max-w-md space-y-6">
     <Heading as="h1" size="xl">Đăng nhập</Heading>
     <Card variant="bordered">

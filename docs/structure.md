@@ -4,33 +4,37 @@
 
 ```
 src/
-├── atoms/          # Jotai atoms – state definitions
-├── hooks/          # React hooks – game logic, orchestration
-├── lib/            # Shared utilities, hooks (debounce, media query)
+├── lib/            # Shared utilities, API clients, auth, http (cookies), devTools config
 ├── components/
 │   ├── layout/     # Header, Sidebar – Astro
 │   ├── ui/         # Reusable UI – Astro
-│   └── 2048/       # Ball game – React (BallBoard, Ball)
-├── layouts/        # Layout wrappers (DashboardLayout)
+│   ├── learn/      # Flashcard, Quiz, RadicalCard, ReviewFlow – Astro
+│   └── devTools/
+│       ├── *.astro   # Shell: ToolPanel, ToolRenderer, ToolCard
+│       └── tools/     # React islands, one per dev tool (client:visible)
+├── layouts/        # Layout wrappers (DashboardLayout, PublicLayout)
 ├── pages/          # Astro routes
-├── styles/         # Global CSS (theme, ballgame)
-├── theme/          # Theme logic (applyTheme)
-└── utils/          # Pure functions (ballPhysics)
+├── scripts/        # Vanilla <script> entry points (vocab-learn, radicals-page, ...)
+├── styles/         # Global CSS (theme)
+└── theme/          # Theme logic (applyTheme)
 ```
+
+React islands (`.tsx`, hydrated via `client:*`) live under the relevant
+`components/<feature>/` directory (e.g. `components/devTools/tools/`) rather than in a
+generic `react/` folder. Their hooks (pure logic + state) live in `lib/<feature>/hooks/`.
 
 ## Import Conventions
 
 - **Alias**: `@/` → `src/`
 - **Components**: `import { Button } from "@/components/ui"`
 - **Layouts**: `import { DashboardLayout } from "@/layouts"`
-- **Atoms**: `import { ballsAtom } from "@/atoms/ballGame"`
 
 ## File Naming
 
 - **Astro**: PascalCase – `Sidebar.astro`, `Button.astro`
-- **React**: PascalCase – `BallBoard.tsx`, `Ball.tsx`
-- **Hooks**: camelCase with `use` prefix – `useBallGame.ts`
-- **Utils**: camelCase – `ballPhysics.ts`
+- **React**: PascalCase – `Counter.tsx`
+- **Hooks**: camelCase with `use` prefix – `useCounter.ts`
+- **Utils**: camelCase – `cn.ts`
 
 ## Island Strategy
 
@@ -38,5 +42,5 @@ src/
 |-----------|------|--------|
 | Sidebar, Header | Astro | Static, no state needed |
 | Button, Card, Modal | Astro | No complex interactivity |
-| BallBoard, Ball | React | Game state, physics loop |
 | ThemeToggle | Astro | Can use inline script |
+| Dev-tools panels (Base64, Hash, JSON Formatter, ...) | React (`.tsx`, `client:visible`) | Per-tool state, only hydrates when its tab is shown |

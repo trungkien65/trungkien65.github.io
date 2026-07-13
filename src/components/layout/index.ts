@@ -4,4 +4,5 @@
 
 export { default as Header } from "./Header.astro"
 export { default as PublicHeader } from "./PublicHeader.astro"
+export { default as SeoMeta } from "./SeoMeta.astro"
 export { default as Sidebar } from "./Sidebar.astro"

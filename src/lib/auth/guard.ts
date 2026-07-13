@@ -14,7 +14,7 @@ const AUTH_REDIRECT_LOCK_KEY = "auth:redirect:lock"
 const AUTH_REDIRECT_LOCK_TTL_MS = 3000
 
 /** Prefix route yêu cầu đăng nhập. */
-export const AUTHED_PATH_PREFIXES = ["/", "/account", "/learn", "/game", "/theme"] as const
+export const AUTHED_PATH_PREFIXES = ["/", "/account", "/learn", "/theme"] as const
 
 /**
  * Route công khai — không gọi refresh/redirect login khi thiếu token

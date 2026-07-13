@@ -24,7 +24,7 @@ interface Props {
 
 const { tool, group } = Astro.props
 ---
-<PublicLayout title={`${tool.label} | Dev Tools`}>
+<PublicLayout title={tool.label} description={tool.description ?? group.description}>
   <div class="space-y-6">
     <div>
       <span class="text-sm font-medium text-muted-foreground">{group.label}</span>
@@ -36,8 +36,3 @@ const { tool, group } = Astro.props
     <ToolPanel toolId={tool.id} />
   </div>
 </PublicLayout>
-
-<script>
-  import { bootDevTools } from "@/scripts/dev-tools/boot"
-  bootDevTools()
-</script>

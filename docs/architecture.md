@@ -1,32 +1,35 @@
 # Architecture Overview
 
-The project uses Astro with React islands, Jotai for state, and Tailwind for styling.
+The project uses Astro (static output) with Tailwind for styling. `@astrojs/react` is
+installed so React islands are available whenever a feature needs client-side state or
+interactivity; most of the site is still plain Astro with vanilla `<script>` blocks.
 
 ## 1. Astro Island Architecture
 
 - **Static-first**: `output: "static"` – no SSR, builds to static HTML.
 - **Astro components**: `.astro` – render HTML at build time, no JS runtime needed.
-- **React islands**: `client:load` – hydrate only when interactivity is needed (game, theme toggle).
-- **Principle**: Use Astro for layout/static; use React only when state/interactivity is needed.
+- **React islands**: `.tsx` components hydrated with `client:*` directives (`client:load`,
+  `client:visible`, `client:idle`) – opt in only when a piece of UI genuinely needs
+  React state/effects.
+- **Vanilla scripts**: `<script>` blocks in `.astro` files (see `src/scripts/`) – used for
+  simple DOM interactivity (theme toggle, tab switching, auth guard) that doesn't need React.
+- **Principle**: Default to Astro for layout/static content and vanilla scripts for light
+  interactivity; reach for a React island only when component-local state/effects justify it.
 
 ```astro
-<!-- Astro wrapper: import React island + styles -->
-<BallBoardReact client:load />
+---
+import Counter from "@/components/example/Counter"
+---
+<Counter client:load />
 ```
 
-## 2. Jotai State Management
+## 2. State Management
 
-- **Atoms**: `src/atoms/` – define state (balls, score, gameStatus).
-- **Not used**: Redux, Context API.
-- **Hooks**: `useAtomValue`, `useSetAtom` – read/write state in React components.
-- **Principle**: State separated from UI; business logic in hooks, not in atoms.
-
-```ts
-// atoms/ballGame.ts
-export const ballsAtom = atom<Ball[]>([])
-export const scoreAtom = atom(0)
-export const gameStatusAtom = atom<GameStatus>("idle")
-```
+- No global state library is installed (no Jotai/Redux/Context store).
+- React islands manage their own state with `useState`/`useReducer`; keep it local to the
+  island unless multiple islands genuinely need to share it.
+- Cross-page/persisted state (auth tokens, theme) goes through plain modules in `src/lib/`
+  (e.g. `lib/auth/`, `lib/http/cookies.ts`), not component state.
 
 ## 3. Tailwind Styling
 
@@ -39,23 +42,19 @@ export const gameStatusAtom = atom<GameStatus>("idle")
 
 ```
 src/components/
-├── layout/     # Header, Sidebar – Astro
-├── ui/         # Button, Card, Modal, etc. – Astro
-└── 2048/       # Ball game – React (BallBoard, Ball)
+├── layout/           # Header, Sidebar – Astro
+├── ui/               # Button, Card, Modal, etc. – Astro
+├── learn/            # Flashcard, Quiz, RadicalCard – Astro
+└── devTools/
+    ├── ToolPanel.astro, ToolRenderer.astro, ToolCard.astro  # Astro shell
+    └── tools/         # One React island per tool (client:visible), state in
+                        # src/lib/devTools/hooks/use<Tool>.ts
 ```
 
 - **Layout**: Astro – no hydration needed.
 - **UI**: Astro – export via `index.ts` for clean imports.
-- **Game**: React – needs state and interactivity.
-
-## 5. Game Physics Logic Separation
-
-- **`utils/ballPhysics.ts`**: Pure functions: radius, collision, gravity, clamp.
-- **`hooks/useBallGame.ts`**: Physics loop, spawn, merge, score – uses atoms.
-- **`atoms/ballGame.ts`**: State data only.
-- **Principle**: Physics is React-independent; can be tested in isolation.
-
-```
-utils/ballPhysics.ts  →  hooks/useBallGame.ts  →  atoms/ballGame.ts
-     (pure functions)        (orchestration)           (state)
-```
+- New React islands should live next to the feature they belong to (e.g.
+  `components/<feature>/Widget.tsx`) rather than in a generic `react/` folder.
+- **Example**: `components/devTools/tools/` – each dev tool is a small React island
+  (`client:visible`, only hydrates once its tab panel is shown) backed by a
+  `lib/devTools/hooks/use<Tool>.ts` hook that holds the pure logic + state.
