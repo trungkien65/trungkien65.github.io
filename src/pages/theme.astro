@@ -1,380 +1,56 @@
 ---
-import {
-  Alert,
-  Badge,
-  Blockquote,
-  Button,
-  Card,
-  Code,
-  Dropdown,
-  Heading,
-  Input,
-  Link,
-  List,
-  Modal,
-  Table,
-  Tabs,
-  Text,
-  Textarea,
-  Progress,
-  Skeleton,
-  Avatar,
-  Divider,
-  Tooltip
-} from "@/components/ui"
-import { FormShowcase } from "@/components/ui/react/FormShowcase"
 /**
- * Theme page: showcase all base UI components.
+ * Storybook Design System Explorer — Thay thế trang Theme tĩnh.
  */
 import { DashboardLayout } from "@/layouts"
+import { Heading, Text } from "@/components/ui"
 ---
 
-<DashboardLayout title="Theme – Component Showcase">
-  <div class="space-y-12">
-    <section>
-      <Heading as="h2" size="lg" class="mb-1">Button</Heading>
-      <Text variant="muted" class="mb-4">Variants and sizes.</Text>
-      <div class="mt-4 flex flex-wrap gap-3">
-        <Button variant="primary">Primary</Button>
-        <Button variant="secondary">Secondary</Button>
-        <Button variant="outline">Outline</Button>
-        <Button variant="ghost">Ghost</Button>
-        <Button variant="danger">Danger</Button>
-        <Button variant="primary" disabled>Disabled</Button>
-      </div>
-      <div class="mt-3 flex flex-wrap gap-3">
-        <Button variant="primary" size="sm">Small</Button>
-        <Button variant="primary" size="md">Medium</Button>
-        <Button variant="primary" size="lg">Large</Button>
-      </div>
-    </section>
-
-    <section>
-      <Heading as="h2" size="lg" class="mb-1">Input</Heading>
-      <Text variant="muted" class="mb-4">Default, label, error.</Text>
-      <div class="mt-4 max-w-sm space-y-4">
-        <Input placeholder="Default input" />
-        <Input label="With label" placeholder="Enter value" />
-        <Input
-          label="With error"
-          error="This field is required"
-          placeholder="Invalid"
-        />
-        <Input label="Required" required placeholder="Required field" />
-      </div>
-    </section>
-
-    <section>
-      <Heading as="h2" size="lg" class="mb-1">Textarea</Heading>
-      <Text variant="muted" class="mb-4">Nhiều dòng, font mono (dev tools).</Text>
-      <div class="mt-4 max-w-xl space-y-4">
-        <Textarea placeholder="Không nhãn" rows={3} />
-        <Textarea label="Có nhãn" rows={4} placeholder="Nhập nội dung…" />
-      </div>
-    </section>
-
-    <section>
-      <Heading as="h2" size="lg" class="mb-1">Link</Heading>
-      <Text variant="muted" class="mb-4">Link variants.</Text>
-      <div class="mt-4 flex flex-wrap gap-4">
-        <Link href="/">Primary link</Link>
-        <Link href="/theme" variant="secondary">Secondary link</Link>
-        <Link href="/" variant="muted">Muted link</Link>
-      </div>
-    </section>
-
-    <section>
-      <Heading as="h2" size="lg" class="mb-1">Typography</Heading>
-      <Text variant="muted" class="mb-4">Heading, Text, Code, Blockquote, List.</Text>
-      <div class="space-y-4">
-        <div>
-          <Heading as="h1" size="xl">Heading XL</Heading>
-          <Heading as="h2" size="lg">Heading LG</Heading>
-          <Heading as="h3" size="md">Heading MD</Heading>
-        </div>
-        <Text variant="lead">Lead paragraph: larger intro text.</Text>
-        <Text>Body default. Lorem ipsum dolor sit amet.</Text>
-        <Text variant="muted">Muted text for secondary content.</Text>
-        <Text variant="small">Small text.</Text>
-        <Text as="p">
-          Inline <Code>code</Code> and <Code>variable_name</Code>.
+<DashboardLayout
+  title="Storybook – Design System"
+  description="Khám phá hệ thống UI Components và Form controls qua Storybook."
+>
+  <div class="flex h-[calc(100vh-7.5rem)] flex-col space-y-3">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <div>
+        <Heading as="h1" size="xl" class="flex items-center gap-2">
+          <span>🎨</span>
+          <span>Storybook Design System</span>
+        </Heading>
+        <Text variant="muted" class="text-xs">
+          Trực quan hóa tất cả UI Components và Form inputs (useController) trong môi trường Storybook.
         </Text>
-        <Code block>const example = "block code"</Code>
-        <Blockquote>
-          Blockquote: quote with primary border.
-        </Blockquote>
-        <List as="ul">
-          <li>Item 1</li>
-          <li>Item 2</li>
-          <li>Item 3</li>
-        </List>
-        <List as="ol">
-          <li>Step one</li>
-          <li>Step two</li>
-        </List>
       </div>
-    </section>
+      <div class="flex items-center gap-2">
+        <a
+          href="http://localhost:6006"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-semibold text-foreground shadow-sm transition-colors hover:bg-muted"
+        >
+          <span>Mở Storybook Dev (:6006)</span>
+          <span>↗</span>
+        </a>
+        <a
+          href="/storybook/index.html"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow transition-opacity hover:opacity-90"
+        >
+          <span>Mở toàn màn hình</span>
+          <span>↗</span>
+        </a>
+      </div>
+    </div>
 
-    <section>
-      <Heading as="h2" size="lg" class="mb-1">Modal</Heading>
-      <Text variant="muted" class="mb-4">Open modal with the button below.</Text>
-      <div class="mt-4">
-        <Button variant="primary" data-modal-open="demo-modal">
-          Open modal
-        </Button>
-      </div>
-      <Modal id="demo-modal" title="Sample Modal">
-        <Text variant="muted">
-          Modal content. Close with X button or click outside.
-        </Text>
-      </Modal>
-    </section>
-
-    <section>
-      <Heading as="h2" size="lg" class="mb-1">Table</Heading>
-      <Text variant="muted" class="mb-4">Table with header, hover, responsive.</Text>
-      <div class="mt-4">
-        <Table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Role</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Alice</td>
-              <td>Admin</td>
-              <td>Active</td>
-            </tr>
-            <tr>
-              <td>Bob</td>
-              <td>Editor</td>
-              <td>Active</td>
-            </tr>
-            <tr>
-              <td>Carol</td>
-              <td>Viewer</td>
-              <td>Inactive</td>
-            </tr>
-          </tbody>
-        </Table>
-      </div>
-    </section>
-
-    <section>
-      <Heading as="h2" size="lg" class="mb-1">Card</Heading>
-      <Text variant="muted" class="mb-4">Default, bordered, elevated.</Text>
-      <div class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <Card variant="default">
-          <Text variant="small">Simple card content.</Text>
-        </Card>
-        <Card variant="bordered">
-          <Text variant="small">Card with border.</Text>
-        </Card>
-        <Card variant="elevated">
-          <span slot="header" class="font-medium">Card with header</span>
-          <Text variant="small">Content and footer.</Text>
-          <span slot="footer" class="text-sm text-muted-foreground">Footer</span>
-        </Card>
-      </div>
-    </section>
-
-    <section>
-      <Heading as="h2" size="lg" class="mb-1">Badge</Heading>
-      <Text variant="muted" class="mb-4">Badge variants.</Text>
-      <div class="mt-4 flex flex-wrap gap-2">
-        <Badge variant="primary">Primary</Badge>
-        <Badge variant="secondary">Secondary</Badge>
-        <Badge variant="success">Success</Badge>
-        <Badge variant="warning">Warning</Badge>
-        <Badge variant="danger">Danger</Badge>
-        <Badge variant="outline">Outline</Badge>
-      </div>
-    </section>
-
-    <section>
-      <Heading as="h2" size="lg" class="mb-1">Alert</Heading>
-      <Text variant="muted" class="mb-4">Info, success, warning, danger.</Text>
-      <div class="mt-4 max-w-xl space-y-3">
-        <Alert variant="info" title="Info">Information message.</Alert>
-        <Alert variant="success" title="Success">Operation successful.</Alert>
-        <Alert variant="warning" title="Warning">Warning to note.</Alert>
-        <Alert variant="danger" title="Danger">Error or risk.</Alert>
-      </div>
-    </section>
-
-    <section>
-      <Heading as="h2" size="lg" class="mb-1">Toast</Heading>
-      <Text variant="muted" class="mb-4">
-        API <Code>showToast</Code> — mặc định <Code>position: &quot;top-center&quot;</Code>; có thể truyền{" "}
-        <Code>top-right</Code>, <Code>bottom-center</Code>, <Code>bottom-right</Code> (tự đóng, có nút đóng).
-      </Text>
-      <div class="mt-4 flex flex-wrap gap-3">
-        <Button type="button" variant="outline" data-demo-toast="default">Default</Button>
-        <Button type="button" variant="outline" data-demo-toast="success">Success</Button>
-        <Button type="button" variant="outline" data-demo-toast="destructive">Destructive</Button>
-      </div>
-      <Text variant="small" class="mt-3 block text-muted-foreground">Vị trí (variant default)</Text>
-      <div class="mt-2 flex flex-wrap gap-3">
-        <Button type="button" variant="ghost" size="sm" data-demo-toast-pos="top-center">top-center</Button>
-        <Button type="button" variant="ghost" size="sm" data-demo-toast-pos="top-right">top-right</Button>
-        <Button type="button" variant="ghost" size="sm" data-demo-toast-pos="bottom-center">bottom-center</Button>
-        <Button type="button" variant="ghost" size="sm" data-demo-toast-pos="bottom-right">bottom-right</Button>
-      </div>
-    </section>
-
-    <section>
-      <Heading as="h2" size="lg" class="mb-1">Dropdown</Heading>
-      <Text variant="muted" class="mb-4">Click button to open menu.</Text>
-      <div class="mt-4">
-        <Dropdown>
-          <Button slot="trigger" variant="outline">
-            Open dropdown
-          </Button>
-          <div slot="menu">
-            <Link href="#" class="block px-4 py-2 text-sm hover:bg-muted">Action 1</Link>
-            <Link href="#" class="block px-4 py-2 text-sm hover:bg-muted">Action 2</Link>
-            <Link href="#" class="block px-4 py-2 text-sm hover:bg-muted">Action 3</Link>
-          </div>
-        </Dropdown>
-      </div>
-    </section>
-
-    <section>
-      <Heading as="h2" size="lg" class="mb-1">Tabs</Heading>
-      <Text variant="muted" class="mb-4">Switch tabs to view content.</Text>
-      <div class="mt-4 max-w-xl">
-        <Tabs>
-          <button
-            slot="list"
-            type="button"
-            role="tab"
-            aria-selected="true"
-            aria-controls="panel-1"
-            id="tab-1">Tab 1</button>
-          <button
-            slot="list"
-            type="button"
-            role="tab"
-            aria-selected="false"
-            aria-controls="panel-2"
-            id="tab-2">Tab 2</button>
-          <button
-            slot="list"
-            type="button"
-            role="tab"
-            aria-selected="false"
-            aria-controls="panel-3"
-            id="tab-3">Tab 3</button>
-          <div
-            slot="panels"
-            role="tabpanel"
-            id="panel-1"
-            aria-labelledby="tab-1"
-            aria-hidden="false"
-          >
-            <Text variant="small">Tab 1 content.</Text>
-          </div>
-          <div
-            slot="panels"
-            role="tabpanel"
-            id="panel-2"
-            aria-labelledby="tab-2"
-            aria-hidden="true"
-            hidden
-          >
-            <Text variant="small">Tab 2 content.</Text>
-          </div>
-          <div
-            slot="panels"
-            role="tabpanel"
-            id="panel-3"
-            aria-labelledby="tab-3"
-            aria-hidden="true"
-            hidden
-          >
-            <Text variant="small">Tab 3 content.</Text>
-          </div>
-        </Tabs>
-      </div>
-    </section>
-
-    <!-- New Components Showcase -->
-    <section>
-      <Heading as="h2" size="lg" class="mb-1">Progress Bar</Heading>
-      <Text variant="muted" class="mb-4">Thanh tiến độ với các biến thể màu và kích thước.</Text>
-      <div class="max-w-md space-y-4">
-        <Progress value={35} max={100} showLabel={true} />
-        <Progress value={65} max={100} variant="success" size="sm" />
-        <Progress value={85} max={100} variant="warning" size="lg" />
-      </div>
-    </section>
-
-    <section>
-      <Heading as="h2" size="lg" class="mb-1">Skeleton & Avatar</Heading>
-      <Text variant="muted" class="mb-4">Placeholder tải trang và hình đại diện.</Text>
-      <div class="flex items-center gap-4">
-        <Avatar fallback="TK" size="lg" />
-        <Avatar fallback="AG" size="md" />
-        <Avatar fallback="CN" size="sm" />
-      </div>
-      <div class="mt-4 max-w-sm space-y-2">
-        <Skeleton class="h-4 w-3/4" />
-        <Skeleton class="h-4 w-1/2" />
-        <Skeleton class="h-10 w-full" variant="rounded" />
-      </div>
-    </section>
-
-    <section>
-      <Heading as="h2" size="lg" class="mb-1">Divider & Tooltip</Heading>
-      <Text variant="muted" class="mb-4">Phân cách nội dung và chú thích khi hover.</Text>
-      <div class="max-w-md space-y-4">
-        <Divider label="HOẶC TIẾP TỤC VỚI" />
-        <div class="flex gap-4 items-center">
-          <Tooltip content="Lưu dữ liệu vào đám mây" position="top">
-            <Button variant="outline" size="sm">Hover xem Tooltip</Button>
-          </Tooltip>
-          <Tooltip content="Chuyển chế độ tối/sáng" position="bottom">
-            <Button variant="secondary" size="sm">Hover dưới</Button>
-          </Tooltip>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <Heading as="h2" size="lg" class="mb-1">React Hook Form (useController)</Heading>
-      <Text variant="muted" class="mb-4">
-        Tất cả form controls (Input, Select, Textarea, Checkbox, Switch) được bọc qua hook <code class="rounded bg-muted px-1.5 py-0.5 text-xs text-foreground font-mono">useController</code>.
-      </Text>
-      <div class="max-w-lg">
-        <FormShowcase client:load />
-      </div>
-    </section>
+    <!-- Embedded Storybook Canvas -->
+    <div class="relative w-full grow overflow-hidden rounded-2xl border-2 border-border bg-card shadow-lg">
+      <iframe
+        src="/storybook/index.html"
+        class="h-full w-full border-0"
+        title="Storybook Component Explorer"
+        loading="lazy"
+      ></iframe>
+    </div>
   </div>
 </DashboardLayout>
-
-<script>
-  import type { ToastPosition } from "@/lib/ui/toast"
-  import { showToast } from "@/lib/ui/toast"
-
-  const positions: ToastPosition[] = ["top-center", "top-right", "bottom-center", "bottom-right"]
-
-  for (const btn of document.querySelectorAll<HTMLButtonElement>("[data-demo-toast]")) {
-    btn.addEventListener("click", () => {
-      const v = btn.getAttribute("data-demo-toast")
-      if (v === "default") showToast("Toast mặc định — đóng tay hoặc chờ vài giây.")
-      else if (v === "success") showToast("Thao tác thành công.", { variant: "success" })
-      else if (v === "destructive") showToast("Có lỗi xảy ra (demo).", { variant: "destructive" })
-    })
-  }
-
-  for (const btn of document.querySelectorAll<HTMLButtonElement>("[data-demo-toast-pos]")) {
-    btn.addEventListener("click", () => {
-      const raw = btn.getAttribute("data-demo-toast-pos")
-      const position = positions.includes(raw as ToastPosition) ? (raw as ToastPosition) : "top-center"
-      showToast(`Vị trí: ${position}`, { position })
-    })
-  }
-</script>
