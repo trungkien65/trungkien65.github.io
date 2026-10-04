@@ -9,7 +9,16 @@ export type LearningWord = {
   id: string
   term: string
   definition: string
+  pinyin?: string
+  notes?: string
   createdAt: string
+}
+
+export type CreateLearningWordBody = {
+  term: string
+  definition: string
+  pinyin?: string
+  notes?: string
 }
 
 export type LearningWordsResponse = {
@@ -92,16 +101,24 @@ export async function fetchLearningWords(params?: { limit?: number; offset?: num
         id: item.id,
         term,
         definition,
-        createdAt: item.createdAt
+        pinyin: item.pinyin ?? null,
+        createdAt: item.createdAt,
       }
-    })
+    }),
   }
+}
+
+/** POST thêm từ vựng mới */
+export async function createLearningWord(body: CreateLearningWordBody): Promise<LearningWord> {
+  const { data } = await http.post<LearningWord>(WORDS_PATH, body)
+  invalidateHttpGetCacheForUrl(WORDS_PATH)
+  return data
 }
 
 /** GET hàng đợi ôn — có cache. */
 export async function fetchReviewDue(params?: { limit?: number }): Promise<ReviewDueResponse> {
   return httpGetCached<ReviewDueResponse>(REVIEW_DUE_PATH, {
-    params: { limit: params?.limit ?? 30 }
+    params: { limit: params?.limit ?? 30 },
   })
 }
 

@@ -123,15 +123,31 @@ export function attachBearerFromCookie(
   })
 }
 
+import { defaultTokenQueue, TokenRefreshQueue } from "./tokenQueue"
+
+/** Export for testing / public check */
+export { isAuthPublic401Path, defaultTokenQueue, TokenRefreshQueue }
+
+export type RefreshInterceptorOptions = {
+  queue?: TokenRefreshQueue
+  getRefreshToken?: () => string | null
+  onRefreshSuccess?: (pair: { access_token: string; refresh_token: string }) => void
+  onRefreshFail?: (error: unknown) => void
+}
+
 /**
- * 401 (access hết hạn) → một lần refresh (mutex), `persistAuthTokenPair`, recall request cũ.
- * Bearer request interceptor đọc lại cookie nên token mới được gửi khi retry.
+ * 401 (access hết hạn) → một lần refresh (queue mutex), `persistAuthTokenPair`, recall request cũ.
+ * Tất cả request song song sẽ đợi hàng đợi và nhận access_token mới nhất.
  */
-export function attachRefreshOn401(client: AxiosInstance = http): void {
+export function attachRefreshOn401(
+  client: AxiosInstance = http,
+  options?: RefreshInterceptorOptions,
+): void {
   if (refresh401Attached.has(client)) return
   refresh401Attached.add(client)
 
-  let refreshInFlight: Promise<void> | null = null
+  const queue = options?.queue ?? defaultTokenQueue
+  const getRt = options?.getRefreshToken ?? (() => getCookie(REFRESH_TOKEN_COOKIE))
 
   client.interceptors.response.use(
     (r) => r,
@@ -145,26 +161,43 @@ export function attachRefreshOn401(client: AxiosInstance = http): void {
       const path = config.url ?? ""
       if (isAuthPublic401Path(path)) return Promise.reject(error)
 
-      if (!getCookie(REFRESH_TOKEN_COOKIE)) return Promise.reject(error)
+      const rt = getRt()
+      if (!rt) return Promise.reject(error)
 
       config._refreshRetried = true
 
       try {
-        if (!refreshInFlight) {
-          refreshInFlight = (async () => {
-            const rt = getCookie(REFRESH_TOKEN_COOKIE)
-            if (!rt) throw new Error("no refresh token")
-            const { authRefresh, persistAuthTokenPair } = await import("@/lib/api/auth")
-            const pair = await authRefresh({ refresh_token: rt })
+        const newAccessToken = await queue.execute(async () => {
+          const currentRt = getRt()
+          if (!currentRt) throw new Error("No refresh token")
+          const { authRefresh, persistAuthTokenPair } = await import("@/lib/api/auth")
+          const pair = await authRefresh({ refresh_token: currentRt })
+          if (options?.onRefreshSuccess) {
+            options.onRefreshSuccess(pair)
+          } else {
             persistAuthTokenPair(pair)
-          })().finally(() => {
-            refreshInFlight = null
-          })
-        }
-        await refreshInFlight
+          }
+          return pair.access_token
+        })
+
+        // Gắn access token mới vào headers của request retry
+        const headers = AxiosHeaders.from(config.headers ?? {})
+        headers.set("Authorization", `Bearer ${newAccessToken}`)
+        config.headers = headers
+
         return client.request(config)
-      } catch {
-        return Promise.reject(error)
+      } catch (refreshErr) {
+        if (options?.onRefreshFail) {
+          options.onRefreshFail(refreshErr)
+        } else {
+          try {
+            const { clearAuthTokenCookies } = await import("@/lib/api/auth")
+            clearAuthTokenCookies()
+          } catch {
+            // Ignore in non-browser env
+          }
+        }
+        return Promise.reject(refreshErr)
       }
     },
   )

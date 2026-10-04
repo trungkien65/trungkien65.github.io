@@ -25,3 +25,5 @@ export {
   type AuthTokenPair,
   type PersistTokenOptions,
 } from "./auth"
+export { createHonoClient, honoClient, type BackendRoutes, type HonoClientOptions } from "./honoClient"
+
