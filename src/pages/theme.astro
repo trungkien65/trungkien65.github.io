@@ -15,8 +15,14 @@ import {
   Table,
   Tabs,
   Text,
-  Textarea
+  Textarea,
+  Progress,
+  Skeleton,
+  Avatar,
+  Divider,
+  Tooltip
 } from "@/components/ui"
+import { FormShowcase } from "@/components/ui/react/FormShowcase"
 /**
  * Theme page: showcase all base UI components.
  */
@@ -292,6 +298,58 @@ import { DashboardLayout } from "@/layouts"
             <Text variant="small">Tab 3 content.</Text>
           </div>
         </Tabs>
+      </div>
+    </section>
+
+    <!-- New Components Showcase -->
+    <section>
+      <Heading as="h2" size="lg" class="mb-1">Progress Bar</Heading>
+      <Text variant="muted" class="mb-4">Thanh tiến độ với các biến thể màu và kích thước.</Text>
+      <div class="max-w-md space-y-4">
+        <Progress value={35} max={100} showLabel={true} />
+        <Progress value={65} max={100} variant="success" size="sm" />
+        <Progress value={85} max={100} variant="warning" size="lg" />
+      </div>
+    </section>
+
+    <section>
+      <Heading as="h2" size="lg" class="mb-1">Skeleton & Avatar</Heading>
+      <Text variant="muted" class="mb-4">Placeholder tải trang và hình đại diện.</Text>
+      <div class="flex items-center gap-4">
+        <Avatar fallback="TK" size="lg" />
+        <Avatar fallback="AG" size="md" />
+        <Avatar fallback="CN" size="sm" />
+      </div>
+      <div class="mt-4 max-w-sm space-y-2">
+        <Skeleton class="h-4 w-3/4" />
+        <Skeleton class="h-4 w-1/2" />
+        <Skeleton class="h-10 w-full" variant="rounded" />
+      </div>
+    </section>
+
+    <section>
+      <Heading as="h2" size="lg" class="mb-1">Divider & Tooltip</Heading>
+      <Text variant="muted" class="mb-4">Phân cách nội dung và chú thích khi hover.</Text>
+      <div class="max-w-md space-y-4">
+        <Divider label="HOẶC TIẾP TỤC VỚI" />
+        <div class="flex gap-4 items-center">
+          <Tooltip content="Lưu dữ liệu vào đám mây" position="top">
+            <Button variant="outline" size="sm">Hover xem Tooltip</Button>
+          </Tooltip>
+          <Tooltip content="Chuyển chế độ tối/sáng" position="bottom">
+            <Button variant="secondary" size="sm">Hover dưới</Button>
+          </Tooltip>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <Heading as="h2" size="lg" class="mb-1">React Hook Form (useController)</Heading>
+      <Text variant="muted" class="mb-4">
+        Tất cả form controls (Input, Select, Textarea, Checkbox, Switch) được bọc qua hook <code class="rounded bg-muted px-1.5 py-0.5 text-xs text-foreground font-mono">useController</code>.
+      </Text>
+      <div class="max-w-lg">
+        <FormShowcase client:load />
       </div>
     </section>
   </div>

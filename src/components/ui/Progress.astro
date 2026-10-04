@@ -1,0 +1,61 @@
+---
+/**
+ * Thanh tiến độ (Progress bar): hiển thị tỷ lệ % hoàn thành
+ */
+export interface Props {
+  value?: number // 0 to 100
+  max?: number
+  variant?: "primary" | "success" | "warning" | "accent"
+  size?: "sm" | "md" | "lg"
+  class?: string
+  showLabel?: boolean
+  id?: string
+}
+
+const {
+  value = 0,
+  max = 100,
+  variant = "primary",
+  size = "md",
+  class: className = "",
+  showLabel = false,
+  id,
+} = Astro.props
+
+const percentage = Math.min(100, Math.max(0, Math.round((value / max) * 100)))
+
+const variantClasses = {
+  primary: "bg-primary",
+  success: "bg-green-500",
+  warning: "bg-amber-500",
+  accent: "bg-accent",
+}
+
+const sizeClasses = {
+  sm: "h-1.5",
+  md: "h-2.5",
+  lg: "h-4",
+}
+---
+
+<div class={`w-full space-y-1.5 ${className}`} id={id}>
+  {showLabel && (
+    <div class="flex justify-between text-xs font-medium text-muted-foreground">
+      <span>Tiến độ</span>
+      <span>{percentage}%</span>
+    </div>
+  )}
+  <div
+    class={`relative w-full overflow-hidden rounded-full bg-muted/60 ${sizeClasses[size]}`}
+    role="progressbar"
+    aria-valuenow={value}
+    aria-valuemin={0}
+    aria-valuemax={max}
+  >
+    <div
+      class={`h-full rounded-full transition-all duration-300 ease-out ${variantClasses[variant]}`}
+      style={`width: ${percentage}%`}
+      data-progress-bar
+    ></div>
+  </div>
+</div>

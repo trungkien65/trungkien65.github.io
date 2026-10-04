@@ -20,3 +20,11 @@ export { default as Text } from "./Text.astro"
 export { default as Code } from "./Code.astro"
 export { default as Blockquote } from "./Blockquote.astro"
 export { default as List } from "./List.astro"
+export { default as Progress } from "./Progress.astro"
+export { default as Skeleton } from "./Skeleton.astro"
+export { default as Avatar } from "./Avatar.astro"
+export { default as Divider } from "./Divider.astro"
+export { default as Tooltip } from "./Tooltip.astro"
+
+export * from "./react"
+

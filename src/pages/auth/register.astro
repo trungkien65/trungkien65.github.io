@@ -1,9 +1,10 @@
 ---
 /**
- * Đăng ký — POST /auth/register.
+ * Đăng ký — sử dụng React Hook Form + useController (RegisterForm).
  */
 import { PublicLayout } from "@/layouts"
-import { Button, Card, Heading, Input, Link, Text } from "@/components/ui"
+import { Card, Heading, Link, Text } from "@/components/ui"
+import { RegisterForm } from "@/components/auth/RegisterForm"
 ---
 
 <PublicLayout
@@ -12,66 +13,17 @@ import { Button, Card, Heading, Input, Link, Text } from "@/components/ui"
   noindex={true}
 >
   <div class="mx-auto max-w-md space-y-6">
-    <Heading as="h1" size="xl">Đăng ký</Heading>
-    <Card variant="bordered">
-      <form id="auth-register-form" class="space-y-4">
-        <div id="auth-register-success" class="hidden rounded-lg border border-emerald-500/40 bg-emerald-500/10 p-3 text-sm text-foreground">
-          <p id="auth-register-success-msg"></p>
-          <p class="mt-2">
-            <Link href="/auth/login">Đi tới đăng nhập</Link>
-          </p>
-        </div>
-        <div id="auth-register-fields" class="space-y-4">
-          <Input label="Email" type="email" name="email" id="auth-register-email" required autocomplete="email" />
-          <Input
-            label="Mật khẩu (tối thiểu 6 ký tự)"
-            type="password"
-            name="password"
-            id="auth-register-password"
-            required
-            minlength={6}
-            autocomplete="new-password"
-          />
-          <Button type="submit" variant="primary" class="w-full" id="auth-register-submit">
-            Tạo tài khoản
-          </Button>
-        </div>
-      </form>
-      <Text variant="small" class="mt-4 block">
-        Đã có tài khoản? <Link href="/auth/login">Đăng nhập</Link>
-      </Text>
+    <div class="text-center sm:text-left">
+      <Heading as="h1" size="xl">Tạo tài khoản</Heading>
+      <Text variant="muted" class="mt-1">Điền thông tin để bắt đầu hành trình học tập</Text>
+    </div>
+    <Card variant="bordered" class="p-6">
+      <RegisterForm client:load />
+      <div class="mt-6 border-t border-border pt-4">
+        <Text variant="small" class="block text-center text-muted-foreground">
+          Đã có tài khoản? <Link href="/auth/login" class="font-medium text-primary">Đăng nhập</Link>
+        </Text>
+      </div>
     </Card>
   </div>
 </PublicLayout>
-
-<script>
-  import { apiErrorMessage } from "@/lib/api/errors"
-  import { authRegister } from "@/lib/api/auth"
-  import { showToast } from "@/lib/ui/toast"
-
-  const form = document.getElementById("auth-register-form") as HTMLFormElement | null
-  const okBox = document.getElementById("auth-register-success") as HTMLDivElement | null
-  const okMsg = document.getElementById("auth-register-success-msg") as HTMLParagraphElement | null
-  const fields = document.getElementById("auth-register-fields") as HTMLDivElement | null
-  const submitBtn = document.getElementById("auth-register-submit") as HTMLButtonElement | null
-
-  form?.addEventListener("submit", async (e) => {
-    e.preventDefault()
-    if (!submitBtn || !okBox || !okMsg || !fields) return
-    okBox.classList.add("hidden")
-    submitBtn.disabled = true
-    const fd = new FormData(form)
-    const email = String(fd.get("email") ?? "").trim()
-    const password = String(fd.get("password") ?? "")
-    try {
-      const res = await authRegister({ email, password })
-      fields.classList.add("hidden")
-      okMsg.textContent = `${res.message} (ID: ${res.userId})`
-      okBox.classList.remove("hidden")
-    } catch (err) {
-      showToast(apiErrorMessage(err, "Đăng ký thất bại"), { variant: "destructive" })
-    } finally {
-      submitBtn.disabled = false
-    }
-  })
-</script>

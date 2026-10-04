@@ -1,31 +1,48 @@
 ---
 /**
- * Học từ vựng: flashcard, quiz, ôn tập (client script + axios cache GET).
+ * Học từ vựng: Flashcard 3D, Quiz trắc nghiệm, Ôn tập SM-2.
  */
 import Flashcard from "@/components/learn/Flashcard.astro"
 import Quiz from "@/components/learn/Quiz.astro"
 import ReviewFlow from "@/components/learn/ReviewFlow.astro"
-import { Button, Heading, Tabs, Text } from "@/components/ui"
+import { Button, Heading, Tabs, Text, Link } from "@/components/ui"
 import { DashboardLayout } from "@/layouts"
 ---
 
 <DashboardLayout
   title="Học từ vựng"
-  description="Học từ vựng qua flashcard, trắc nghiệm và ôn tập theo lịch lặp."
+  description="Luyện tập từ vựng tiếng Trung qua Flashcard 3D, Quiz trắc nghiệm và thuật toán lặp lại ngắt quãng SM-2."
 >
   <div class="space-y-6">
-    <div>
-      <Heading as="h1" size="xl" class="mb-1">Từ vựng</Heading>
-      <Text variant="muted">Flashcard, trắc nghiệm và ôn theo lịch (chất lượng 0–5).</Text>
+    <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+      <div>
+        <Heading as="h1" size="xl" class="mb-1">Luyện tập Từ vựng</Heading>
+        <Text variant="muted">Học từ mới qua Flashcard 3D, kiểm tra với Quiz và củng cố trí nhớ dài hạn bằng thuật toán SM-2.</Text>
+      </div>
+      <Text variant="small">
+        <Link href="/learn/radicals" class="inline-flex items-center gap-1 text-primary hover:underline font-medium">
+          Tra cứu 214 Bộ thủ →
+        </Link>
+      </Text>
     </div>
 
-    <div class="max-w-3xl" data-vocab-app>
-      <div class="mb-4 flex flex-wrap items-center gap-2 rounded-lg border border-border bg-muted/40 p-3" data-vocab-pagination>
-        <Button type="button" variant="outline" size="sm" data-vocab-page-prev>Trang trước</Button>
-        <Button type="button" variant="outline" size="sm" data-vocab-page-next>Trang sau</Button>
-        <Text variant="muted" class="sm:ml-auto" data-vocab-page-label>Trang 1</Text>
+    <div class="mx-auto max-w-3xl" data-vocab-app>
+      <!-- Pagination Bar -->
+      <div class="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border/80 bg-card p-3 shadow-sm" data-vocab-pagination>
+        <div class="flex items-center gap-2">
+          <Button type="button" variant="outline" size="sm" data-vocab-page-prev>
+            ← Trang trước
+          </Button>
+          <Button type="button" variant="outline" size="sm" data-vocab-page-next>
+            Trang sau →
+          </Button>
+        </div>
+        <span class="rounded-lg bg-muted/60 px-3 py-1 text-xs font-semibold text-foreground" data-vocab-page-label>
+          Trang 1
+        </span>
       </div>
 
+      <!-- Main Learning Tabs -->
       <Tabs class="w-full min-w-0">
         <button
           slot="list"
@@ -33,27 +50,44 @@ import { DashboardLayout } from "@/layouts"
           role="tab"
           aria-selected="true"
           aria-controls="panel-vocab-flash"
-          id="tab-vocab-flash">Flashcard</button>
+          id="tab-vocab-flash"
+          class="flex items-center gap-2"
+        >
+          <span>📇</span>
+          <span>Flashcard</span>
+        </button>
         <button
           slot="list"
           type="button"
           role="tab"
           aria-selected="false"
           aria-controls="panel-vocab-quiz"
-          id="tab-vocab-quiz">Quiz</button>
+          id="tab-vocab-quiz"
+          class="flex items-center gap-2"
+        >
+          <span>🧩</span>
+          <span>Quiz trắc nghiệm</span>
+        </button>
         <button
           slot="list"
           type="button"
           role="tab"
           aria-selected="false"
           aria-controls="panel-vocab-review"
-          id="tab-vocab-review">Ôn tập</button>
+          id="tab-vocab-review"
+          class="flex items-center gap-2"
+        >
+          <span>🧠</span>
+          <span>Ôn tập (SM-2)</span>
+        </button>
+
         <div
           slot="panels"
           role="tabpanel"
           id="panel-vocab-flash"
           aria-labelledby="tab-vocab-flash"
           aria-hidden="false"
+          class="py-4"
         >
           <Flashcard />
         </div>
@@ -64,6 +98,7 @@ import { DashboardLayout } from "@/layouts"
           aria-labelledby="tab-vocab-quiz"
           aria-hidden="true"
           hidden
+          class="py-4"
         >
           <Quiz />
         </div>
@@ -74,6 +109,7 @@ import { DashboardLayout } from "@/layouts"
           aria-labelledby="tab-vocab-review"
           aria-hidden="true"
           hidden
+          class="py-4"
         >
           <ReviewFlow />
         </div>
