@@ -1,15 +1,15 @@
 {
   "name": "todo-list-astro",
   "type": "module",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "packageManager": "pnpm@9.11.0",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro build",
+    "build": "storybook build -o public/storybook && astro build",
     "preview": "astro preview",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
+    "build-storybook": "storybook build -o public/storybook",
     "test": "vitest run",
     "biome:check": "biome check .",
     "biome:fix": "biome check . --write",

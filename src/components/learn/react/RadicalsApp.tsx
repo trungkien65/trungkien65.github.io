@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from "react"
 import { type RadicalItem, type RadicalsGroup, fetchRadicals } from "@/lib/api/radicals"
 import { apiErrorMessage } from "@/lib/api/errors"
 import { showToast } from "@/lib/ui/toast"
-import { AudioButton, Badge } from "@/components/ui/react"
+import { AudioButton, Badge, Chip } from "@/components/ui/react"
 
 export function RadicalsApp() {
   const [groups, setGroups] = useState<RadicalsGroup[]>([])
@@ -131,32 +131,22 @@ export function RadicalsApp() {
         {availableStrokes.length > 0 && (
           <div className="flex flex-wrap items-center gap-1.5 pt-1">
             <span className="text-xs font-semibold text-muted-foreground mr-1">Số nét:</span>
-            <button
-              type="button"
+            <Chip
+              active={selectedStroke === null}
               onClick={() => setSelectedStroke(null)}
-              className={`rounded-lg px-2.5 py-1 text-xs font-semibold transition-all ${
-                selectedStroke === null
-                  ? "bg-primary text-primary-foreground shadow-sm"
-                  : "bg-muted/70 text-muted-foreground hover:bg-muted hover:text-foreground"
-              }`}
             >
               Tất cả
-            </button>
+            </Chip>
             {availableStrokes.map((stroke) => (
-              <button
+              <Chip
                 key={stroke}
-                type="button"
+                active={selectedStroke === stroke}
                 onClick={() =>
                   setSelectedStroke((prev) => (prev === stroke ? null : stroke))
                 }
-                className={`rounded-lg px-2.5 py-1 text-xs font-semibold transition-all ${
-                  selectedStroke === stroke
-                    ? "bg-primary text-primary-foreground shadow-sm"
-                    : "bg-muted/70 text-muted-foreground hover:bg-muted hover:text-foreground"
-                }`}
               >
                 {stroke}
-              </button>
+              </Chip>
             ))}
           </div>
         )}

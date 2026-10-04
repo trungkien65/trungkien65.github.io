@@ -5,6 +5,8 @@ import { useForm } from "react-hook-form"
 import { ControlledInput } from "@/components/ui/react/ControlledInput"
 import { Button } from "@/components/ui/react/Button"
 import { Badge } from "@/components/ui/react/Badge"
+import { Chip } from "@/components/ui/react/Chip"
+import { ProgressBar } from "@/components/ui/react/ProgressBar"
 
 ;(globalThis as any).IS_REACT_ACT_ENVIRONMENT = true
 
@@ -46,6 +48,40 @@ describe("Reusable UI & Form Components", () => {
     const badge = container.querySelector("span")
     expect(badge?.textContent).toBe("Thành công")
     expect(badge?.className).toContain("bg-emerald-500/10")
+  })
+
+  it("renders Chip with active state and badge", async () => {
+    const container = document.createElement("div")
+    const root = createRoot(container)
+    await act(async () => {
+      root.render(
+        React.createElement(Chip, { active: true, badge: 42 }, "Nét 1"),
+      )
+    })
+
+    const chip = container.querySelector("button")
+    expect(chip?.textContent).toContain("Nét 1")
+    expect(chip?.textContent).toContain("42")
+    expect(chip?.className).toContain("bg-primary text-primary-foreground")
+  })
+
+  it("renders ProgressBar with correct percentage and aria attributes", async () => {
+    const container = document.createElement("div")
+    const root = createRoot(container)
+    await act(async () => {
+      root.render(
+        React.createElement(ProgressBar, { value: 25, max: 50, showLabel: true, label: "Học tập" }),
+      )
+    })
+
+    const bar = container.querySelector('[role="progressbar"]') as HTMLElement
+    expect(bar).not.toBeNull()
+    expect(bar.getAttribute("aria-valuenow")).toBe("25")
+    expect(bar.getAttribute("aria-valuemax")).toBe("50")
+
+    const fill = bar.querySelector("div") as HTMLElement
+    expect(fill.style.width).toBe("50%")
+    expect(container.textContent).toContain("50%")
   })
 
   it("renders ControlledInput with label and placeholder", async () => {

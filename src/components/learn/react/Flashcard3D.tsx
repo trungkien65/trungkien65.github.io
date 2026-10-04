@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react"
 import type { LearningWord } from "@/lib/api/learning"
-import { AudioButton, Badge, Button } from "@/components/ui/react"
+import { AudioButton, Badge, Button, ProgressBar } from "@/components/ui/react"
 
 export interface Flashcard3DProps {
   words: LearningWord[]
@@ -68,23 +68,18 @@ export function Flashcard3D({ words, initialIndex = 0, onIndexChange }: Flashcar
   }
 
   const currentWord = words[currentIndex] || words[0]
-  const progressPercent = Math.round(((currentIndex + 1) / words.length) * 100)
 
   return (
     <div className="flex flex-col items-center w-full max-w-xl mx-auto space-y-6">
-      {/* Progress header */}
-      <div className="w-full flex items-center justify-between text-xs font-semibold text-muted-foreground px-1">
-        <span>Tiến độ thẻ</span>
-        <span>
-          {currentIndex + 1} / {words.length} ({progressPercent}%)
-        </span>
-      </div>
-
-      <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
-        <div
-          className="h-full bg-primary transition-all duration-300 ease-out"
-          style={{ width: `${progressPercent}%` }}
-        />
+      {/* Progress header & bar */}
+      <div className="w-full space-y-1.5 px-1">
+        <div className="flex items-center justify-between text-xs font-semibold text-muted-foreground">
+          <span>Tiến độ thẻ</span>
+          <span>
+            {currentIndex + 1} / {words.length}
+          </span>
+        </div>
+        <ProgressBar value={currentIndex + 1} max={words.length} size="sm" />
       </div>
 
       {/* 3D Flip Card */}
